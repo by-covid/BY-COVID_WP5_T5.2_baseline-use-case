@@ -15,15 +15,13 @@ jobs:
         uses: ResearchObject/ro-crate-preview-action@v1.2.0
 
       - name: Commit RO Crate Preview
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add ro-crate-preview.html
-          git commit -m "Updated RO-Crate preview"
-          git push
-
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: swinton/commit@v2.0.0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
         with:
-          folder: .
-          branch: gh-pages
+          files: |
+            ro-crate-preview.html
+            index.html
+          commit-message: |
+            Updated RO-Crate preview
+            
