@@ -1,0 +1,312 @@
+{
+  "@context": "http://schema.org",
+  "type": "Dataset",
+  "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
+  "creator": [
+    {
+      "type": "Person",
+      "id": "https://orcid.org/0000-0001-7316-6990",
+      "email": "Nina.VanGoethem@sciensano.be",
+      "affiliation": "Sciensano",
+      "name": "Nina Van Goethem"
+    },
+    {
+      "type": "Person",
+      "id": "https://orcid.org/0000-0002-4409-0664",
+      "email": "Marjan.Meurisse@sciensano.be",
+      "affiliation": "Sciensano",
+      "name": "Marjan Meurisse"
+    },
+    {
+      "type": "Person",
+      "id": "https://orcid.org/0000-0002-0961-3298",
+      "email": "ebernal.iacs@aragon.es",
+      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "name": "Enrique Bernal-Delgado"
+    },
+    {
+      "type": "Person",
+      "id": "https://orcid.org/0000-0002-6285-8120",
+      "email": "festupinnan.iacs@aragon.es",
+      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "name": "Francisco Estupiñán-Romero"
+    },
+    {
+      "type": "Person",
+      "id": "https://orcid.org/0000-0002-8783-5478",
+      "email": "jgonzalezga.iacs@aragon.es",
+      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "name": "Javier González-Galindo"
+    }
+  ],
+  "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
+  "datePublished": "27-07-2022",
+  "keywords": ["synthetic data", "dataset", "covid-19", "vaccines", "effectiveness", "causal model"],
+  "funder": null,
+  "temporalCoverage": "01-01-2020/31-12-2024",
+  "license": "CC BY 4.0",
+  "spatialCoverage": {
+    "type": "Place",
+    "name": "Europe",
+    "geo": {
+      "type": "GeoShape",
+      "box": "66.78398 11.50546 44.4272 -15.84884"
+    }
+  },
+  "variableMeasured": [
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "person_id",
+      "description": "Pseudoid  of the person included in the cohort"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": "years",
+      "name": "age_nm",
+      "description": "Age of the person included in  the cohort (at the time of entering the cohort)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "sex_cd",
+      "description": "Sex of the person included in  the cohort (at the time of entering the cohort)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "socecon_lvl_cd",
+      "description": "Socioeconomic level of the person in the cohort (at the time  of entering the cohort)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "residence_area_cd",
+      "description": "Area of residence of the person included in the cohort (NUTS  3) (at the time of entering the cohort)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "country_cd",
+      "description": "Country of residence of the person included in the cohort (at  the time of entering the cohort)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "foreign_bl",
+      "description": "Is the country of residence different from the country that is  doing the analyses?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "exitus_dt",
+      "description": "Date of death of the person (if the person has died)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "exitus_bl",
+      "description": "Date of death of the person (if the person has died during the  period of study)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "essential_worker_bl",
+      "description": "Is the person included in the cohort an essential worker? (at  the time of entering the cohort)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "institutionalized_bl",
+      "description": "Is the person included in the cohort institutionalized? (at  the time of entering the cohort)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "dose_1_brand_cd",
+      "description": "Brand of first dose of the vaccine"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "dose_1_dt",
+      "description": "Date of the first dose of the vaccine"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "dose_2_brand_cd",
+      "description": "Brand of second dose of the vaccine"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "dose_2_dt",
+      "description": "Date of the second dose of the vaccine"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "dose_3_brand_cd",
+      "description": "Brand of third dose of the vaccine"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "dose_3_dt",
+      "description": "Date of the third dose of the vaccine"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "number_doses",
+      "description": "Number of doses (independently of the vaccine brand) received  by a person during the period of study"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "fully_vaccinated_dt",
+      "description": "Date on which the person included in the cohort is considered  fully vaccinated"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "fully_vaccinated_bl",
+      "description": "Is the person included in the cohort fully vaccinated?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "vaccination_schedule_cd",
+      "description": "Vaccine types received for 1st and 2nd dose concatenated with  hyphen"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "confirmed_case_dt",
+      "description": "Date of diagnosis or test result positive of the last  known/confirmed infection"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "confirmed_case_bl",
+      "description": "Is the person included in the cohort a confirmed COVID-19  case?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "previous_infection_dt",
+      "description": "If the person experienced a confirmed infection proceeding the  last confirmed infection with more than 60 days, date of diagnosis of this  previous infection"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "previous_infection_bl",
+      "description": "Did the person experience a confirmed infection proceeding the  last confirmed infection?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "test_type_cd",
+      "description": "Type of COVID-19 test used to detect the last known SARS-CoV-2  infection (i.e. first positive test for SARS-CoV-2)"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "variant_cd",
+      "description": "Identified variant (WHO label) for last known SARS-CoV-2  infection"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "diabetes_bl",
+      "description": "Does the person included in the cohort suffer from type II  diabetes (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "obesity_bl",
+      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? "
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "heart_failure_bl",
+      "description": "Does the person included in the cohort suffer from heart  failure (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "copd_bl",
+      "description": "Does the person included in the cohort suffer from chronic  lung disease (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "solid_tumor_without_metastasis_bl",
+      "description": "Does the person included in the cohort suffer from solid  cancer without metastatis (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "chronic_kidney_disease_bl",
+      "description": "Does the person included in the cohort suffer from chronic  kidney disease (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "sickle_cell_disease_bl",
+      "description": "Does the person included in the cohort suffer from sickle cell  disease (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "hypertension_bl",
+      "description": "Does the person included in the cohort suffer from  hypertension (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "blood_cancer_bl",
+      "description": "Does the person included in the cohort suffer from blood  cancer (leukemia) (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "transplanted_bl",
+      "description": "Is the person included in the cohort a transplant patient  (i.e. solid organ transplantation) (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "hiv_infection_bl",
+      "description": "Does the person included in the cohort suffer from a HIV  infection (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "primary_immunodeficiency_bl",
+      "description": "Does the person included in the cohort suffer from a primary  immuno deficiency disease (lymphoma) (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "immunosuppression_bl",
+      "description": "Does the person included in the cohort suffer from drugs  induced immunosuppression (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
+      "name": "pregnancy_bl",
+      "description": "Is the person included in the cohort pregnant (at the time of  entering the cohort)?"
+    }
+  ],
+  "distribution": [
+    {
+      "type": "DataDownload",
+      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
+      "contentUrl": null,
+      "encodingFormat": "csv"
+    }
+  ]
+}
