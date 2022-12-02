@@ -1,4 +1,4 @@
-name: RO Crate to GitHub Pages
+name: RO-Crate Preview
 on:
   push:
     branches:
