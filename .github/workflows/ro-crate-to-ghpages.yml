@@ -1,0 +1,29 @@
+name: RO Crate to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+    concurrency: ci-${{github.ref}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build RO Crate Preview
+        uses: ResearchObject/ro-crate-preview-action@v1.2.0
+
+      - name: Commit RO Crate Preview
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add ro-crate-preview.html
+          git commit -m "Updated RO-Crate preview"
+          git push
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .
+          branch: gh-pages
