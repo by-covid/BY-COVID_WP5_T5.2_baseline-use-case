@@ -1,130 +1,151 @@
 {
-    "@context": "https://w3id.org/ro/crate/1.1/context",
-    "@graph": [
-        {
-        "@id": "ro-crate-metadata.json",
-        "@type": "CreativeWork",
-        "conformsTo": {
-            "@id": "https://w3id.org/ro/crate/1.1"
-        },
-        "author": { "@id": "https://orcid.org/0000-0001-9842-9718"},
-        "about": {
-            "@id": "https://doi.org/10.5281/zenodo.6913045"
-        }
-    },    
-    {
-      "@id": "https://doi.org/10.5281/zenodo.6913045",
-      "@type": "Dataset",
-      "conformsTo": [
-        {
-          "@id": "https://w3id.org/ro/wfrun/process/0.1-DRAFT"
-        }
-      ],
-      "identifier": "https://doi.org/10.5281/zenodo.6913045",
-      "hasPart": [
-        {"@id": "vaccines_effectiveness_causal_model/"},
-        {"@id": "vaccines_effectiveness_common_data_model_specification/"},
-        {"@id": "vaccines_effectiveness_common_synthetic_dataset/"}
-      ],
-      "mentions": [
-        { "@id": "#xx" }
-      ],
-      "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
-      "author": [
-        {
-          "@id": "https://orcid.org/0000-0002-6285-8120"
-        }, 
-        {
-          "@id": "https://orcid.org/0000-0001-7316-6990"
-        }, 
-        {
-          "@id": "https://orcid.org/0000-0002-4409-0664"
-        }, 
-        {
-          "@id": "https://orcid.org/0000-0002-8783-5478"
-        }, 
-        {
-          "@id": "https://orcid.org/0000-0002-0961-3298"
-        }
-      ],
-      "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
-    },
-    {
-      "@id": "https://orcid.org/0000-0001-9842-9718",
-      "@type": "Person",
-      "name": "Stian Soiland-Reyes"
-    },
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
       {
-        "@id": "https://orcid.org/0000-0002-6285-8120", 
-        "affiliation": "Instute for Health Science in Aragon (IACS)", 
-        "@type": "Person", 
-        "name": "Estupiñán-Romero, Francisco"
-      }, 
-      {
-        "@id": "https://orcid.org/0000-0001-7316-6990", 
-        "affiliation": "Sciensano", 
-        "@type": "Person", 
-        "name": "Van Goethem, Nina"
-      }, 
-      {
-        "@id": "https://orcid.org/0000-0002-4409-0664", 
-        "affiliation": "Sciensano", 
-        "@type": "Person", 
-        "name": "Meurisse, Marjan"
-      }, 
-      {
-        "@id": "https://orcid.org/0000-0002-8783-5478", 
-        "affiliation": "Instute for Health Science in Aragon (IACS)", 
-        "@type": "Person", 
-        "name": "González-Galindo, Javier"
-      }, 
-      {
-        "@id": "https://orcid.org/0000-0002-0961-3298", 
-        "affiliation": "Instute for Health Science in Aragon (IACS)", 
-        "@type": "Person", 
-        "name": "Bernal-Delgado, Enrique"
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "conformsTo": {
+          "@id": "https://w3id.org/ro/crate/1.1"
       },
-
-      {
-        "@id": "#xx",
-        "@type": "CreateAction",
-        "agent": {
-          "@id": "#SomeUser"
-        },
-        "description": "Run through GUI",
-        "endTime": "2018-09-19T17:01:07+10:00",
-        "instrument": {
-          "@id": "xx"
-        },
-        "name": "xx",
-        "object": {
-          "@id": "xx"
-        },
-        "result": {
-          "@id": "x"
-        }
-      },
-      { "@id": "vaccines_effectiveness_causal_model/",
-        "@type": "Dataset",
-        "name": "Causal model",
-        "description": "responding to the research question"
-      },
-      { "@id": "vaccines_effectiveness_common_data_model_specification/",
-        "@type": "Dataset",
-        "name": "Common data model specification",
-        "description": "following the causal model"
-      },
-      { "@id": "vaccines_effectiveness_common_synthetic_dataset/",
-        "@type": "Dataset",
-        "name": "Synthetic dataset",
-        "description": "complying with the common data model specifications"
-      },
-      {
-        "@id": "x",
-        "@type": "File",
-        "description": "Data Dictionary",
-        "encodingFormat": "text/csv",
-        "name": "Dictionarycsv"
+      "author": { "@id": "https://orcid.org/0000-0001-9842-9718"},
+      "about": {
+          "@id": "https://doi.org/10.5281/zenodo.6913045"
       }
-    ]
-  }
+  },    
+  {
+    "@id": "https://doi.org/10.5281/zenodo.6913045",
+    "@type": "Dataset",
+    "conformsTo": [
+      {
+        "@id": "https://w3id.org/ro/wfrun/process/0.1-DRAFT"
+      }
+    ],
+    "identifier": "https://doi.org/10.5281/zenodo.6913045",
+    "hasPart": [
+      {"@id": "vaccines_effectiveness_causal_model/"},
+      {"@id": "vaccines_effectiveness_common_data_model_specification/"},
+      {"@id": "vaccines_effectiveness_common_synthetic_dataset/"}
+    ],
+    "mentions": [
+      { "@id": "#qmd-generation" }
+    ],
+    "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
+    "author": [
+      {
+        "@id": "https://orcid.org/0000-0002-6285-8120"
+      }, 
+      {
+        "@id": "https://orcid.org/0000-0001-7316-6990"
+      }, 
+      {
+        "@id": "https://orcid.org/0000-0002-4409-0664"
+      }, 
+      {
+        "@id": "https://orcid.org/0000-0002-8783-5478"
+      }, 
+      {
+        "@id": "https://orcid.org/0000-0002-0961-3298"
+      }
+    ],
+    "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
+  },
+  {
+    "@id": "https://orcid.org/0000-0001-9842-9718",
+    "@type": "Person",
+    "name": "Stian Soiland-Reyes"
+  },
+    {
+      "@id": "https://orcid.org/0000-0002-6285-8120", 
+      "affiliation": "Instute for Health Science in Aragon (IACS)", 
+      "@type": "Person", 
+      "name": "Estupiñán-Romero, Francisco"
+    }, 
+    {
+      "@id": "https://orcid.org/0000-0001-7316-6990", 
+      "affiliation": "Sciensano", 
+      "@type": "Person", 
+      "name": "Van Goethem, Nina"
+    }, 
+    {
+      "@id": "https://orcid.org/0000-0002-4409-0664", 
+      "affiliation": "Sciensano", 
+      "@type": "Person", 
+      "name": "Meurisse, Marjan"
+    }, 
+    {
+      "@id": "https://orcid.org/0000-0002-8783-5478", 
+      "affiliation": "Instute for Health Science in Aragon (IACS)", 
+      "@type": "Person", 
+      "name": "González-Galindo, Javier"
+    }, 
+    {
+      "@id": "https://orcid.org/0000-0002-0961-3298", 
+      "affiliation": "Instute for Health Science in Aragon (IACS)", 
+      "@type": "Person", 
+      "name": "Bernal-Delgado, Enrique"
+    },
+
+    {
+      "@id": "#qmd-generation",
+      "@type": "CreateAction",
+      "xx-unknown-agent": {
+        "@id": "#SomeUser"
+      },
+      "endTime": "2022-07-27T12:00:00+01:00",
+      "instrument": {
+        "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8"
+      },
+      "name": "Generating HTML from QMD",
+      "object": {
+        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"
+      },
+      "result": {
+        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
+      }
+    },
+    { "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8", 
+      "@type": "SoftwareApplication",
+      "name": "Quarto",
+      "version": "1.0.8",
+      "url": "https://quarto.org/"
+    },
+    { "@id": "vaccines_effectiveness_causal_model/",
+      "@type": "Dataset",
+      "name": "Causal model",
+      "description": "responding to the research question",
+      "hasPart": [
+        {"@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"},
+        {"@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"}
+      ]
+    },
+    { "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html",
+      "@type": "File",
+      "description": "Interactive report showcasing the structural causal model (DAG) to answer the research question",
+      "encodingFormat": "text/html",
+      "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)"
+    },
+    { "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd",
+      "@type": "File",
+      "encodingFormat": [
+        "text/markdown",
+        {"@id": "https://quarto.org/docs/authoring/markdown-basics.html"}
+      ],      
+      "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)",
+      "description": "Quarto RMarkdown script to produce the structural causal model"
+    },
+    { "@id": "https://quarto.org/docs/authoring/markdown-basics.html",
+      "@type": "WebPage",
+      "name": "Quarto Markdown"
+    },
+    { "@id": "vaccines_effectiveness_common_data_model_specification/",
+      "@type": "Dataset",
+      "name": "Common data model specification",
+      "description": "following the causal model"
+    },
+    { "@id": "vaccines_effectiveness_common_synthetic_dataset/",
+      "@type": "Dataset",
+      "name": "Synthetic dataset",
+      "description": "complying with the common data model specifications"
+    }
+  ]
+}
