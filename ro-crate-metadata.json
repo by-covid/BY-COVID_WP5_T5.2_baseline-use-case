@@ -7,30 +7,84 @@
         "conformsTo": {
             "@id": "https://w3id.org/ro/crate/1.1"
         },
+        "author": { "@id": "https://orcid.org/0000-0001-9842-9718"},
         "about": {
-            "@id": "./"
+            "@id": "https://doi.org/10.5281/zenodo.6913045"
         }
     },    
     {
-      "@id": "./",
+      "@id": "https://doi.org/10.5281/zenodo.6913045",
       "@type": "Dataset",
       "conformsTo": [
         {
           "@id": "https://w3id.org/ro/wfrun/process/0.1-DRAFT"
         }
       ],
+      "identifier": "https://doi.org/10.5281/zenodo.6913045",
       "hasPart": [
+        {"@id": "vaccines_effectiveness_causal_model/"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/"},
+        {"@id": "vaccines_effectiveness_common_synthetic_dataset/"}
       ],
-      "mentions": {
-      },
-      "author": { "@id": "#SomeUser"},
-      "name": ".."
+      "mentions": [
+        { "@id": "#xx" }
+      ],
+      "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        }, 
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        }, 
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        }, 
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        }, 
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
+      "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
     },
     {
-        "@id": "#SomeUser",
-        "@type": "Person",
-        "name": "Alice"
+      "@id": "https://orcid.org/0000-0001-9842-9718",
+      "@type": "Person",
+      "name": "Stian Soiland-Reyes"
+    },
+      {
+        "@id": "https://orcid.org/0000-0002-6285-8120", 
+        "affiliation": "Instute for Health Science in Aragon (IACS)", 
+        "@type": "Person", 
+        "name": "Estupiñán-Romero, Francisco"
+      }, 
+      {
+        "@id": "https://orcid.org/0000-0001-7316-6990", 
+        "affiliation": "Sciensano", 
+        "@type": "Person", 
+        "name": "Van Goethem, Nina"
+      }, 
+      {
+        "@id": "https://orcid.org/0000-0002-4409-0664", 
+        "affiliation": "Sciensano", 
+        "@type": "Person", 
+        "name": "Meurisse, Marjan"
+      }, 
+      {
+        "@id": "https://orcid.org/0000-0002-8783-5478", 
+        "affiliation": "Instute for Health Science in Aragon (IACS)", 
+        "@type": "Person", 
+        "name": "González-Galindo, Javier"
+      }, 
+      {
+        "@id": "https://orcid.org/0000-0002-0961-3298", 
+        "affiliation": "Instute for Health Science in Aragon (IACS)", 
+        "@type": "Person", 
+        "name": "Bernal-Delgado, Enrique"
       },
+
       {
         "@id": "#xx",
         "@type": "CreateAction",
@@ -49,6 +103,21 @@
         "result": {
           "@id": "x"
         }
+      },
+      { "@id": "vaccines_effectiveness_causal_model/",
+        "@type": "Dataset",
+        "name": "Causal model",
+        "description": "responding to the research question"
+      },
+      { "@id": "vaccines_effectiveness_common_data_model_specification/",
+        "@type": "Dataset",
+        "name": "Common data model specification",
+        "description": "following the causal model"
+      },
+      { "@id": "vaccines_effectiveness_common_synthetic_dataset/",
+        "@type": "Dataset",
+        "name": "Synthetic dataset",
+        "description": "complying with the common data model specifications"
       },
       {
         "@id": "x",
