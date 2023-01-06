@@ -32,6 +32,9 @@
     ],
     "mentions": [
       { "@id": "#qmd-generation" },
+      { "@id": "#panda-analysis"},
+      { "@id": "#dataspice-creation"},
+      { "@id": "#notebook-execution"},
       { "@id": "#metadata-creation"}
     ],
     "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
@@ -54,9 +57,6 @@
     ],
     "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
   },
-  {"@id": "vaccines_effectiveness_common_synthetic_dataset/",
-  "@type": "Dataset",
-  },  
   {
     "@id": "README.md",
     "@type": "File",
