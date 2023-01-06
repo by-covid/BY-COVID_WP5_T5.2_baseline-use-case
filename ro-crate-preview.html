@@ -45,7 +45,7 @@
         }
       ],
       "mentions": {
-        "@id": "#xx"
+        "@id": "#qmd-generation"
       },
       "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
       "author": [
@@ -71,7 +71,15 @@
       "@id": "vaccines_effectiveness_causal_model/",
       "@type": "Dataset",
       "name": "Causal model",
-      "description": "responding to the research question"
+      "description": "responding to the research question",
+      "hasPart": [
+        {
+          "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
+        },
+        {
+          "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"
+        }
+      ]
     },
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/",
@@ -86,22 +94,21 @@
       "description": "complying with the common data model specifications"
     },
     {
-      "@id": "#xx",
+      "@id": "#qmd-generation",
       "@type": "CreateAction",
-      "agent": {
+      "xx-unknown-agent": {
         "@id": "#SomeUser"
       },
-      "description": "Run through GUI",
-      "endTime": "2018-09-19T17:01:07+10:00",
+      "endTime": "2022-07-27T12:00:00+01:00",
       "instrument": {
-        "@id": "xx"
+        "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8"
       },
-      "name": "xx",
+      "name": "Generating HTML from QMD",
       "object": {
-        "@id": "xx"
+        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"
       },
       "result": {
-        "@id": "x"
+        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
       }
     },
     {
@@ -135,11 +142,35 @@
       "name": "Bernal-Delgado, Enrique"
     },
     {
-      "@id": "x",
+      "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8",
+      "@type": "SoftwareApplication",
+      "name": "Quarto",
+      "version": "1.0.8",
+      "url": "https://quarto.org/"
+    },
+    {
+      "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd",
       "@type": "File",
-      "description": "Data Dictionary",
-      "encodingFormat": "text/csv",
-      "name": "Dictionarycsv"
+      "encodingFormat": [
+        "text/markdown",
+        {
+          "@id": "https://quarto.org/docs/authoring/markdown-basics.html"
+        }
+      ],
+      "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)",
+      "description": "Quarto RMarkdown script to produce the structural causal model"
+    },
+    {
+      "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html",
+      "@type": "File",
+      "description": "Interactive report showcasing the structural causal model (DAG) to answer the research question",
+      "encodingFormat": "text/html",
+      "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)"
+    },
+    {
+      "@id": "https://quarto.org/docs/authoring/markdown-basics.html",
+      "@type": "WebPage",
+      "name": "Quarto Markdown"
     }
   ]
 }
@@ -238,7 +269,7 @@ table.table {
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
-            <td style='text-align:left'><a href="#%23xx">xx</a></td>
+            <td style='text-align:left'><a href="#%23qmd-generation">Generating HTML from QMD</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">keywords<span>&nbsp;</span><a href="http://schema.org/keywords">[?]</a></th>
             <td style='text-align:left'><span>COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data</span></td>
@@ -422,6 +453,13 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
             <td style='text-align:left'><span>responding to the research question</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html">COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd">COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)</a></li>
+                        </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
@@ -492,41 +530,38 @@ table.table {
         </div>
         <hr/><br/><br/>
            <div>
-            <h3> xx</h3>
+            <h3> Generating HTML from QMD</h3>
             
             
             
             
-        <div id="#xx">
+        <div id="#qmd-generation">
             
             <table class="table metadata table-striped" >
                 <tbody><tr>
             <th style="text-align:left;" class="prop">@id</th>
-            <td style='text-align:left'><span>#xx</span></td>
+            <td style='text-align:left'><span>#qmd-generation</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
-            <td style='text-align:left'><span>xx</span></td>
+            <td style='text-align:left'><span>Generating HTML from QMD</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">@type</th>
             <td style='text-align:left'><span>CreateAction</span></td>
             </tr><tr>
-            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
-            <td style='text-align:left'><span>Run through GUI</span></td>
-            </tr><tr>
-            <th style="text-align:left;" class="prop">agent<span>&nbsp;</span><a href="http://schema.org/agent">[?]</a></th>
+            <th style="text-align:left;" class="prop">xx-unknown-agent</th>
             <td style='text-align:left'>#SomeUser</td>
             </tr><tr>
             <th style="text-align:left;" class="prop">endTime<span>&nbsp;</span><a href="http://schema.org/endTime">[?]</a></th>
-            <td style='text-align:left'><span>2018-09-19T17:01:07+10:00</span></td>
+            <td style='text-align:left'><span>2022-07-27T12:00:00+01:00</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
-            <td style='text-align:left'>xx</td>
+            <td style='text-align:left'><a href="#https%3A//github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8">Quarto</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
-            <td style='text-align:left'>xx</td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd">COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
-            <td style='text-align:left'><a href="#x">Dictionarycsv</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html">COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
