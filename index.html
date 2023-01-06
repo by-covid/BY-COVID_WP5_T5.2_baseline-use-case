@@ -129,10 +129,7 @@
           "@id": "https://orcid.org/0000-0002-8783-5478"
         }
       ],
-      "datePublished": {
-        "@type": "Date",
-        "@value": "27-07-2022"
-      },
+      "datePublished": "2022-07-27",
       "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
       "distribution": {
         "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
@@ -324,9 +321,6 @@
     {
       "@id": "#qmd-generation",
       "@type": "CreateAction",
-      "xx-unknown-agent": {
-        "@id": "#SomeUser"
-      },
       "endTime": "2022-07-27T12:00:00+01:00",
       "instrument": {
         "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8"
@@ -390,7 +384,7 @@
           "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
+          "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
         }
       ],
       "instrument": {
@@ -504,10 +498,11 @@
         "File"
       ],
       "encodingFormat": "text/csv",
-      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
+      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1",
+      "description": "synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
+      "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
       "@type": "File",
       "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
       "encodingFormat": "text/html",
@@ -649,7 +644,7 @@
       "@type": "Dataset",
       "name": "Documentation for Common data model specification",
       "hasPart": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
+        "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
       },
       "about": {
         "@id": "vaccines_effectiveness_common_data_model_specification/"
@@ -699,6 +694,8 @@
       "@type": "PropertyValue",
       "description": "Age of the person included in  the cohort (at the time of entering the cohort)",
       "name": "age_nm",
+      "minValue": 5,
+      "maxValue": 115,
       "unitText": "years"
     },
     {
@@ -1291,7 +1288,7 @@ table.table {
             <td style='text-align:left'><span>Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
-            <td style='text-align:left'><span>[object Object]</span></td>
+            <td style='text-align:left'><span>2022-07-27</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
             <td style='text-align:left'><ul>
@@ -1307,11 +1304,11 @@ table.table {
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">distribution<span>&nbsp;</span><a href="http://schema.org/distribution">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></li>
                         
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></li>
                         
@@ -1437,7 +1434,7 @@ table.table {
             <td style='text-align:left'><ul>
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
                         
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></li>
                         </ul></td>
@@ -1543,9 +1540,6 @@ table.table {
             <th style="text-align:left;" class="prop">@type</th>
             <td style='text-align:left'><span>CreateAction</span></td>
             </tr><tr>
-            <th style="text-align:left;" class="prop">xx-unknown-agent</th>
-            <td style='text-align:left'>#SomeUser</td>
-            </tr><tr>
             <th style="text-align:left;" class="prop">endTime<span>&nbsp;</span><a href="http://schema.org/endTime">[?]</a></th>
             <td style='text-align:left'><span>2022-07-27T12:00:00+01:00</span></td>
             </tr><tr>
@@ -1645,14 +1639,14 @@ table.table {
                         
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
             <td style='text-align:left'><ul>
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
