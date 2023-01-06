@@ -795,6 +795,8 @@
       "@type": "PropertyValue",
       "description": "Age of the person included in  the cohort (at the time of entering the cohort)",
       "name": "age_nm",
+      "minValue": 5,
+      "maxValue": 115,
       "unitText": "years"
     },
     {
