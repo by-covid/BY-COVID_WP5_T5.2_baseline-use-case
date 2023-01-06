@@ -34,7 +34,8 @@
       { "@id": "#qmd-generation" },
       { "@id": "#panda-analysis"},
       { "@id": "#dataspice-creation"},
-      { "@id": "#notebook-execution"},
+      { "@id": "#notebook-execution-650k"},
+      { "@id": "#notebook-execution-1M"},
       { "@id": "#metadata-creation"}
     ],
     "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
@@ -120,14 +121,24 @@
       "endTime": "2022-07-27"
     },
     {
-      "@id": "#notebook-execution",
+      "@id": "#notebook-execution-650k",
       "@type": "CreateAction",
       "instrument": {
         "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
       },
       "result": { "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv" },
-      "name": "Execution of Jupyter Notebook to generate synthetic dataset",
-      "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A different notebook was executed.",
+      "name": "Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset",
+      "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A modified notebook must have been executed.",
+      "endTime": "2022-05-24"
+    },
+    {
+      "@id": "#notebook-execution-1M",
+      "@type": "CreateAction",
+      "instrument": {
+        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+      },
+      "result": { "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv" },
+      "name": "Execution of Jupyter Notebook to generate 1M synthetic dataset",
       "endTime": "2022-05-24"
     },
     {
@@ -322,13 +333,14 @@
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
       "@type": "File",
-      "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)",
+      "description": "Human-readable version (interactive report)",
       "encodingFormat": "text/html",
       "about": { 
         "@id": "vaccines_effectiveness_common_data_model_specification/"
       }      
     },
-    { "@id": "vaccines_effectiveness_common_data_model_specification/metadata/",
+    { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/",
       "@type": "Dataset",
       "name": "Metadata for Common data model specification",
       "hasPart": [
@@ -378,8 +390,18 @@
       "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
       "encodingFormat": "application/ld+json",
       "@type": "File",
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)",
+      "description": "Machine-readable version",
       "mainEntity": {"@id": "vaccines_effectiveness_common_data_model_specification/"}
     },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx",
+      "@type": "File",
+      "name": "vaccine effectiveness data model specification (XLXS)",
+      "description": "Human-readable version (Excel)",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+    },    
     { "@id": "vaccines_effectiveness_common_data_model_specification/",
       "@type": "Dataset",
       "creator": [
@@ -406,11 +428,12 @@
       },
       "hasPart": [
         {"@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"},
-        {"@id": "vaccines_effectiveness_common_data_model_specification/metadata/"},
-        {"@id": "vaccines_effectiveness_common_data_model_specification/docs/"}
+        {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/docs/"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx"}
       ],
       "subjectOf": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/metadata/"
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/"
       },
       "keywords": [
         "synthetic data",
