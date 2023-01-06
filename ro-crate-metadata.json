@@ -59,6 +59,8 @@
       "license": {
         "@id": "https://spdx.org/licenses/CC-BY-4.0"
       },
+      "datePublished": "2023-01-06",
+      "publisher": {"@id": "https://by-covid.eu/"},
       "mentions": [
         {
           "@id": "#qmd-generation"
@@ -550,65 +552,86 @@
     {
       "@id": "https://orcid.org/0000-0001-7316-6990",
       "@type": "Person",
-      "affiliation": "Sciensano",
+      "affiliation": {
+        "@id": "https://ror.org/04ejags36"
+      },
       "email": "Nina.VanGoethem@sciensano.be",
       "name": "Nina Van Goethem"
     },
     {
       "@id": "https://orcid.org/0000-0001-9842-9718",
       "@type": "Person",
-      "name": "Stian Soiland-Reyes"
+      "name": "Stian Soiland-Reyes",
+      "affiliation": {
+        "@id": "https://ror.org/027m9bs27"
+      }
     },
     {
       "@id": "https://orcid.org/0000-0002-0493-4711",
       "@type": "Person",
-      "affiliation": "GÖG",
+      "affiliation": {
+        "@id": "https://ror.org/02m68mv75"
+      },
       "name": "Alexander Degelsegger-Marquez"
     },
     {
       "@id": "https://orcid.org/0000-0002-0961-3298",
       "@type": "Person",
-      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
       "email": "ebernal.iacs@aragon.es",
       "name": "Enrique Bernal-Delgado"
     },
     {
       "@id": "https://orcid.org/0000-0002-1145-7829",
       "@type": "Person",
-      "affiliation": "DANS",
+      "affiliation": {
+        "@id": "https://ror.org/008pnp284"
+      },
       "name": "Simon Saldner"
     },
     {
       "@id": "https://orcid.org/0000-0002-4409-0664",
       "@type": "Person",
-      "affiliation": "Sciensano",
+      "affiliation": {
+        "@id": "https://ror.org/04ejags36"
+      },
       "email": "Marjan.Meurisse@sciensano.be",
       "name": "Marjan Meurisse"
     },
     {
       "@id": "https://orcid.org/0000-0002-6285-8120",
       "@type": "Person",
-      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
       "email": "festupinnan.iacs@aragon.es",
       "name": "Francisco Estupiñán-Romero"
     },
     {
       "@id": "https://orcid.org/0000-0002-7873-6152",
       "@type": "Person",
-      "affiliation": "GÖG",
+      "affiliation": {
+        "@id": "https://ror.org/02m68mv75"
+      },
       "name": "Lorenz Dolanski-Aghamanoukjan"
     },
     {
       "@id": "https://orcid.org/0000-0002-8783-5478",
       "@type": "Person",
-      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
       "email": "jgonzalezga.iacs@aragon.es",
       "name": "Javier González-Galindo"
     },
     {
       "@id": "https://orcid.org/0000-0002-9586-7955",
       "@type": "Person",
-      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
       "name": "Martínez-Lizaga, Natalia"
     },
     {
@@ -622,8 +645,65 @@
       "name": "Creative Commons Attribution 4.0 International",
       "url": "https://creativecommons.org/licenses/by/4.0/"
     },
-
-
+    {
+      "@id": "https://by-covid.eu/",
+      "@type": "Project", 
+      "name": "BY-COVID",
+      "description": "BeYond-COVID, make data from COVID-19 and other infectious diseases open and accessible to everyone",
+      "url": "https://by-covid.eu/",
+      "funding": {
+        "@id": "https://doi.org/10.3030/101046203"
+      }
+    },
+    {
+      "@id": "https://doi.org/10.3030/101046203",
+      "@type": "Grant", 
+      "name": "HORIZON-INFRA-2021-EMERGENCY-01 101046203",
+      "funder": {
+        "@id": "https://ror.org/00k4n6c32"
+      },
+      "identifier": "https://doi.org/10.3030/101046203"
+    },
+    {
+      "@id": "https://ror.org/00k4n6c32",
+      "@type": "Organization",
+      "name": "European Commission"
+    },
+    {
+      "@id": "https://ror.org/05p0enq35",
+      "@type": "Organization",
+      "name": "Instute for Health Science in Aragon (IACS)",
+      "legalName": "Instituto Aragonés de Ciencias de la Salud",
+      "alternateName": "IACS",
+      "url": "https://www.iacs.es/"
+    },
+    {
+      "@id": "https://ror.org/027m9bs27",
+      "@type": "CollegeOrUniversity", 
+      "name": "The University of Manchester",
+      "alternateName": "UNIMAN",
+      "url": "https://www.manchester.ac.uk/"
+    },
+    {
+      "@id": "https://ror.org/04ejags36",
+      "@type": "Organization",
+      "name": "Sciensano",
+      "url": "https://www.sciensano.be/"
+    },
+    {
+      "@id": "https://ror.org/008pnp284",
+      "@type": "Organization",
+      "name": "Data Archiving and Networked Services", 
+      "alternateName": "DANS",
+      "legalName": "Nederlands Instituut voor Permanente Toegang tot Digitale Onderzoeksgegevens",
+      "url": "https://dans.knaw.nl/"
+    },
+    {
+      "@id": "https://ror.org/02m68mv75",
+      "name": "Gesundheit Österreich",
+      "alternateName": "GÖG",
+      "url": "https://goeg.at/"
+    },
     {
       "@id": "_:b0",
       "@type": "Place",
