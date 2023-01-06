@@ -61,6 +61,12 @@
       },
       "datePublished": "2023-01-06",
       "publisher": {"@id": "https://by-covid.eu/"},
+      "funding": {
+        "@id": "https://doi.org/10.3030/101046203"
+      },
+      "funder": {
+        "@id": "https://ror.org/00k4n6c32"
+      },
       "mentions": [
         {
           "@id": "#qmd-generation"
