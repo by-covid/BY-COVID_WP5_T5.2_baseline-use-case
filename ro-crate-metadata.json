@@ -196,8 +196,24 @@
       "name": "Common data model specification",
       "description": "following the causal model"
     },
+    { "@id": "vaccines_effectiveness_common_data_model_specification/docs/",
+      "@type": "Dataset",
+      "name": "Documentation for Common data model specification",
+      "hasPart": [
+        {"@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html"}
+      ],
+      "about": { 
+        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+      }
+    },    
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
+      "@type": "File",
+      "encodingFormat": "text/html"
+    },
     { "@id": "vaccines_effectiveness_common_data_model_specification/metadata/",
       "@type": "Dataset",
+      "name": "Metadata for Common data model specification",
       "hasPart": [
         {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"},
         {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"},
@@ -276,7 +292,8 @@
       },
       "hasPart": [
         {"@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"},
-        {"@id": "vaccines_effectiveness_common_data_model_specification/metadata/"}
+        {"@id": "vaccines_effectiveness_common_data_model_specification/metadata/"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/docs/"}
       ],
       "subjectOf": {
         "@id": "vaccines_effectiveness_common_data_model_specification/metadata/"
