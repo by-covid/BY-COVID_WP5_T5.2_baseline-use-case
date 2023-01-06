@@ -66,6 +66,10 @@
       "license": {
         "@id": "https://spdx.org/licenses/CC-BY-4.0"
       },
+      "datePublished": "2023-01-06",
+      "publisher": {
+        "@id": "https://by-covid.eu/"
+      },
       "mentions": [
         {
           "@id": "#qmd-generation"
@@ -98,7 +102,10 @@
     {
       "@id": "https://orcid.org/0000-0001-9842-9718",
       "@type": "Person",
-      "name": "Stian Soiland-Reyes"
+      "name": "Stian Soiland-Reyes",
+      "affiliation": {
+        "@id": "https://ror.org/027m9bs27"
+      }
     },
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
@@ -113,35 +120,45 @@
     {
       "@id": "https://orcid.org/0000-0002-6285-8120",
       "@type": "Person",
-      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
       "email": "festupinnan.iacs@aragon.es",
       "name": "Francisco Estupiñán-Romero"
     },
     {
       "@id": "https://orcid.org/0000-0001-7316-6990",
       "@type": "Person",
-      "affiliation": "Sciensano",
+      "affiliation": {
+        "@id": "https://ror.org/04ejags36"
+      },
       "email": "Nina.VanGoethem@sciensano.be",
       "name": "Nina Van Goethem"
     },
     {
       "@id": "https://orcid.org/0000-0002-4409-0664",
       "@type": "Person",
-      "affiliation": "Sciensano",
+      "affiliation": {
+        "@id": "https://ror.org/04ejags36"
+      },
       "email": "Marjan.Meurisse@sciensano.be",
       "name": "Marjan Meurisse"
     },
     {
       "@id": "https://orcid.org/0000-0002-8783-5478",
       "@type": "Person",
-      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
       "email": "jgonzalezga.iacs@aragon.es",
       "name": "Javier González-Galindo"
     },
     {
       "@id": "https://orcid.org/0000-0002-0961-3298",
       "@type": "Person",
-      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
       "email": "ebernal.iacs@aragon.es",
       "name": "Enrique Bernal-Delgado"
     },
@@ -393,6 +410,16 @@
       "@type": "Thing"
     },
     {
+      "@id": "https://by-covid.eu/",
+      "@type": "Project",
+      "name": "BY-COVID",
+      "description": "BeYond-COVID, make data from COVID-19 and other infectious diseases open and accessible to everyone",
+      "url": "https://by-covid.eu/",
+      "funding": {
+        "@id": "https://doi.org/10.3030/101046203"
+      }
+    },
+    {
       "@id": "#qmd-generation",
       "@type": "CreateAction",
       "endTime": "2022-07-27T12:00:00+01:00",
@@ -542,25 +569,33 @@
     {
       "@id": "https://orcid.org/0000-0002-1145-7829",
       "@type": "Person",
-      "affiliation": "DANS",
+      "affiliation": {
+        "@id": "https://ror.org/008pnp284"
+      },
       "name": "Simon Saldner"
     },
     {
       "@id": "https://orcid.org/0000-0002-7873-6152",
       "@type": "Person",
-      "affiliation": "GÖG",
+      "affiliation": {
+        "@id": "https://ror.org/02m68mv75"
+      },
       "name": "Lorenz Dolanski-Aghamanoukjan"
     },
     {
       "@id": "https://orcid.org/0000-0002-0493-4711",
       "@type": "Person",
-      "affiliation": "GÖG",
+      "affiliation": {
+        "@id": "https://ror.org/02m68mv75"
+      },
       "name": "Alexander Degelsegger-Marquez"
     },
     {
       "@id": "https://orcid.org/0000-0002-9586-7955",
       "@type": "Person",
-      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
       "name": "Martínez-Lizaga, Natalia"
     },
     {
@@ -1019,6 +1054,56 @@
       "version": "1.0.8"
     },
     {
+      "@id": "https://ror.org/04ejags36",
+      "@type": "Organization",
+      "name": "Sciensano",
+      "url": "https://www.sciensano.be/"
+    },
+    {
+      "@id": "https://ror.org/027m9bs27",
+      "@type": "CollegeOrUniversity",
+      "name": "The University of Manchester",
+      "alternateName": "UNIMAN",
+      "url": "https://www.manchester.ac.uk/"
+    },
+    {
+      "@id": "https://ror.org/02m68mv75",
+      "name": "Gesundheit Österreich",
+      "alternateName": "GÖG",
+      "url": "https://goeg.at/",
+      "@type": "Thing"
+    },
+    {
+      "@id": "https://ror.org/05p0enq35",
+      "@type": "Organization",
+      "name": "Instute for Health Science in Aragon (IACS)",
+      "legalName": "Instituto Aragonés de Ciencias de la Salud",
+      "alternateName": "IACS",
+      "url": "https://www.iacs.es/"
+    },
+    {
+      "@id": "https://ror.org/008pnp284",
+      "@type": "Organization",
+      "name": "Data Archiving and Networked Services",
+      "alternateName": "DANS",
+      "legalName": "Nederlands Instituut voor Permanente Toegang tot Digitale Onderzoeksgegevens",
+      "url": "https://dans.knaw.nl/"
+    },
+    {
+      "@id": "https://doi.org/10.3030/101046203",
+      "@type": "Grant",
+      "name": "HORIZON-INFRA-2021-EMERGENCY-01 101046203",
+      "funder": {
+        "@id": "https://ror.org/00k4n6c32"
+      },
+      "identifier": "https://doi.org/10.3030/101046203"
+    },
+    {
+      "@id": "https://ror.org/00k4n6c32",
+      "@type": "Organization",
+      "name": "European Commission"
+    },
+    {
       "@id": "_:b42",
       "@type": "GeoShape",
       "box": "66.78398 11.50546 44.4272 -15.84884"
@@ -1094,6 +1179,9 @@ table.table {
             <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
             <td style='text-align:left'><span>This publication corresponds to the Common Data Model (CDM) specification of the Baseline Use Case proposed in T.5.2 (WP5) in the BY-COVID project on “COVID-19 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection.”</span></td>
             </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2023-01-06</span></td>
+            </tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
             <td style='text-align:left'><ul>
                         <li><a href="#https%3A//orcid.org/0000-0002-6285-8120">Francisco Estupiñán-Romero</a></li>
@@ -1129,6 +1217,9 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">license<span>&nbsp;</span><a href="http://schema.org/license">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//spdx.org/licenses/CC-BY-4.0">Creative Commons Attribution 4.0 International</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">publisher<span>&nbsp;</span><a href="http://schema.org/publisher">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//by-covid.eu/">BY-COVID</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
             <td style='text-align:left'><ul>
@@ -1201,7 +1292,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Person</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">affiliation<span>&nbsp;</span><a href="http://schema.org/affiliation">[?]</a></th>
-            <td style='text-align:left'><span>Instute for Health Science in Aragon (IACS)</span></td>
+            <td style='text-align:left'><a href="#https%3A//ror.org/05p0enq35">Instute for Health Science in Aragon (IACS)</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">email<span>&nbsp;</span><a href="http://schema.org/email">[?]</a></th>
             <td style='text-align:left'><span>festupinnan.iacs@aragon.es</span></td>
@@ -1237,7 +1328,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Person</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">affiliation<span>&nbsp;</span><a href="http://schema.org/affiliation">[?]</a></th>
-            <td style='text-align:left'><span>Sciensano</span></td>
+            <td style='text-align:left'><a href="#https%3A//ror.org/04ejags36">Sciensano</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">email<span>&nbsp;</span><a href="http://schema.org/email">[?]</a></th>
             <td style='text-align:left'><span>Nina.VanGoethem@sciensano.be</span></td>
@@ -1273,7 +1364,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Person</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">affiliation<span>&nbsp;</span><a href="http://schema.org/affiliation">[?]</a></th>
-            <td style='text-align:left'><span>Sciensano</span></td>
+            <td style='text-align:left'><a href="#https%3A//ror.org/04ejags36">Sciensano</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">email<span>&nbsp;</span><a href="http://schema.org/email">[?]</a></th>
             <td style='text-align:left'><span>Marjan.Meurisse@sciensano.be</span></td>
@@ -1309,7 +1400,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Person</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">affiliation<span>&nbsp;</span><a href="http://schema.org/affiliation">[?]</a></th>
-            <td style='text-align:left'><span>Instute for Health Science in Aragon (IACS)</span></td>
+            <td style='text-align:left'><a href="#https%3A//ror.org/05p0enq35">Instute for Health Science in Aragon (IACS)</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">email<span>&nbsp;</span><a href="http://schema.org/email">[?]</a></th>
             <td style='text-align:left'><span>jgonzalezga.iacs@aragon.es</span></td>
@@ -1345,7 +1436,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Person</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">affiliation<span>&nbsp;</span><a href="http://schema.org/affiliation">[?]</a></th>
-            <td style='text-align:left'><span>Instute for Health Science in Aragon (IACS)</span></td>
+            <td style='text-align:left'><a href="#https%3A//ror.org/05p0enq35">Instute for Health Science in Aragon (IACS)</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">email<span>&nbsp;</span><a href="http://schema.org/email">[?]</a></th>
             <td style='text-align:left'><span>ebernal.iacs@aragon.es</span></td>
@@ -1693,6 +1784,42 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">license<span>&nbsp;</span><a href="http://schema.org/license">[?]</a></th>
+            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3><a href="https://by-covid.eu/">Go to: </a> BY-COVID</h3>
+            
+            
+            
+            
+        <div id="https://by-covid.eu/">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><a href="https://by-covid.eu/">https://by-covid.eu/</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>BY-COVID</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>Project</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>BeYond-COVID, make data from COVID-19 and other infectious diseases open and accessible to everyone</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">url<span>&nbsp;</span><a href="http://schema.org/url">[?]</a></th>
+            <td style='text-align:left'><a href="https://by-covid.eu/">https://by-covid.eu/</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">funding<span>&nbsp;</span><a href="http://schema.org/funding">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.3030/101046203">HORIZON-INFRA-2021-EMERGENCY-01 101046203</a></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">publisher<span>&nbsp;</span><a href="http://schema.org/publisher">[?]</a></th>
             <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr></tbody>
             </table>
