@@ -8,7 +8,7 @@
         "@id": "https://w3id.org/ro/crate/1.1"
       },
       "about": {
-        "@id": "https://doi.org/10.5281/zenodo.6913045"
+        "@id": "./"
       },
       "author": {
         "@id": "https://orcid.org/0000-0001-9842-9718"
@@ -18,7 +18,7 @@
       }
     },
     {
-      "@id": "https://doi.org/10.5281/zenodo.6913045",
+      "@id": "./",
       "@type": "Dataset",
       "conformsTo": {
         "@id": "https://w3id.org/ro/wfrun/process/0.1-DRAFT"
@@ -79,13 +79,20 @@
           "@id": "#metadata-creation"
         }
       ],
-      "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
+      "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification",
+      "description": "This publication corresponds to the Common Data Model (CDM) specification of the Baseline Use Case proposed in T.5.2 (WP5) in the BY-COVID project on “COVID-19 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection.”",
+      "assesses": "Research Question: How effective have the SARS-CoV-2 vaccination programmes been in preventing SARS-CoV-2 infections?",
+      "material": "Cohort definition: All people, eligible to be vaccinated (from 5 to 115 years old, included) or with, at least, one dose of a SARS-CoV-2 vaccine (any of the available brands) having or not a previous SARS-CoV-2 infection.",
+      "materialExtent": "Inclusion criteria: \n All people vaccinated with at least one dose of the COVID-19 vaccine (any of the available brands) in an area of residence. Any person eligible to be vaccinated (from 5 to 115 years old, included) with a positive diagnosis (irrespective of the type of test) for SARS-CoV-2 infection (COVID-19) during the period of study.  \n\n Exclusion criteria: \n People not eligible for the vaccine (from 0 to 4 years old, included)",
+      "publishingPrinciples": "Study Design: An observational retrospective longitudinal study to assess the effectiveness of the COVID-19 vaccine(s) in preventing SARS-CoV-2 infections using routinely collected social, health and care data from several countries.\n\nA causal model was established using Directed Acyclic Graphs (DAGs) to map domain knowledge, theories and assumptions about the causal relationship between exposure and outcome. ",
+      "temporalCoverage": "Study Period: From the date of the first documented SARS-CoV-2 infection in each country to the most recent date in which data is available at the time of analysis. Roughly from 01-03-2020 to 30-06-2022, depending on the country.",
+      "usageInfo": "The scripts (software) accompanying the data model specification are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit."
     },
     {
       "@id": "README.md",
       "@type": "File",
       "about": {
-        "@id": "https://doi.org/10.5281/zenodo.6913045"
+        "@id": "./"
       },
       "encodingFormat": "text/markdown"
     },
