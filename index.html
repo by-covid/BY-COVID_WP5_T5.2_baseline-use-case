@@ -17,6 +17,9 @@
       "author": {
         "@id": "https://orcid.org/0000-0001-9842-9718"
       },
+      "isBasedOn": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+      },
       "about": {
         "@id": "https://doi.org/10.5281/zenodo.6913045"
       }
@@ -25,6 +28,14 @@
       "@id": "https://orcid.org/0000-0001-9842-9718",
       "@type": "Person",
       "name": "Stian Soiland-Reyes"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
+      "encodingFormat": "application/ld+json",
+      "@type": "File",
+      "mainEntity": {
+        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+      }
     },
     {
       "@id": "https://doi.org/10.5281/zenodo.6913045",
@@ -42,11 +53,19 @@
         },
         {
           "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+        },
+        {
+          "@id": "README.md"
         }
       ],
-      "mentions": {
-        "@id": "#qmd-generation"
-      },
+      "mentions": [
+        {
+          "@id": "#qmd-generation"
+        },
+        {
+          "@id": "#metadata-creation"
+        }
+      ],
       "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
       "author": [
         {
@@ -90,8 +109,194 @@
     {
       "@id": "vaccines_effectiveness_common_synthetic_dataset/",
       "@type": "Dataset",
-      "name": "Synthetic dataset",
-      "description": "complying with the common data model specifications"
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        }
+      ],
+      "datePublished": {
+        "@type": "Date",
+        "@value": "27-07-2022"
+      },
+      "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
+      "distribution": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+      },
+      "hasPart": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/metadata/"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/docs/"
+        }
+      ],
+      "subjectOf": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/metadata/"
+      },
+      "keywords": [
+        "synthetic data",
+        "dataset",
+        "covid-19",
+        "vaccines",
+        "effectiveness",
+        "causal model"
+      ],
+      "license": {
+        "@id": "CC BY 4.0"
+      },
+      "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
+      "spatialCoverage": {
+        "@id": "_:b2"
+      },
+      "temporalCoverage": "01-01-2020/31-12-2024",
+      "variableMeasured": [
+        {
+          "@id": "_:b4"
+        },
+        {
+          "@id": "_:b5"
+        },
+        {
+          "@id": "_:b6"
+        },
+        {
+          "@id": "_:b7"
+        },
+        {
+          "@id": "_:b8"
+        },
+        {
+          "@id": "_:b9"
+        },
+        {
+          "@id": "_:b10"
+        },
+        {
+          "@id": "_:b11"
+        },
+        {
+          "@id": "_:b12"
+        },
+        {
+          "@id": "_:b13"
+        },
+        {
+          "@id": "_:b14"
+        },
+        {
+          "@id": "_:b15"
+        },
+        {
+          "@id": "_:b16"
+        },
+        {
+          "@id": "_:b17"
+        },
+        {
+          "@id": "_:b18"
+        },
+        {
+          "@id": "_:b19"
+        },
+        {
+          "@id": "_:b20"
+        },
+        {
+          "@id": "_:b21"
+        },
+        {
+          "@id": "_:b22"
+        },
+        {
+          "@id": "_:b23"
+        },
+        {
+          "@id": "_:b24"
+        },
+        {
+          "@id": "_:b25"
+        },
+        {
+          "@id": "_:b26"
+        },
+        {
+          "@id": "_:b27"
+        },
+        {
+          "@id": "_:b28"
+        },
+        {
+          "@id": "_:b29"
+        },
+        {
+          "@id": "_:b30"
+        },
+        {
+          "@id": "_:b31"
+        },
+        {
+          "@id": "_:b32"
+        },
+        {
+          "@id": "_:b33"
+        },
+        {
+          "@id": "_:b34"
+        },
+        {
+          "@id": "_:b35"
+        },
+        {
+          "@id": "_:b36"
+        },
+        {
+          "@id": "_:b37"
+        },
+        {
+          "@id": "_:b38"
+        },
+        {
+          "@id": "_:b39"
+        },
+        {
+          "@id": "_:b40"
+        },
+        {
+          "@id": "_:b41"
+        },
+        {
+          "@id": "_:b42"
+        },
+        {
+          "@id": "_:b43"
+        },
+        {
+          "@id": "_:b44"
+        }
+      ]
+    },
+    {
+      "@id": "README.md",
+      "@type": "File",
+      "encodingFormat": "text/markdown",
+      "about": {
+        "@id": "https://doi.org/10.5281/zenodo.6913045"
+      }
     },
     {
       "@id": "#qmd-generation",
@@ -109,6 +314,29 @@
       },
       "result": {
         "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
+      }
+    },
+    {
+      "@id": "#metadata-creation",
+      "@type": "CreateAction",
+      "object": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+        },
+        {
+          "@id": "README.md"
+        }
+      ],
+      "result": {
+        "@id": "ro-crate-metadata.json"
+      },
+      "name": "RO-Crate metadata created based on README and dataspice JSON-LD",
+      "endTime": "2023-01-06",
+      "agent": {
+        "@id": "https://orcid.org/0000-0001-9842-9718"
+      },
+      "actionStatus": {
+        "@id": "http://schema.org/CompletedActionStatus"
       }
     },
     {
@@ -142,6 +370,71 @@
       "name": "Bernal-Delgado, Enrique"
     },
     {
+      "@id": "#dataspice-creation",
+      "@type": "CreateAction",
+      "object": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
+        }
+      ],
+      "result": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+      },
+      "instrument": {
+        "@id": "https://docs.ropensci.org/dataspice/"
+      },
+      "name": "dataspice JSON-LD created from CSV templates",
+      "endTime": "2022-07-27"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      }
+    },
+    {
+      "@id": "https://docs.ropensci.org/dataspice/",
+      "@type": "SoftwareApplication",
+      "name": "dataspice",
+      "version": "1.1.0",
+      "url": "https://docs.ropensci.org/dataspice/"
+    },
+    {
       "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8",
       "@type": "SoftwareApplication",
       "name": "Quarto",
@@ -168,9 +461,327 @@
       "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)"
     },
     {
+      "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files",
+      "@type": "WebPage",
+      "name": "dataspice CSV template",
+      "about": {
+        "@id": "https://docs.ropensci.org/dataspice/"
+      }
+    },
+    {
       "@id": "https://quarto.org/docs/authoring/markdown-basics.html",
       "@type": "WebPage",
       "name": "Quarto Markdown"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/docs/",
+      "@type": "Dataset",
+      "name": "Documentation for Common data model specification",
+      "hasPart": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
+      },
+      "about": {
+        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
+      "@type": "File",
+      "encodingFormat": "text/html"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/metadata/",
+      "@type": "Dataset",
+      "name": "Metadata for Common data model specification",
+      "hasPart": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+        }
+      ],
+      "about": {
+        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv",
+      "@type": [
+        "DataDownload",
+        "File"
+      ],
+      "encodingFormat": "text/csv",
+      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
+    },
+    {
+      "@id": "_:b2",
+      "@type": "Place",
+      "geo": {
+        "@id": "_:b3"
+      },
+      "name": "Europe"
+    },
+    {
+      "@id": "_:b4",
+      "@type": "PropertyValue",
+      "description": "Pseudoid  of the person included in the cohort",
+      "name": "person_id"
+    },
+    {
+      "@id": "_:b5",
+      "@type": "PropertyValue",
+      "description": "Age of the person included in  the cohort (at the time of entering the cohort)",
+      "name": "age_nm",
+      "unitText": "years"
+    },
+    {
+      "@id": "_:b6",
+      "@type": "PropertyValue",
+      "description": "Sex of the person included in  the cohort (at the time of entering the cohort)",
+      "name": "sex_cd"
+    },
+    {
+      "@id": "_:b7",
+      "@type": "PropertyValue",
+      "description": "Socioeconomic level of the person in the cohort (at the time  of entering the cohort)",
+      "name": "socecon_lvl_cd"
+    },
+    {
+      "@id": "_:b8",
+      "@type": "PropertyValue",
+      "description": "Area of residence of the person included in the cohort (NUTS  3) (at the time of entering the cohort)",
+      "name": "residence_area_cd"
+    },
+    {
+      "@id": "_:b9",
+      "@type": "PropertyValue",
+      "description": "Country of residence of the person included in the cohort (at  the time of entering the cohort)",
+      "name": "country_cd"
+    },
+    {
+      "@id": "_:b10",
+      "@type": "PropertyValue",
+      "description": "Is the country of residence different from the country that is  doing the analyses?",
+      "name": "foreign_bl"
+    },
+    {
+      "@id": "_:b11",
+      "@type": "PropertyValue",
+      "description": "Date of death of the person (if the person has died)",
+      "name": "exitus_dt"
+    },
+    {
+      "@id": "_:b12",
+      "@type": "PropertyValue",
+      "description": "Date of death of the person (if the person has died during the  period of study)",
+      "name": "exitus_bl"
+    },
+    {
+      "@id": "_:b13",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort an essential worker? (at  the time of entering the cohort)",
+      "name": "essential_worker_bl"
+    },
+    {
+      "@id": "_:b14",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort institutionalized? (at  the time of entering the cohort)",
+      "name": "institutionalized_bl"
+    },
+    {
+      "@id": "_:b15",
+      "@type": "PropertyValue",
+      "description": "Brand of first dose of the vaccine",
+      "name": "dose_1_brand_cd"
+    },
+    {
+      "@id": "_:b16",
+      "@type": "PropertyValue",
+      "description": "Date of the first dose of the vaccine",
+      "name": "dose_1_dt"
+    },
+    {
+      "@id": "_:b17",
+      "@type": "PropertyValue",
+      "description": "Brand of second dose of the vaccine",
+      "name": "dose_2_brand_cd"
+    },
+    {
+      "@id": "_:b18",
+      "@type": "PropertyValue",
+      "description": "Date of the second dose of the vaccine",
+      "name": "dose_2_dt"
+    },
+    {
+      "@id": "_:b19",
+      "@type": "PropertyValue",
+      "description": "Brand of third dose of the vaccine",
+      "name": "dose_3_brand_cd"
+    },
+    {
+      "@id": "_:b20",
+      "@type": "PropertyValue",
+      "description": "Date of the third dose of the vaccine",
+      "name": "dose_3_dt"
+    },
+    {
+      "@id": "_:b21",
+      "@type": "PropertyValue",
+      "description": "Number of doses (independently of the vaccine brand) received  by a person during the period of study",
+      "name": "number_doses"
+    },
+    {
+      "@id": "_:b22",
+      "@type": "PropertyValue",
+      "description": "Date on which the person included in the cohort is considered  fully vaccinated",
+      "name": "fully_vaccinated_dt"
+    },
+    {
+      "@id": "_:b23",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort fully vaccinated?",
+      "name": "fully_vaccinated_bl"
+    },
+    {
+      "@id": "_:b24",
+      "@type": "PropertyValue",
+      "description": "Vaccine types received for 1st and 2nd dose concatenated with  hyphen",
+      "name": "vaccination_schedule_cd"
+    },
+    {
+      "@id": "_:b25",
+      "@type": "PropertyValue",
+      "description": "Date of diagnosis or test result positive of the last  known/confirmed infection",
+      "name": "confirmed_case_dt"
+    },
+    {
+      "@id": "_:b26",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort a confirmed COVID-19  case?",
+      "name": "confirmed_case_bl"
+    },
+    {
+      "@id": "_:b27",
+      "@type": "PropertyValue",
+      "description": "If the person experienced a confirmed infection proceeding the  last confirmed infection with more than 60 days, date of diagnosis of this  previous infection",
+      "name": "previous_infection_dt"
+    },
+    {
+      "@id": "_:b28",
+      "@type": "PropertyValue",
+      "description": "Did the person experience a confirmed infection proceeding the  last confirmed infection?",
+      "name": "previous_infection_bl"
+    },
+    {
+      "@id": "_:b29",
+      "@type": "PropertyValue",
+      "description": "Type of COVID-19 test used to detect the last known SARS-CoV-2  infection (i.e. first positive test for SARS-CoV-2)",
+      "name": "test_type_cd"
+    },
+    {
+      "@id": "_:b30",
+      "@type": "PropertyValue",
+      "description": "Identified variant (WHO label) for last known SARS-CoV-2  infection",
+      "name": "variant_cd"
+    },
+    {
+      "@id": "_:b31",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from type II  diabetes (at the time of entering the cohort)?",
+      "name": "diabetes_bl"
+    },
+    {
+      "@id": "_:b32",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ",
+      "name": "obesity_bl"
+    },
+    {
+      "@id": "_:b33",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from heart  failure (at the time of entering the cohort)?",
+      "name": "heart_failure_bl"
+    },
+    {
+      "@id": "_:b34",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from chronic  lung disease (at the time of entering the cohort)?",
+      "name": "copd_bl"
+    },
+    {
+      "@id": "_:b35",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from solid  cancer without metastatis (at the time of entering the cohort)?",
+      "name": "solid_tumor_without_metastasis_bl"
+    },
+    {
+      "@id": "_:b36",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from chronic  kidney disease (at the time of entering the cohort)?",
+      "name": "chronic_kidney_disease_bl"
+    },
+    {
+      "@id": "_:b37",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from sickle cell  disease (at the time of entering the cohort)?",
+      "name": "sickle_cell_disease_bl"
+    },
+    {
+      "@id": "_:b38",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from  hypertension (at the time of entering the cohort)?",
+      "name": "hypertension_bl"
+    },
+    {
+      "@id": "_:b39",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from blood  cancer (leukemia) (at the time of entering the cohort)?",
+      "name": "blood_cancer_bl"
+    },
+    {
+      "@id": "_:b40",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort a transplant patient  (i.e. solid organ transplantation) (at the time of entering the cohort)?",
+      "name": "transplanted_bl"
+    },
+    {
+      "@id": "_:b41",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from a HIV  infection (at the time of entering the cohort)?",
+      "name": "hiv_infection_bl"
+    },
+    {
+      "@id": "_:b42",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from a primary  immuno deficiency disease (lymphoma) (at the time of entering the cohort)?",
+      "name": "primary_immunodeficiency_bl"
+    },
+    {
+      "@id": "_:b43",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from drugs  induced immunosuppression (at the time of entering the cohort)?",
+      "name": "immunosuppression_bl"
+    },
+    {
+      "@id": "_:b44",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort pregnant (at the time of  entering the cohort)?",
+      "name": "pregnancy_bl"
+    },
+    {
+      "@id": "_:b3",
+      "@type": "GeoShape",
+      "box": "66.78398 11.50546 44.4272 -15.84884"
     }
   ]
 }
@@ -265,17 +876,27 @@ table.table {
                         
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/">Common data model specification</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_synthetic_dataset/">Synthetic dataset</a></li>
+                        <li><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        
+                        <li><a href="#README.md">README.md</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
-            <td style='text-align:left'><a href="#%23qmd-generation">Generating HTML from QMD</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#%23qmd-generation">Generating HTML from QMD</a></li>
+                        
+                        <li><a href="#%23metadata-creation">RO-Crate metadata created based on README and dataspice JSON-LD</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">keywords<span>&nbsp;</span><a href="http://schema.org/keywords">[?]</a></th>
             <td style='text-align:left'><span>COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
-            <td style='text-align:left'><a href="#ro-crate-metadata.json">ro-crate-metadata.json</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#ro-crate-metadata.json">ro-crate-metadata.json</a></li>
+                        
+                        <li><a href="#README.md">README.md</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -306,6 +927,9 @@ table.table {
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -336,6 +960,9 @@ table.table {
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -366,6 +993,9 @@ table.table {
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -396,6 +1026,9 @@ table.table {
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -426,6 +1059,9 @@ table.table {
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -500,7 +1136,7 @@ table.table {
         </div>
         <hr/><br/><br/>
            <div>
-            <h3> Synthetic dataset</h3>
+            <h3> COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</h3>
             
             
             
@@ -513,16 +1149,199 @@ table.table {
             <td style='text-align:left'><span>vaccines_effectiveness_common_synthetic_dataset/</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
-            <td style='text-align:left'><span>Synthetic dataset</span></td>
+            <td style='text-align:left'><span>COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">@type</th>
             <td style='text-align:left'><span>Dataset</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
-            <td style='text-align:left'><span>complying with the common data model specifications</span></td>
+            <td style='text-align:left'><span>Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>[object Object]</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/0000-0001-7316-6990">Van Goethem, Nina</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-4409-0664">Meurisse, Marjan</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-0961-3298">Bernal-Delgado, Enrique</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-6285-8120">Estupiñán-Romero, Francisco</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-8783-5478">González-Galindo, Javier</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">distribution<span>&nbsp;</span><a href="http://schema.org/distribution">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">subjectOf<span>&nbsp;</span><a href="http://schema.org/subjectOf">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">keywords<span>&nbsp;</span><a href="http://schema.org/keywords">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><span>synthetic data</span></li>
+                        
+                        <li><span>dataset</span></li>
+                        
+                        <li><span>covid-19</span></li>
+                        
+                        <li><span>vaccines</span></li>
+                        
+                        <li><span>effectiveness</span></li>
+                        
+                        <li><span>causal model</span></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">license<span>&nbsp;</span><a href="http://schema.org/license">[?]</a></th>
+            <td style='text-align:left'>CC BY 4.0</td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">spatialCoverage<span>&nbsp;</span><a href="http://schema.org/spatialCoverage">[?]</a></th>
+            <td style='text-align:left'><a href="#_%3Ab2">Europe</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">temporalCoverage<span>&nbsp;</span><a href="http://schema.org/temporalCoverage">[?]</a></th>
+            <td style='text-align:left'><span>01-01-2020/31-12-2024</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">variableMeasured<span>&nbsp;</span><a href="http://schema.org/variableMeasured">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li>person_id: undefined</li>
+                        
+                        <li>age_nm: undefined</li>
+                        
+                        <li>sex_cd: undefined</li>
+                        
+                        <li>socecon_lvl_cd: undefined</li>
+                        
+                        <li>residence_area_cd: undefined</li>
+                        
+                        <li>country_cd: undefined</li>
+                        
+                        <li>foreign_bl: undefined</li>
+                        
+                        <li>exitus_dt: undefined</li>
+                        
+                        <li>exitus_bl: undefined</li>
+                        
+                        <li>essential_worker_bl: undefined</li>
+                        
+                        <li>institutionalized_bl: undefined</li>
+                        
+                        <li>dose_1_brand_cd: undefined</li>
+                        
+                        <li>dose_1_dt: undefined</li>
+                        
+                        <li>dose_2_brand_cd: undefined</li>
+                        
+                        <li>dose_2_dt: undefined</li>
+                        
+                        <li>dose_3_brand_cd: undefined</li>
+                        
+                        <li>dose_3_dt: undefined</li>
+                        
+                        <li>number_doses: undefined</li>
+                        
+                        <li>fully_vaccinated_dt: undefined</li>
+                        
+                        <li>fully_vaccinated_bl: undefined</li>
+                        
+                        <li>vaccination_schedule_cd: undefined</li>
+                        
+                        <li>confirmed_case_dt: undefined</li>
+                        
+                        <li>confirmed_case_bl: undefined</li>
+                        
+                        <li>previous_infection_dt: undefined</li>
+                        
+                        <li>previous_infection_bl: undefined</li>
+                        
+                        <li>test_type_cd: undefined</li>
+                        
+                        <li>variant_cd: undefined</li>
+                        
+                        <li>diabetes_bl: undefined</li>
+                        
+                        <li>obesity_bl: undefined</li>
+                        
+                        <li>heart_failure_bl: undefined</li>
+                        
+                        <li>copd_bl: undefined</li>
+                        
+                        <li>solid_tumor_without_metastasis_bl: undefined</li>
+                        
+                        <li>chronic_kidney_disease_bl: undefined</li>
+                        
+                        <li>sickle_cell_disease_bl: undefined</li>
+                        
+                        <li>hypertension_bl: undefined</li>
+                        
+                        <li>blood_cancer_bl: undefined</li>
+                        
+                        <li>transplanted_bl: undefined</li>
+                        
+                        <li>hiv_infection_bl: undefined</li>
+                        
+                        <li>primary_immunodeficiency_bl: undefined</li>
+                        
+                        <li>immunosuppression_bl: undefined</li>
+                        
+                        <li>pregnancy_bl: undefined</li>
+                        </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">mainEntity<span>&nbsp;</span><a href="http://schema.org/mainEntity">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3><a href="README.md">⬇️ Download: </a> README.md</h3>
+            
+            
+            
+            
+        <div id="README.md">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>README.md</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>File</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">encodingFormat<span>&nbsp;</span><a href="http://schema.org/encodingFormat">[?]</a></th>
+            <td style='text-align:left'><span>text/markdown</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
+            <td style='text-align:left'><a href="#%23metadata-creation">RO-Crate metadata created based on README and dataspice JSON-LD</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -562,6 +1381,52 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
             <td style='text-align:left'><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html">COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)</a></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> RO-Crate metadata created based on README and dataspice JSON-LD</h3>
+            
+            
+            
+            
+        <div id="#metadata-creation">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>#metadata-creation</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>RO-Crate metadata created based on README and dataspice JSON-LD</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>CreateAction</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json</a></li>
+                        
+                        <li><a href="#README.md">README.md</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
+            <td style='text-align:left'><a href="#ro-crate-metadata.json">ro-crate-metadata.json</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">endTime<span>&nbsp;</span><a href="http://schema.org/endTime">[?]</a></th>
+            <td style='text-align:left'><span>2023-01-06</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">agent<span>&nbsp;</span><a href="http://schema.org/agent">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//orcid.org/0000-0001-9842-9718">Stian Soiland-Reyes</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">actionStatus<span>&nbsp;</span><a href="http://schema.org/actionStatus">[?]</a></th>
+            <td style='text-align:left'><a href="http://schema.org/CompletedActionStatus">http://schema.org/CompletedActionStatus</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
