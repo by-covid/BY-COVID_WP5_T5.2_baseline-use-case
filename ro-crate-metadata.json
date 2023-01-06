@@ -27,7 +27,7 @@
     "hasPart": [
       {"@id": "vaccines_effectiveness_causal_model/"},
       {"@id": "vaccines_effectiveness_common_data_model_specification/"},
-      {"@id": "vaccines_effectiveness_common_synthetic_dataset/"},
+      {"@id": "vaccines_effectiveness_synthetic_dataset/"},
       {"@id": "README.md"}
     ],
     "mentions": [
@@ -54,6 +54,9 @@
     ],
     "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
   },
+  {"@id": "vaccines_effectiveness_common_synthetic_dataset/",
+  "@type": "Dataset",
+  },  
   {
     "@id": "README.md",
     "@type": "File",
@@ -116,7 +119,48 @@
       "name": "dataspice JSON-LD created from CSV templates",
       "endTime": "2022-07-27"
     },
-
+    {
+      "@id": "#notebook-execution",
+      "@type": "CreateAction",
+      "instrument": {
+        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+      },
+      "result": { "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv" },
+      "name": "Execution of Jupyter Notebook to generate synthetic dataset",
+      "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A different notebook was executed.",
+      "endTime": "2022-05-24"
+    },
+    {
+      "@id": "#panda-analysis",
+      "@type": "CreateAction",
+      "name": "Execution of pandas-profiling for exploratory data analysis",
+      "instrument": {
+        "@id": "https://github.com/pandas-profiling/pandas-profiling"
+      },
+      "object": [
+        {"@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"},
+        {"@id": "vaccines_effectiveness_synthetic_dataset/config.json"}
+      ],
+      "result": [
+        { "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json" },
+        { "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html" }     
+      ],
+      "startTime": "2022-05-27T09:52:29.847284",
+      "endTime": "2022-05-27T09:52:32.926250"
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/config.json",
+      "@type": "File",
+      "encodingFormat": "application/json",
+      "name": "pandas-profiling config"
+    },
+    {
+      "@id": "https://github.com/pandas-profiling/pandas-profiling",
+      "@type": "SoftwareApplication",
+      "name": "pandas-profiling v3.1.0",
+      "version": "3.1.0",
+      "url": "https://github.com/pandas-profiling/pandas-profiling"
+    },
     {
       "@id": "#metadata-creation",
       "@type": "CreateAction",
@@ -195,10 +239,78 @@
       "@type": "WebPage",
       "name": "Quarto Markdown"
     },
-    { "@id": "vaccines_effectiveness_common_data_model_specification/",
+    { "@id": "vaccines_effectiveness_synthetic_dataset/",
       "@type": "Dataset",
       "name": "Common data model specification",
-      "description": "following the causal model"
+      "description": "following the causal model",
+      "hasPart": [
+        {"@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"},
+        {"@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"},
+        {"@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"},
+        {"@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"}
+      ]
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb",
+      "@type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
+      "conformsTo": 
+        {"@id": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE"},
+      "name": "COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)",
+      "description": "Jupyter notebook with Python scripting and commenting to generate the synthetic dataset",
+      "programmingLanguage": {
+        "@id": "https://jupyter.org/"
+      },
+      "input": [
+      ],
+      "output": [
+        {"@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8"}  
+      ],
+      "conditionsOfAccess": "The scripts (software) accompanying the data model specification are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it."
+    },
+    {
+      "@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8",
+      "@type": "FormalParameter",
+      "conformsTo": 
+        {"@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"},
+      "name": "vaccines_synthetic_1M.csv",
+      "description": "Note: The synthetic dataset is saved as a CSV file, UTF-8 format, pipe-separated (|)",
+      "format": { "@id": "http://edamontology.org/format_3752" }
+    },
+    { "@id": "http://edamontology.org/format_3752",
+      "@type": "DefinedTerm",
+      "name": "CSV",
+      "description": "Tabular data represented as comma-separated values in a text file."
+    },
+    {
+      "@id": "https://jupyter.org/",
+      "@type": "ComputerLanguage",
+      "name": "Jupyter Notebook",
+      "alternateName": "Jupyter",
+      "identifier": {
+        "@id": "https://jupyter.org/"
+      },
+      "url": {
+        "@id": "https://jupyter.org/"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)",
+      "description": "Interactive report of the exploratory data analysis (EDA) of the synthetic dataset"
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json",
+      "@type": "File",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)",
+      "description": "Machine-readable version of the exploratory data analysis (EDA) of the synthetic dataset",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv"
     },
     { "@id": "vaccines_effectiveness_common_data_model_specification/docs/",
       "@type": "Dataset",
@@ -230,7 +342,7 @@
         {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"}
       ],
       "about": { 
-        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
       }
     },
     {
@@ -269,9 +381,9 @@
       "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
       "encodingFormat": "application/ld+json",
       "@type": "File",
-      "mainEntity": {"@id": "vaccines_effectiveness_common_synthetic_dataset/"}
+      "mainEntity": {"@id": "vaccines_effectiveness_common_data_model_specification/"}
     },
-    { "@id": "vaccines_effectiveness_common_synthetic_dataset/",
+    { "@id": "vaccines_effectiveness_common_data_model_specification/",
       "@type": "Dataset",
       "creator": [
         {
