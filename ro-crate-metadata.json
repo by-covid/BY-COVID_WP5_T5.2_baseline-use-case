@@ -56,7 +56,16 @@
         "@id": "https://orcid.org/0000-0002-0961-3298"
       }
     ],
+    "license": {
+      "@id": "https://spdx.org/licenses/CC-BY-4.0"
+    },
     "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
+  },
+  {
+    "@id": "https://spdx.org/licenses/CC-BY-4.0",
+    "identifier": "CC-BY-4.0",
+    "name": "Creative Commons Attribution 4.0 International",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
   },
   {
     "@id": "README.md",
@@ -69,37 +78,6 @@
     "@type": "Person",
     "name": "Stian Soiland-Reyes"
   },
-    {
-      "@id": "https://orcid.org/0000-0002-6285-8120", 
-      "affiliation": "Instute for Health Science in Aragon (IACS)", 
-      "@type": "Person", 
-      "name": "Estupiñán-Romero, Francisco"
-    }, 
-    {
-      "@id": "https://orcid.org/0000-0001-7316-6990", 
-      "affiliation": "Sciensano", 
-      "@type": "Person", 
-      "name": "Van Goethem, Nina"
-    }, 
-    {
-      "@id": "https://orcid.org/0000-0002-4409-0664", 
-      "affiliation": "Sciensano", 
-      "@type": "Person", 
-      "name": "Meurisse, Marjan"
-    }, 
-    {
-      "@id": "https://orcid.org/0000-0002-8783-5478", 
-      "affiliation": "Instute for Health Science in Aragon (IACS)", 
-      "@type": "Person", 
-      "name": "González-Galindo, Javier"
-    }, 
-    {
-      "@id": "https://orcid.org/0000-0002-0961-3298", 
-      "affiliation": "Instute for Health Science in Aragon (IACS)", 
-      "@type": "Person", 
-      "name": "Bernal-Delgado, Enrique"
-    },
-
     {
       "@id": "#dataspice-creation",
       "@type": "CreateAction",
@@ -420,6 +398,20 @@
         },
         {
           "@id": "https://orcid.org/0000-0002-8783-5478"
+        }
+      ],
+      "contributor": [
+        {
+          "@id": "https://orcid.org/0000-0002-1145-7829"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-7873-6152"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0493-4711"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-9586-7955"
         }
       ],
       "datePublished": "2022-07-27",
@@ -881,6 +873,30 @@
       "affiliation": "Instute for Health Science in Aragon (IACS)",
       "email": "jgonzalezga.iacs@aragon.es",
       "name": "Javier González-Galindo"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-1145-7829",
+      "@type": "Person",
+      "name": "Simon Saldner",
+      "affiliation": "DANS"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-7873-6152",
+      "@type": "Person",
+      "name": "Lorenz Dolanski-Aghamanoukjan",
+      "affiliation": "GÖG"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-0493-4711",
+      "@type": "Person",
+      "name": "Alexander Degelsegger-Marquez",
+      "affiliation": "GÖG"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-9586-7955",
+      "@type": "Person",
+      "name": "Martínez-Lizaga, Natalia",
+      "affiliation": "Instute for Health Science in Aragon (IACS)"
     }
   ]
     
