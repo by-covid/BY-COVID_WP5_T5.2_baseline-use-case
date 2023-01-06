@@ -34,7 +34,7 @@
       "encodingFormat": "application/ld+json",
       "@type": "File",
       "mainEntity": {
-        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
       }
     },
     {
@@ -52,7 +52,7 @@
           "@id": "vaccines_effectiveness_common_data_model_specification/"
         },
         {
-          "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+          "@id": "vaccines_effectiveness_synthetic_dataset/"
         },
         {
           "@id": "README.md"
@@ -61,6 +61,15 @@
       "mentions": [
         {
           "@id": "#qmd-generation"
+        },
+        {
+          "@id": "#panda-analysis"
+        },
+        {
+          "@id": "#dataspice-creation"
+        },
+        {
+          "@id": "#notebook-execution"
         },
         {
           "@id": "#metadata-creation"
@@ -102,12 +111,6 @@
     },
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/",
-      "@type": "Dataset",
-      "name": "Common data model specification",
-      "description": "following the causal model"
-    },
-    {
-      "@id": "vaccines_effectiveness_common_synthetic_dataset/",
       "@type": "Dataset",
       "creator": [
         {
@@ -291,6 +294,26 @@
       ]
     },
     {
+      "@id": "vaccines_effectiveness_synthetic_dataset/",
+      "@type": "Dataset",
+      "name": "Common data model specification",
+      "description": "following the causal model",
+      "hasPart": [
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+        }
+      ]
+    },
+    {
       "@id": "README.md",
       "@type": "File",
       "encodingFormat": "text/markdown",
@@ -315,6 +338,79 @@
       "result": {
         "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
       }
+    },
+    {
+      "@id": "#panda-analysis",
+      "@type": "CreateAction",
+      "name": "Execution of pandas-profiling for exploratory data analysis",
+      "instrument": {
+        "@id": "https://github.com/pandas-profiling/pandas-profiling"
+      },
+      "object": [
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/config.json"
+        }
+      ],
+      "result": [
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"
+        }
+      ],
+      "startTime": "2022-05-27T09:52:29.847284",
+      "endTime": "2022-05-27T09:52:32.926250"
+    },
+    {
+      "@id": "#dataspice-creation",
+      "@type": "CreateAction",
+      "object": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+        }
+      ],
+      "result": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
+        }
+      ],
+      "instrument": {
+        "@id": "https://docs.ropensci.org/dataspice/"
+      },
+      "name": "dataspice JSON-LD created from CSV templates",
+      "endTime": "2022-07-27"
+    },
+    {
+      "@id": "#notebook-execution",
+      "@type": "CreateAction",
+      "instrument": {
+        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+      },
+      "result": {
+        "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+      },
+      "name": "Execution of Jupyter Notebook to generate synthetic dataset",
+      "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A different notebook was executed.",
+      "endTime": "2022-05-24"
     },
     {
       "@id": "#metadata-creation",
@@ -370,32 +466,6 @@
       "name": "Bernal-Delgado, Enrique"
     },
     {
-      "@id": "#dataspice-creation",
-      "@type": "CreateAction",
-      "object": [
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
-        }
-      ],
-      "result": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
-      },
-      "instrument": {
-        "@id": "https://docs.ropensci.org/dataspice/"
-      },
-      "name": "dataspice JSON-LD created from CSV templates",
-      "endTime": "2022-07-27"
-    },
-    {
       "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv",
       "@type": "File",
       "encodingFormat": "text/csv",
@@ -428,11 +498,82 @@
       }
     },
     {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv",
+      "@type": [
+        "DataDownload",
+        "File"
+      ],
+      "encodingFormat": "text/csv",
+      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
+      "@type": "File",
+      "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
+      "encodingFormat": "text/html",
+      "about": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
+      }
+    },
+    {
       "@id": "https://docs.ropensci.org/dataspice/",
       "@type": "SoftwareApplication",
       "name": "dataspice",
       "version": "1.1.0",
       "url": "https://docs.ropensci.org/dataspice/"
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb",
+      "@type": [
+        "File",
+        "SoftwareSourceCode",
+        "ComputationalWorkflow"
+      ],
+      "conformsTo": {
+        "@id": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE"
+      },
+      "name": "COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)",
+      "description": "Jupyter notebook with Python scripting and commenting to generate the synthetic dataset",
+      "programmingLanguage": {
+        "@id": "https://jupyter.org/"
+      },
+      "input": [],
+      "output": {
+        "@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8"
+      },
+      "conditionsOfAccess": "The scripts (software) accompanying the data model specification are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it."
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@id": "https://github.com/pandas-profiling/pandas-profiling",
+      "@type": "SoftwareApplication",
+      "name": "pandas-profiling v3.1.0",
+      "version": "3.1.0",
+      "url": "https://github.com/pandas-profiling/pandas-profiling"
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/config.json",
+      "@type": "File",
+      "encodingFormat": "application/json",
+      "name": "pandas-profiling config"
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json",
+      "@type": "File",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)",
+      "description": "Machine-readable version of the exploratory data analysis (EDA) of the synthetic dataset",
+      "encodingFormat": "application/json"
+    },
+    {
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)",
+      "description": "Interactive report of the exploratory data analysis (EDA) of the synthetic dataset"
     },
     {
       "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8",
@@ -474,6 +615,36 @@
       "name": "Quarto Markdown"
     },
     {
+      "@id": "https://jupyter.org/",
+      "@type": "ComputerLanguage",
+      "name": "Jupyter Notebook",
+      "alternateName": "Jupyter",
+      "identifier": {
+        "@id": "https://jupyter.org/"
+      },
+      "url": {
+        "@id": "https://jupyter.org/"
+      }
+    },
+    {
+      "@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8",
+      "@type": "FormalParameter",
+      "conformsTo": {
+        "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
+      },
+      "name": "vaccines_synthetic_1M.csv",
+      "description": "Note: The synthetic dataset is saved as a CSV file, UTF-8 format, pipe-separated (|)",
+      "format": {
+        "@id": "http://edamontology.org/format_3752"
+      }
+    },
+    {
+      "@id": "http://edamontology.org/format_3752",
+      "@type": "DefinedTerm",
+      "name": "CSV",
+      "description": "Tabular data represented as comma-separated values in a text file."
+    },
+    {
       "@id": "vaccines_effectiveness_common_data_model_specification/docs/",
       "@type": "Dataset",
       "name": "Documentation for Common data model specification",
@@ -481,13 +652,8 @@
         "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
       },
       "about": {
-        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
       }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
-      "@type": "File",
-      "encodingFormat": "text/html"
     },
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/metadata/",
@@ -511,17 +677,8 @@
         }
       ],
       "about": {
-        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
       }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv",
-      "@type": [
-        "DataDownload",
-        "File"
-      ],
-      "encodingFormat": "text/csv",
-      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
     },
     {
       "@id": "_:b2",
@@ -874,9 +1031,9 @@ table.table {
             <td style='text-align:left'><ul>
                         <li><a href="#vaccines_effectiveness_causal_model/">Causal model</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/">Common data model specification</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/">Common data model specification</a></li>
                         
                         <li><a href="#README.md">README.md</a></li>
                         </ul></td>
@@ -884,6 +1041,12 @@ table.table {
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
             <td style='text-align:left'><ul>
                         <li><a href="#%23qmd-generation">Generating HTML from QMD</a></li>
+                        
+                        <li><a href="#%23panda-analysis">Execution of pandas-profiling for exploratory data analysis</a></li>
+                        
+                        <li><a href="#%23dataspice-creation">dataspice JSON-LD created from CSV templates</a></li>
+                        
+                        <li><a href="#%23notebook-execution">Execution of Jupyter Notebook to generate synthetic dataset</a></li>
                         
                         <li><a href="#%23metadata-creation">RO-Crate metadata created based on README and dataspice JSON-LD</a></li>
                         </ul></td>
@@ -929,7 +1092,7 @@ table.table {
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -962,7 +1125,7 @@ table.table {
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -995,7 +1158,7 @@ table.table {
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1028,7 +1191,7 @@ table.table {
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1061,7 +1224,7 @@ table.table {
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_synthetic_dataset/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1106,7 +1269,7 @@ table.table {
         </div>
         <hr/><br/><br/>
            <div>
-            <h3> Common data model specification</h3>
+            <h3> COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</h3>
             
             
             
@@ -1117,36 +1280,6 @@ table.table {
                 <tbody><tr>
             <th style="text-align:left;" class="prop">@id</th>
             <td style='text-align:left'><span>vaccines_effectiveness_common_data_model_specification/</span></td>
-            </tr><tr>
-            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
-            <td style='text-align:left'><span>Common data model specification</span></td>
-            </tr><tr>
-            <th style="text-align:left;" class="prop">@type</th>
-            <td style='text-align:left'><span>Dataset</span></td>
-            </tr><tr>
-            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
-            <td style='text-align:left'><span>following the causal model</span></td>
-            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
-            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
-            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
-            </tr></tbody>
-            </table>
-        </div>
-
-        </div>
-        <hr/><br/><br/>
-           <div>
-            <h3> COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</h3>
-            
-            
-            
-            
-        <div id="vaccines_effectiveness_common_synthetic_dataset/">
-            
-            <table class="table metadata table-striped" >
-                <tbody><tr>
-            <th style="text-align:left;" class="prop">@id</th>
-            <td style='text-align:left'><span>vaccines_effectiveness_common_synthetic_dataset/</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
             <td style='text-align:left'><span>COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</span></td>
@@ -1304,11 +1437,54 @@ table.table {
             <td style='text-align:left'><ul>
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
                         
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">mainEntity<span>&nbsp;</span><a href="http://schema.org/mainEntity">[?]</a></th>
             <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> Common data model specification</h3>
+            
+            
+            
+            
+        <div id="vaccines_effectiveness_synthetic_dataset/">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>vaccines_effectiveness_synthetic_dataset/</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>Common data model specification</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>Dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>following the causal model</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html">COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json">COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv</a></li>
+                        </ul></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1381,6 +1557,148 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
             <td style='text-align:left'><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html">COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)</a></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> Execution of pandas-profiling for exploratory data analysis</h3>
+            
+            
+            
+            
+        <div id="#panda-analysis">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>#panda-analysis</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>Execution of pandas-profiling for exploratory data analysis</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>CreateAction</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//github.com/pandas-profiling/pandas-profiling">pandas-profiling v3.1.0</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/config.json">pandas-profiling config</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json">COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html">COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">startTime<span>&nbsp;</span><a href="http://schema.org/startTime">[?]</a></th>
+            <td style='text-align:left'><span>2022-05-27T09:52:29.847284</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">endTime<span>&nbsp;</span><a href="http://schema.org/endTime">[?]</a></th>
+            <td style='text-align:left'><span>2022-05-27T09:52:32.926250</span></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> dataspice JSON-LD created from CSV templates</h3>
+            
+            
+            
+            
+        <div id="#dataspice-creation">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>#dataspice-creation</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>dataspice JSON-LD created from CSV templates</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>CreateAction</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//docs.ropensci.org/dataspice/">dataspice</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">endTime<span>&nbsp;</span><a href="http://schema.org/endTime">[?]</a></th>
+            <td style='text-align:left'><span>2022-07-27</span></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> Execution of Jupyter Notebook to generate synthetic dataset</h3>
+            
+            
+            
+            
+        <div id="#notebook-execution">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>#notebook-execution</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>Execution of Jupyter Notebook to generate synthetic dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>CreateAction</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A different notebook was executed.</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">endTime<span>&nbsp;</span><a href="http://schema.org/endTime">[?]</a></th>
+            <td style='text-align:left'><span>2022-05-24</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
