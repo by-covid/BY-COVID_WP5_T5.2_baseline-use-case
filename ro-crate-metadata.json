@@ -146,6 +146,480 @@
       "@type": "Dataset",
       "name": "Synthetic dataset",
       "description": "complying with the common data model specifications"
+    },
+
+ {
+      "@id": "_:b0",
+      "@type": "Dataset",
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        }
+      ],
+      "datePublished": {
+        "@type": "Date",
+        "@value": "27-07-2022"
+      },
+      "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
+      "distribution": {
+        "@id": "_:b1"
+      },
+      "keywords": [
+        "synthetic data",
+        "dataset",
+        "covid-19",
+        "vaccines",
+        "effectiveness",
+        "causal model"
+      ],
+      "license": {
+        "@id": "CC BY 4.0"
+      },
+      "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
+      "spatialCoverage": {
+        "@id": "_:b2"
+      },
+      "temporalCoverage": "01-01-2020/31-12-2024",
+      "variableMeasured": [
+        {
+          "@id": "_:b4"
+        },
+        {
+          "@id": "_:b5"
+        },
+        {
+          "@id": "_:b6"
+        },
+        {
+          "@id": "_:b7"
+        },
+        {
+          "@id": "_:b8"
+        },
+        {
+          "@id": "_:b9"
+        },
+        {
+          "@id": "_:b10"
+        },
+        {
+          "@id": "_:b11"
+        },
+        {
+          "@id": "_:b12"
+        },
+        {
+          "@id": "_:b13"
+        },
+        {
+          "@id": "_:b14"
+        },
+        {
+          "@id": "_:b15"
+        },
+        {
+          "@id": "_:b16"
+        },
+        {
+          "@id": "_:b17"
+        },
+        {
+          "@id": "_:b18"
+        },
+        {
+          "@id": "_:b19"
+        },
+        {
+          "@id": "_:b20"
+        },
+        {
+          "@id": "_:b21"
+        },
+        {
+          "@id": "_:b22"
+        },
+        {
+          "@id": "_:b23"
+        },
+        {
+          "@id": "_:b24"
+        },
+        {
+          "@id": "_:b25"
+        },
+        {
+          "@id": "_:b26"
+        },
+        {
+          "@id": "_:b27"
+        },
+        {
+          "@id": "_:b28"
+        },
+        {
+          "@id": "_:b29"
+        },
+        {
+          "@id": "_:b30"
+        },
+        {
+          "@id": "_:b31"
+        },
+        {
+          "@id": "_:b32"
+        },
+        {
+          "@id": "_:b33"
+        },
+        {
+          "@id": "_:b34"
+        },
+        {
+          "@id": "_:b35"
+        },
+        {
+          "@id": "_:b36"
+        },
+        {
+          "@id": "_:b37"
+        },
+        {
+          "@id": "_:b38"
+        },
+        {
+          "@id": "_:b39"
+        },
+        {
+          "@id": "_:b40"
+        },
+        {
+          "@id": "_:b41"
+        },
+        {
+          "@id": "_:b42"
+        },
+        {
+          "@id": "_:b43"
+        },
+        {
+          "@id": "_:b44"
+        }
+      ]
+    },
+    {
+      "@id": "_:b1",
+      "@type": "DataDownload",
+      "encodingFormat": "csv",
+      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
+    },
+    {
+      "@id": "_:b10",
+      "@type": "PropertyValue",
+      "description": "Is the country of residence different from the country that is  doing the analyses?",
+      "name": "foreign_bl"
+    },
+    {
+      "@id": "_:b11",
+      "@type": "PropertyValue",
+      "description": "Date of death of the person (if the person has died)",
+      "name": "exitus_dt"
+    },
+    {
+      "@id": "_:b12",
+      "@type": "PropertyValue",
+      "description": "Date of death of the person (if the person has died during the  period of study)",
+      "name": "exitus_bl"
+    },
+    {
+      "@id": "_:b13",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort an essential worker? (at  the time of entering the cohort)",
+      "name": "essential_worker_bl"
+    },
+    {
+      "@id": "_:b14",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort institutionalized? (at  the time of entering the cohort)",
+      "name": "institutionalized_bl"
+    },
+    {
+      "@id": "_:b15",
+      "@type": "PropertyValue",
+      "description": "Brand of first dose of the vaccine",
+      "name": "dose_1_brand_cd"
+    },
+    {
+      "@id": "_:b16",
+      "@type": "PropertyValue",
+      "description": "Date of the first dose of the vaccine",
+      "name": "dose_1_dt"
+    },
+    {
+      "@id": "_:b17",
+      "@type": "PropertyValue",
+      "description": "Brand of second dose of the vaccine",
+      "name": "dose_2_brand_cd"
+    },
+    {
+      "@id": "_:b18",
+      "@type": "PropertyValue",
+      "description": "Date of the second dose of the vaccine",
+      "name": "dose_2_dt"
+    },
+    {
+      "@id": "_:b19",
+      "@type": "PropertyValue",
+      "description": "Brand of third dose of the vaccine",
+      "name": "dose_3_brand_cd"
+    },
+    {
+      "@id": "_:b2",
+      "@type": "Place",
+      "geo": {
+        "@id": "_:b3"
+      },
+      "name": "Europe"
+    },
+    {
+      "@id": "_:b20",
+      "@type": "PropertyValue",
+      "description": "Date of the third dose of the vaccine",
+      "name": "dose_3_dt"
+    },
+    {
+      "@id": "_:b21",
+      "@type": "PropertyValue",
+      "description": "Number of doses (independently of the vaccine brand) received  by a person during the period of study",
+      "name": "number_doses"
+    },
+    {
+      "@id": "_:b22",
+      "@type": "PropertyValue",
+      "description": "Date on which the person included in the cohort is considered  fully vaccinated",
+      "name": "fully_vaccinated_dt"
+    },
+    {
+      "@id": "_:b23",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort fully vaccinated?",
+      "name": "fully_vaccinated_bl"
+    },
+    {
+      "@id": "_:b24",
+      "@type": "PropertyValue",
+      "description": "Vaccine types received for 1st and 2nd dose concatenated with  hyphen",
+      "name": "vaccination_schedule_cd"
+    },
+    {
+      "@id": "_:b25",
+      "@type": "PropertyValue",
+      "description": "Date of diagnosis or test result positive of the last  known/confirmed infection",
+      "name": "confirmed_case_dt"
+    },
+    {
+      "@id": "_:b26",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort a confirmed COVID-19  case?",
+      "name": "confirmed_case_bl"
+    },
+    {
+      "@id": "_:b27",
+      "@type": "PropertyValue",
+      "description": "If the person experienced a confirmed infection proceeding the  last confirmed infection with more than 60 days, date of diagnosis of this  previous infection",
+      "name": "previous_infection_dt"
+    },
+    {
+      "@id": "_:b28",
+      "@type": "PropertyValue",
+      "description": "Did the person experience a confirmed infection proceeding the  last confirmed infection?",
+      "name": "previous_infection_bl"
+    },
+    {
+      "@id": "_:b29",
+      "@type": "PropertyValue",
+      "description": "Type of COVID-19 test used to detect the last known SARS-CoV-2  infection (i.e. first positive test for SARS-CoV-2)",
+      "name": "test_type_cd"
+    },
+    {
+      "@id": "_:b3",
+      "@type": "GeoShape",
+      "box": "66.78398 11.50546 44.4272 -15.84884"
+    },
+    {
+      "@id": "_:b30",
+      "@type": "PropertyValue",
+      "description": "Identified variant (WHO label) for last known SARS-CoV-2  infection",
+      "name": "variant_cd"
+    },
+    {
+      "@id": "_:b31",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from type II  diabetes (at the time of entering the cohort)?",
+      "name": "diabetes_bl"
+    },
+    {
+      "@id": "_:b32",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ",
+      "name": "obesity_bl"
+    },
+    {
+      "@id": "_:b33",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from heart  failure (at the time of entering the cohort)?",
+      "name": "heart_failure_bl"
+    },
+    {
+      "@id": "_:b34",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from chronic  lung disease (at the time of entering the cohort)?",
+      "name": "copd_bl"
+    },
+    {
+      "@id": "_:b35",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from solid  cancer without metastatis (at the time of entering the cohort)?",
+      "name": "solid_tumor_without_metastasis_bl"
+    },
+    {
+      "@id": "_:b36",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from chronic  kidney disease (at the time of entering the cohort)?",
+      "name": "chronic_kidney_disease_bl"
+    },
+    {
+      "@id": "_:b37",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from sickle cell  disease (at the time of entering the cohort)?",
+      "name": "sickle_cell_disease_bl"
+    },
+    {
+      "@id": "_:b38",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from  hypertension (at the time of entering the cohort)?",
+      "name": "hypertension_bl"
+    },
+    {
+      "@id": "_:b39",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from blood  cancer (leukemia) (at the time of entering the cohort)?",
+      "name": "blood_cancer_bl"
+    },
+    {
+      "@id": "_:b4",
+      "@type": "PropertyValue",
+      "description": "Pseudoid  of the person included in the cohort",
+      "name": "person_id"
+    },
+    {
+      "@id": "_:b40",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort a transplant patient  (i.e. solid organ transplantation) (at the time of entering the cohort)?",
+      "name": "transplanted_bl"
+    },
+    {
+      "@id": "_:b41",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from a HIV  infection (at the time of entering the cohort)?",
+      "name": "hiv_infection_bl"
+    },
+    {
+      "@id": "_:b42",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from a primary  immuno deficiency disease (lymphoma) (at the time of entering the cohort)?",
+      "name": "primary_immunodeficiency_bl"
+    },
+    {
+      "@id": "_:b43",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from drugs  induced immunosuppression (at the time of entering the cohort)?",
+      "name": "immunosuppression_bl"
+    },
+    {
+      "@id": "_:b44",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort pregnant (at the time of  entering the cohort)?",
+      "name": "pregnancy_bl"
+    },
+    {
+      "@id": "_:b5",
+      "@type": "PropertyValue",
+      "description": "Age of the person included in  the cohort (at the time of entering the cohort)",
+      "name": "age_nm",
+      "unitText": "years"
+    },
+    {
+      "@id": "_:b6",
+      "@type": "PropertyValue",
+      "description": "Sex of the person included in  the cohort (at the time of entering the cohort)",
+      "name": "sex_cd"
+    },
+    {
+      "@id": "_:b7",
+      "@type": "PropertyValue",
+      "description": "Socioeconomic level of the person in the cohort (at the time  of entering the cohort)",
+      "name": "socecon_lvl_cd"
+    },
+    {
+      "@id": "_:b8",
+      "@type": "PropertyValue",
+      "description": "Area of residence of the person included in the cohort (NUTS  3) (at the time of entering the cohort)",
+      "name": "residence_area_cd"
+    },
+    {
+      "@id": "_:b9",
+      "@type": "PropertyValue",
+      "description": "Country of residence of the person included in the cohort (at  the time of entering the cohort)",
+      "name": "country_cd"
+    },
+    {
+      "@id": "https://orcid.org/0000-0001-7316-6990",
+      "@type": "Person",
+      "affiliation": "Sciensano",
+      "email": "Nina.VanGoethem@sciensano.be",
+      "name": "Nina Van Goethem"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-0961-3298",
+      "@type": "Person",
+      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "email": "ebernal.iacs@aragon.es",
+      "name": "Enrique Bernal-Delgado"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-4409-0664",
+      "@type": "Person",
+      "affiliation": "Sciensano",
+      "email": "Marjan.Meurisse@sciensano.be",
+      "name": "Marjan Meurisse"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-6285-8120",
+      "@type": "Person",
+      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "email": "festupinnan.iacs@aragon.es",
+      "name": "Francisco Estupiñán-Romero"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-8783-5478",
+      "@type": "Person",
+      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "email": "jgonzalezga.iacs@aragon.es",
+      "name": "Javier González-Galindo"
     }
-  ]
+  ]    
+
+    
 }
