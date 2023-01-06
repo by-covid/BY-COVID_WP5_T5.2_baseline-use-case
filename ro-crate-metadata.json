@@ -8,6 +8,9 @@
           "@id": "https://w3id.org/ro/crate/1.1"
       },
       "author": { "@id": "https://orcid.org/0000-0001-9842-9718"},
+      "isBasedOn": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+      },
       "about": {
           "@id": "https://doi.org/10.5281/zenodo.6913045"
       }
@@ -24,10 +27,12 @@
     "hasPart": [
       {"@id": "vaccines_effectiveness_causal_model/"},
       {"@id": "vaccines_effectiveness_common_data_model_specification/"},
-      {"@id": "vaccines_effectiveness_common_synthetic_dataset/"}
+      {"@id": "vaccines_effectiveness_common_synthetic_dataset/"},
+      {"@id": "README.md"}
     ],
     "mentions": [
-      { "@id": "#qmd-generation" }
+      { "@id": "#qmd-generation" },
+      { "@id": "#metadata-creation"}
     ],
     "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
     "author": [
@@ -48,6 +53,12 @@
       }
     ],
     "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
+  },
+  {
+    "@id": "README.md",
+    "@type": "File",
+    "encodingFormat": "text/markdown",
+    "about": {"@id": "https://doi.org/10.5281/zenodo.6913045"}
   },
   {
     "@id": "https://orcid.org/0000-0001-9842-9718",
@@ -86,6 +97,36 @@
     },
 
     {
+      "@id": "#dataspice-creation",
+      "@type": "CreateAction",
+      "object": [
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv" },
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv" },
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv" },
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv" }
+      ],
+      "result": { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json" },
+      "instrument": {
+        "@id": "https://docs.ropensci.org/dataspice/"
+      },
+      "name": "dataspice JSON-LD created from CSV templates",
+      "endTime": "2022-07-27"
+    },
+
+    {
+      "@id": "#metadata-creation",
+      "@type": "CreateAction",
+      "object": [
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json" },
+        { "@id": "README.md" }
+      ],
+      "result": { "@id": "ro-crate-metadata.json" },
+      "name": "RO-Crate metadata created based on README and dataspice JSON-LD",
+      "endTime": "2023-01-06",
+      "agent": { "@id": "https://orcid.org/0000-0001-9842-9718" },
+      "actionStatus":  { "@id": "http://schema.org/CompletedActionStatus" }
+    },
+    {
       "@id": "#qmd-generation",
       "@type": "CreateAction",
       "xx-unknown-agent": {
@@ -108,6 +149,19 @@
       "name": "Quarto",
       "version": "1.0.8",
       "url": "https://quarto.org/"
+    },
+    {
+      "@id": "https://docs.ropensci.org/dataspice/",
+      "@type": "SoftwareApplication",
+      "name": "dataspice",
+      "version": "1.1.0",
+      "url": "https://docs.ropensci.org/dataspice/"
+    },
+    {
+      "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files",
+      "@type": "WebPage",
+      "name": "dataspice CSV template",
+      "about": {"@id": "https://docs.ropensci.org/dataspice/"}
     },
     { "@id": "vaccines_effectiveness_causal_model/",
       "@type": "Dataset",
@@ -142,14 +196,58 @@
       "name": "Common data model specification",
       "description": "following the causal model"
     },
-    { "@id": "vaccines_effectiveness_common_synthetic_dataset/",
+    { "@id": "vaccines_effectiveness_common_data_model_specification/metadata/",
       "@type": "Dataset",
-      "name": "Synthetic dataset",
-      "description": "complying with the common data model specifications"
+      "hasPart": [
+        {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"}
+      ],
+      "about": { 
+        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+      }
     },
-
- {
-      "@id": "_:b0",
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      }      
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
+      "encodingFormat": "application/ld+json",
+      "@type": "File",
+      "mainEntity": {"@id": "vaccines_effectiveness_common_synthetic_dataset/"}
+    },
+    { "@id": "vaccines_effectiveness_common_synthetic_dataset/",
       "@type": "Dataset",
       "creator": [
         {
@@ -174,7 +272,14 @@
       },
       "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
       "distribution": {
-        "@id": "_:b1"
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+      },
+      "hasPart": [
+        {"@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"},
+        {"@id": "vaccines_effectiveness_common_data_model_specification/metadata/"}
+      ],
+      "subjectOf": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/metadata/"
       },
       "keywords": [
         "synthetic data",
@@ -319,9 +424,9 @@
       ]
     },
     {
-      "@id": "_:b1",
-      "@type": "DataDownload",
-      "encodingFormat": "csv",
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv",
+      "@type": ["DataDownload", "File"],
+      "encodingFormat": "text/csv",
       "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
     },
     {
@@ -619,7 +724,6 @@
       "email": "jgonzalezga.iacs@aragon.es",
       "name": "Javier González-Galindo"
     }
-  ]    
-
+  ]
     
 }
