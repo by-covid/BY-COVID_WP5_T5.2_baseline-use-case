@@ -103,9 +103,13 @@
         { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv" },
         { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv" },
         { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv" },
-        { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv" }
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv" },
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv" }
       ],
-      "result": { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json" },
+      "result": [
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json" },
+        { "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html" }
+      ],
       "instrument": {
         "@id": "https://docs.ropensci.org/dataspice/"
       },
@@ -203,13 +207,17 @@
         {"@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html"}
       ],
       "about": { 
-        "@id": "vaccines_effectiveness_common_synthetic_dataset/"
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
       }
     },    
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
       "@type": "File",
-      "encodingFormat": "text/html"
+      "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
+      "encodingFormat": "text/html",
+      "about": { 
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
+      }      
     },
     { "@id": "vaccines_effectiveness_common_data_model_specification/metadata/",
       "@type": "Dataset",
