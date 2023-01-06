@@ -7,25 +7,39 @@
       "conformsTo": {
         "@id": "https://w3id.org/ro/crate/1.1"
       },
+      "about": {
+        "@id": "https://doi.org/10.5281/zenodo.6913045"
+      },
       "author": {
         "@id": "https://orcid.org/0000-0001-9842-9718"
       },
       "isBasedOn": {
         "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
-      },
-      "about": {
-        "@id": "https://doi.org/10.5281/zenodo.6913045"
       }
     },
     {
       "@id": "https://doi.org/10.5281/zenodo.6913045",
       "@type": "Dataset",
-      "conformsTo": [
+      "conformsTo": {
+        "@id": "https://w3id.org/ro/wfrun/process/0.1-DRAFT"
+      },
+      "author": [
         {
-          "@id": "https://w3id.org/ro/wfrun/process/0.1-DRAFT"
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
         }
       ],
-      "identifier": "https://doi.org/10.5281/zenodo.6913045",
       "hasPart": [
         {
           "@id": "vaccines_effectiveness_causal_model/"
@@ -40,6 +54,11 @@
           "@id": "README.md"
         }
       ],
+      "identifier": "https://doi.org/10.5281/zenodo.6913045",
+      "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
+      "license": {
+        "@id": "https://spdx.org/licenses/CC-BY-4.0"
+      },
       "mentions": [
         {
           "@id": "#qmd-generation"
@@ -60,210 +79,19 @@
           "@id": "#metadata-creation"
         }
       ],
-      "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
-      "author": [
-        {
-          "@id": "https://orcid.org/0000-0002-6285-8120"
-        },
-        {
-          "@id": "https://orcid.org/0000-0001-7316-6990"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-4409-0664"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-8783-5478"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-0961-3298"
-        }
-      ],
-      "license": {
-        "@id": "https://spdx.org/licenses/CC-BY-4.0"
-      },
       "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification"
-    },
-    {
-      "@id": "https://spdx.org/licenses/CC-BY-4.0",
-      "identifier": "CC-BY-4.0",
-      "name": "Creative Commons Attribution 4.0 International",
-      "url": "https://creativecommons.org/licenses/by/4.0/"
     },
     {
       "@id": "README.md",
       "@type": "File",
-      "encodingFormat": "text/markdown",
       "about": {
         "@id": "https://doi.org/10.5281/zenodo.6913045"
-      }
-    },
-    {
-      "@id": "https://orcid.org/0000-0001-9842-9718",
-      "@type": "Person",
-      "name": "Stian Soiland-Reyes"
-    },
-    {
-      "@id": "#dataspice-creation",
-      "@type": "CreateAction",
-      "object": [
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
-        }
-      ],
-      "result": [
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
-        }
-      ],
-      "instrument": {
-        "@id": "https://docs.ropensci.org/dataspice/"
       },
-      "name": "dataspice JSON-LD created from CSV templates",
-      "endTime": "2022-07-27"
-    },
-    {
-      "@id": "#notebook-execution-650k",
-      "@type": "CreateAction",
-      "instrument": {
-        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
-      },
-      "result": {
-        "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
-      },
-      "name": "Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset",
-      "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A modified notebook must have been executed.",
-      "endTime": "2022-05-24"
-    },
-    {
-      "@id": "#notebook-execution-1M",
-      "@type": "CreateAction",
-      "instrument": {
-        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
-      },
-      "result": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
-      },
-      "name": "Execution of Jupyter Notebook to generate 1M synthetic dataset",
-      "endTime": "2022-05-24"
-    },
-    {
-      "@id": "#panda-analysis",
-      "@type": "CreateAction",
-      "name": "Execution of pandas-profiling for exploratory data analysis",
-      "instrument": {
-        "@id": "https://github.com/pandas-profiling/pandas-profiling"
-      },
-      "object": [
-        {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_synthetic_dataset/config.json"
-        }
-      ],
-      "result": [
-        {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"
-        },
-        {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"
-        }
-      ],
-      "startTime": "2022-05-27T09:52:29.847284",
-      "endTime": "2022-05-27T09:52:32.926250"
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/config.json",
-      "@type": "File",
-      "encodingFormat": "application/json",
-      "name": "pandas-profiling config"
-    },
-    {
-      "@id": "https://github.com/pandas-profiling/pandas-profiling",
-      "@type": "SoftwareApplication",
-      "name": "pandas-profiling v3.1.0",
-      "version": "3.1.0",
-      "url": "https://github.com/pandas-profiling/pandas-profiling"
-    },
-    {
-      "@id": "#metadata-creation",
-      "@type": "CreateAction",
-      "object": [
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
-        },
-        {
-          "@id": "README.md"
-        }
-      ],
-      "result": {
-        "@id": "ro-crate-metadata.json"
-      },
-      "name": "RO-Crate metadata created based on README and dataspice JSON-LD",
-      "endTime": "2023-01-06",
-      "agent": {
-        "@id": "https://orcid.org/0000-0001-9842-9718"
-      },
-      "actionStatus": {
-        "@id": "http://schema.org/CompletedActionStatus"
-      }
-    },
-    {
-      "@id": "#qmd-generation",
-      "@type": "CreateAction",
-      "endTime": "2022-07-27T12:00:00+01:00",
-      "instrument": {
-        "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8"
-      },
-      "name": "Generating HTML from QMD",
-      "object": {
-        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"
-      },
-      "result": {
-        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
-      }
-    },
-    {
-      "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8",
-      "@type": "SoftwareApplication",
-      "name": "Quarto",
-      "version": "1.0.8",
-      "url": "https://quarto.org/"
-    },
-    {
-      "@id": "https://docs.ropensci.org/dataspice/",
-      "@type": "SoftwareApplication",
-      "name": "dataspice",
-      "version": "1.1.0",
-      "url": "https://docs.ropensci.org/dataspice/"
-    },
-    {
-      "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files",
-      "@type": "WebPage",
-      "name": "dataspice CSV template",
-      "about": {
-        "@id": "https://docs.ropensci.org/dataspice/"
-      }
+      "encodingFormat": "text/markdown"
     },
     {
       "@id": "vaccines_effectiveness_causal_model/",
       "@type": "Dataset",
-      "name": "Causal model",
       "description": "responding to the research question",
       "hasPart": [
         {
@@ -272,7 +100,8 @@
         {
           "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"
         }
-      ]
+      ],
+      "name": "Causal model"
     },
     {
       "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html",
@@ -284,213 +113,32 @@
     {
       "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd",
       "@type": "File",
+      "description": "Quarto RMarkdown script to produce the structural causal model",
       "encodingFormat": [
         "text/markdown",
         {
           "@id": "https://quarto.org/docs/authoring/markdown-basics.html"
         }
       ],
-      "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)",
-      "description": "Quarto RMarkdown script to produce the structural causal model"
-    },
-    {
-      "@id": "https://quarto.org/docs/authoring/markdown-basics.html",
-      "@type": "WebPage",
-      "name": "Quarto Markdown"
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/",
-      "@type": "Dataset",
-      "name": "Common data model specification",
-      "description": "following the causal model",
-      "hasPart": [
-        {
-          "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
-        },
-        {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"
-        },
-        {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"
-        },
-        {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
-        }
-      ]
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb",
-      "@type": [
-        "File",
-        "SoftwareSourceCode",
-        "ComputationalWorkflow"
-      ],
-      "conformsTo": {
-        "@id": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE"
-      },
-      "name": "COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)",
-      "description": "Jupyter notebook with Python scripting and commenting to generate the synthetic dataset",
-      "programmingLanguage": {
-        "@id": "https://jupyter.org/"
-      },
-      "input": [],
-      "output": [
-        {
-          "@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8"
-        }
-      ],
-      "conditionsOfAccess": "The scripts (software) accompanying the data model specification are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it."
-    },
-    {
-      "@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8",
-      "@type": "FormalParameter",
-      "conformsTo": {
-        "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
-      },
-      "name": "vaccines_synthetic_1M.csv",
-      "description": "Note: The synthetic dataset is saved as a CSV file, UTF-8 format, pipe-separated (|)",
-      "format": {
-        "@id": "http://edamontology.org/format_3752"
-      }
-    },
-    {
-      "@id": "http://edamontology.org/format_3752",
-      "@type": "DefinedTerm",
-      "name": "CSV",
-      "description": "Tabular data represented as comma-separated values in a text file."
-    },
-    {
-      "@id": "https://jupyter.org/",
-      "@type": "ComputerLanguage",
-      "name": "Jupyter Notebook",
-      "alternateName": "Jupyter",
-      "identifier": {
-        "@id": "https://jupyter.org/"
-      },
-      "url": {
-        "@id": "https://jupyter.org/"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html",
-      "@type": "File",
-      "encodingFormat": "text/html",
-      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)",
-      "description": "Interactive report of the exploratory data analysis (EDA) of the synthetic dataset"
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json",
-      "@type": "File",
-      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)",
-      "description": "Machine-readable version of the exploratory data analysis (EDA) of the synthetic dataset",
-      "encodingFormat": "application/json"
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv",
-      "@type": "File",
-      "encodingFormat": "text/csv",
-      "name": "Synthetic dataset with 650k entries"
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/docs/",
-      "@type": "Dataset",
-      "name": "Documentation for Common data model specification",
-      "hasPart": [
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
-        }
-      ],
-      "about": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
-      "@type": "File",
-      "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)",
-      "description": "Human-readable version (interactive report)",
-      "encodingFormat": "text/html",
-      "about": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/",
-      "@type": "Dataset",
-      "name": "Metadata for Common data model specification",
-      "hasPart": [
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
-        },
-        {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
-        }
-      ],
-      "about": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv",
-      "@type": "File",
-      "encodingFormat": "text/csv",
-      "conformsTo": {
-        "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv",
-      "@type": "File",
-      "encodingFormat": "text/csv",
-      "conformsTo": {
-        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv",
-      "@type": "File",
-      "encodingFormat": "text/csv",
-      "conformsTo": {
-        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv",
-      "@type": "File",
-      "encodingFormat": "text/csv",
-      "conformsTo": {
-        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
-      "encodingFormat": "application/ld+json",
-      "@type": "File",
-      "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)",
-      "description": "Machine-readable version",
-      "mainEntity": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx",
-      "@type": "File",
-      "name": "vaccine effectiveness data model specification (XLXS)",
-      "description": "Human-readable version (Excel)",
-      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)"
     },
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/",
       "@type": "Dataset",
+      "contributor": [
+        {
+          "@id": "https://orcid.org/0000-0002-1145-7829"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-7873-6152"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0493-4711"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-9586-7955"
+        }
+      ],
       "creator": [
         {
           "@id": "https://orcid.org/0000-0001-7316-6990"
@@ -506,20 +154,6 @@
         },
         {
           "@id": "https://orcid.org/0000-0002-8783-5478"
-        }
-      ],
-      "contributor": [
-        {
-          "@id": "https://orcid.org/0000-0002-1145-7829"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-7873-6152"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-0493-4711"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-9586-7955"
         }
       ],
       "datePublished": "2022-07-27",
@@ -541,9 +175,6 @@
           "@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx"
         }
       ],
-      "subjectOf": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/"
-      },
       "keywords": [
         "synthetic data",
         "dataset",
@@ -557,10 +188,22 @@
       },
       "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
       "spatialCoverage": {
-        "@id": "_:b2"
+        "@id": "_:b0"
+      },
+      "subjectOf": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/"
       },
       "temporalCoverage": "01-01-2020/31-12-2024",
       "variableMeasured": [
+        {
+          "@id": "_:b1"
+        },
+        {
+          "@id": "_:b2"
+        },
+        {
+          "@id": "_:b3"
+        },
         {
           "@id": "_:b4"
         },
@@ -674,17 +317,75 @@
         },
         {
           "@id": "_:b41"
-        },
-        {
-          "@id": "_:b42"
-        },
-        {
-          "@id": "_:b43"
-        },
-        {
-          "@id": "_:b44"
         }
       ]
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/",
+      "@type": "Dataset",
+      "about": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
+      },
+      "hasPart": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+        }
+      ],
+      "name": "Metadata for Common data model specification"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv",
+      "@type": "File",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files"
+      },
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv",
+      "@type": "File",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      },
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv",
+      "@type": "File",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      },
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv",
+      "@type": "File",
+      "conformsTo": {
+        "@id": "https://docs.ropensci.org/dataspice/#create-spice"
+      },
+      "encodingFormat": "text/csv"
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
+      "@type": "File",
+      "description": "Machine-readable version",
+      "encodingFormat": "application/ld+json",
+      "mainEntity": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
+      },
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)"
     },
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv",
@@ -692,271 +393,152 @@
         "DataDownload",
         "File"
       ],
+      "description": "synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
       "encodingFormat": "text/csv",
-      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1",
-      "description": "synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
+      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1"
     },
     {
-      "@id": "_:b10",
-      "@type": "PropertyValue",
-      "description": "Is the country of residence different from the country that is  doing the analyses?",
-      "name": "foreign_bl"
-    },
-    {
-      "@id": "_:b11",
-      "@type": "PropertyValue",
-      "description": "Date of death of the person (if the person has died)",
-      "name": "exitus_dt"
-    },
-    {
-      "@id": "_:b12",
-      "@type": "PropertyValue",
-      "description": "Date of death of the person (if the person has died during the  period of study)",
-      "name": "exitus_bl"
-    },
-    {
-      "@id": "_:b13",
-      "@type": "PropertyValue",
-      "description": "Is the person included in the cohort an essential worker? (at  the time of entering the cohort)",
-      "name": "essential_worker_bl"
-    },
-    {
-      "@id": "_:b14",
-      "@type": "PropertyValue",
-      "description": "Is the person included in the cohort institutionalized? (at  the time of entering the cohort)",
-      "name": "institutionalized_bl"
-    },
-    {
-      "@id": "_:b15",
-      "@type": "PropertyValue",
-      "description": "Brand of first dose of the vaccine",
-      "name": "dose_1_brand_cd"
-    },
-    {
-      "@id": "_:b16",
-      "@type": "PropertyValue",
-      "description": "Date of the first dose of the vaccine",
-      "name": "dose_1_dt"
-    },
-    {
-      "@id": "_:b17",
-      "@type": "PropertyValue",
-      "description": "Brand of second dose of the vaccine",
-      "name": "dose_2_brand_cd"
-    },
-    {
-      "@id": "_:b18",
-      "@type": "PropertyValue",
-      "description": "Date of the second dose of the vaccine",
-      "name": "dose_2_dt"
-    },
-    {
-      "@id": "_:b19",
-      "@type": "PropertyValue",
-      "description": "Brand of third dose of the vaccine",
-      "name": "dose_3_brand_cd"
-    },
-    {
-      "@id": "_:b2",
-      "@type": "Place",
-      "geo": {
-        "@id": "_:b3"
+      "@id": "vaccines_effectiveness_common_data_model_specification/docs/",
+      "@type": "Dataset",
+      "about": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
       },
-      "name": "Europe"
+      "hasPart": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
+      },
+      "name": "Documentation for Common data model specification"
     },
     {
-      "@id": "_:b20",
-      "@type": "PropertyValue",
-      "description": "Date of the third dose of the vaccine",
-      "name": "dose_3_dt"
+      "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
+      "@type": "File",
+      "about": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/"
+      },
+      "description": "Human-readable version (interactive report)",
+      "encodingFormat": "text/html",
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)"
     },
     {
-      "@id": "_:b21",
-      "@type": "PropertyValue",
-      "description": "Number of doses (independently of the vaccine brand) received  by a person during the period of study",
-      "name": "number_doses"
+      "@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx",
+      "@type": "File",
+      "description": "Human-readable version (Excel)",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "name": "vaccine effectiveness data model specification (XLXS)"
     },
     {
-      "@id": "_:b22",
-      "@type": "PropertyValue",
-      "description": "Date on which the person included in the cohort is considered  fully vaccinated",
-      "name": "fully_vaccinated_dt"
+      "@id": "vaccines_effectiveness_synthetic_dataset/",
+      "@type": "Dataset",
+      "description": "following the causal model",
+      "hasPart": [
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+        }
+      ],
+      "name": "Common data model specification"
     },
     {
-      "@id": "_:b23",
-      "@type": "PropertyValue",
-      "description": "Is the person included in the cohort fully vaccinated?",
-      "name": "fully_vaccinated_bl"
+      "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb",
+      "@type": [
+        "File",
+        "SoftwareSourceCode",
+        "ComputationalWorkflow"
+      ],
+      "conformsTo": {
+        "@id": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE"
+      },
+      "conditionsOfAccess": "The scripts (software) accompanying the data model specification are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it.",
+      "description": "Jupyter notebook with Python scripting and commenting to generate the synthetic dataset",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)",
+      "programmingLanguage": {
+        "@id": "https://jupyter.org/"
+      },
+      "input": [],
+      "output": {
+        "@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8"
+      }
     },
     {
-      "@id": "_:b24",
-      "@type": "PropertyValue",
-      "description": "Vaccine types received for 1st and 2nd dose concatenated with  hyphen",
-      "name": "vaccination_schedule_cd"
+      "@id": "vaccines_effectiveness_synthetic_dataset/config.json",
+      "@type": "File",
+      "encodingFormat": "application/json",
+      "name": "pandas-profiling config"
     },
     {
-      "@id": "_:b25",
-      "@type": "PropertyValue",
-      "description": "Date of diagnosis or test result positive of the last  known/confirmed infection",
-      "name": "confirmed_case_dt"
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html",
+      "@type": "File",
+      "description": "Interactive report of the exploratory data analysis (EDA) of the synthetic dataset",
+      "encodingFormat": "text/html",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)"
     },
     {
-      "@id": "_:b26",
-      "@type": "PropertyValue",
-      "description": "Is the person included in the cohort a confirmed COVID-19  case?",
-      "name": "confirmed_case_bl"
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json",
+      "@type": "File",
+      "description": "Machine-readable version of the exploratory data analysis (EDA) of the synthetic dataset",
+      "encodingFormat": "application/json",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)"
     },
     {
-      "@id": "_:b27",
-      "@type": "PropertyValue",
-      "description": "If the person experienced a confirmed infection proceeding the  last confirmed infection with more than 60 days, date of diagnosis of this  previous infection",
-      "name": "previous_infection_dt"
+      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "name": "Synthetic dataset with 650k entries"
+    },
+    
+    {
+      "@id": "http://edamontology.org/format_3752",
+      "@type": "DefinedTerm",
+      "description": "Tabular data represented as comma-separated values in a text file.",
+      "name": "CSV"
     },
     {
-      "@id": "_:b28",
-      "@type": "PropertyValue",
-      "description": "Did the person experience a confirmed infection proceeding the  last confirmed infection?",
-      "name": "previous_infection_bl"
+      "@id": "https://docs.ropensci.org/dataspice/",
+      "@type": "SoftwareApplication",
+      "name": "dataspice",
+      "url": "https://docs.ropensci.org/dataspice/",
+      "version": "1.1.0"
     },
     {
-      "@id": "_:b29",
-      "@type": "PropertyValue",
-      "description": "Type of COVID-19 test used to detect the last known SARS-CoV-2  infection (i.e. first positive test for SARS-CoV-2)",
-      "name": "test_type_cd"
+      "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files",
+      "@type": "WebPage",
+      "about": {
+        "@id": "https://docs.ropensci.org/dataspice/"
+      },
+      "name": "dataspice CSV template"
     },
     {
-      "@id": "_:b3",
-      "@type": "GeoShape",
-      "box": "66.78398 11.50546 44.4272 -15.84884"
+      "@id": "https://github.com/pandas-profiling/pandas-profiling",
+      "@type": "SoftwareApplication",
+      "name": "pandas-profiling v3.1.0",
+      "url": "https://github.com/pandas-profiling/pandas-profiling",
+      "version": "3.1.0"
     },
     {
-      "@id": "_:b30",
-      "@type": "PropertyValue",
-      "description": "Identified variant (WHO label) for last known SARS-CoV-2  infection",
-      "name": "variant_cd"
+      "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8",
+      "@type": "SoftwareApplication",
+      "name": "Quarto",
+      "url": "https://quarto.org/",
+      "version": "1.0.8"
     },
     {
-      "@id": "_:b31",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from type II  diabetes (at the time of entering the cohort)?",
-      "name": "diabetes_bl"
-    },
-    {
-      "@id": "_:b32",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ",
-      "name": "obesity_bl"
-    },
-    {
-      "@id": "_:b33",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from heart  failure (at the time of entering the cohort)?",
-      "name": "heart_failure_bl"
-    },
-    {
-      "@id": "_:b34",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from chronic  lung disease (at the time of entering the cohort)?",
-      "name": "copd_bl"
-    },
-    {
-      "@id": "_:b35",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from solid  cancer without metastatis (at the time of entering the cohort)?",
-      "name": "solid_tumor_without_metastasis_bl"
-    },
-    {
-      "@id": "_:b36",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from chronic  kidney disease (at the time of entering the cohort)?",
-      "name": "chronic_kidney_disease_bl"
-    },
-    {
-      "@id": "_:b37",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from sickle cell  disease (at the time of entering the cohort)?",
-      "name": "sickle_cell_disease_bl"
-    },
-    {
-      "@id": "_:b38",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from  hypertension (at the time of entering the cohort)?",
-      "name": "hypertension_bl"
-    },
-    {
-      "@id": "_:b39",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from blood  cancer (leukemia) (at the time of entering the cohort)?",
-      "name": "blood_cancer_bl"
-    },
-    {
-      "@id": "_:b4",
-      "@type": "PropertyValue",
-      "description": "Pseudoid  of the person included in the cohort",
-      "name": "person_id"
-    },
-    {
-      "@id": "_:b40",
-      "@type": "PropertyValue",
-      "description": "Is the person included in the cohort a transplant patient  (i.e. solid organ transplantation) (at the time of entering the cohort)?",
-      "name": "transplanted_bl"
-    },
-    {
-      "@id": "_:b41",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from a HIV  infection (at the time of entering the cohort)?",
-      "name": "hiv_infection_bl"
-    },
-    {
-      "@id": "_:b42",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from a primary  immuno deficiency disease (lymphoma) (at the time of entering the cohort)?",
-      "name": "primary_immunodeficiency_bl"
-    },
-    {
-      "@id": "_:b43",
-      "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from drugs  induced immunosuppression (at the time of entering the cohort)?",
-      "name": "immunosuppression_bl"
-    },
-    {
-      "@id": "_:b44",
-      "@type": "PropertyValue",
-      "description": "Is the person included in the cohort pregnant (at the time of  entering the cohort)?",
-      "name": "pregnancy_bl"
-    },
-    {
-      "@id": "_:b5",
-      "@type": "PropertyValue",
-      "description": "Age of the person included in  the cohort (at the time of entering the cohort)",
-      "name": "age_nm",
-      "minValue": 5,
-      "maxValue": 115,
-      "unitText": "years"
-    },
-    {
-      "@id": "_:b6",
-      "@type": "PropertyValue",
-      "description": "Sex of the person included in  the cohort (at the time of entering the cohort)",
-      "name": "sex_cd"
-    },
-    {
-      "@id": "_:b7",
-      "@type": "PropertyValue",
-      "description": "Socioeconomic level of the person in the cohort (at the time  of entering the cohort)",
-      "name": "socecon_lvl_cd"
-    },
-    {
-      "@id": "_:b8",
-      "@type": "PropertyValue",
-      "description": "Area of residence of the person included in the cohort (NUTS  3) (at the time of entering the cohort)",
-      "name": "residence_area_cd"
-    },
-    {
-      "@id": "_:b9",
-      "@type": "PropertyValue",
-      "description": "Country of residence of the person included in the cohort (at  the time of entering the cohort)",
-      "name": "country_cd"
+      "@id": "https://jupyter.org/",
+      "@type": "ComputerLanguage",
+      "alternateName": "Jupyter",
+      "identifier": {
+        "@id": "https://jupyter.org/"
+      },
+      "name": "Jupyter Notebook",
+      "url": {
+        "@id": "https://jupyter.org/"
+      }
     },
     {
       "@id": "https://orcid.org/0000-0001-7316-6990",
@@ -966,11 +548,28 @@
       "name": "Nina Van Goethem"
     },
     {
+      "@id": "https://orcid.org/0000-0001-9842-9718",
+      "@type": "Person",
+      "name": "Stian Soiland-Reyes"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-0493-4711",
+      "@type": "Person",
+      "affiliation": "GÖG",
+      "name": "Alexander Degelsegger-Marquez"
+    },
+    {
       "@id": "https://orcid.org/0000-0002-0961-3298",
       "@type": "Person",
       "affiliation": "Instute for Health Science in Aragon (IACS)",
       "email": "ebernal.iacs@aragon.es",
       "name": "Enrique Bernal-Delgado"
+    },
+    {
+      "@id": "https://orcid.org/0000-0002-1145-7829",
+      "@type": "Person",
+      "affiliation": "DANS",
+      "name": "Simon Saldner"
     },
     {
       "@id": "https://orcid.org/0000-0002-4409-0664",
@@ -987,6 +586,12 @@
       "name": "Francisco Estupiñán-Romero"
     },
     {
+      "@id": "https://orcid.org/0000-0002-7873-6152",
+      "@type": "Person",
+      "affiliation": "GÖG",
+      "name": "Lorenz Dolanski-Aghamanoukjan"
+    },
+    {
       "@id": "https://orcid.org/0000-0002-8783-5478",
       "@type": "Person",
       "affiliation": "Instute for Health Science in Aragon (IACS)",
@@ -994,28 +599,417 @@
       "name": "Javier González-Galindo"
     },
     {
-      "@id": "https://orcid.org/0000-0002-1145-7829",
-      "@type": "Person",
-      "name": "Simon Saldner",
-      "affiliation": "DANS"
-    },
-    {
-      "@id": "https://orcid.org/0000-0002-7873-6152",
-      "@type": "Person",
-      "name": "Lorenz Dolanski-Aghamanoukjan",
-      "affiliation": "GÖG"
-    },
-    {
-      "@id": "https://orcid.org/0000-0002-0493-4711",
-      "@type": "Person",
-      "name": "Alexander Degelsegger-Marquez",
-      "affiliation": "GÖG"
-    },
-    {
       "@id": "https://orcid.org/0000-0002-9586-7955",
       "@type": "Person",
-      "name": "Martínez-Lizaga, Natalia",
-      "affiliation": "Instute for Health Science in Aragon (IACS)"
+      "affiliation": "Instute for Health Science in Aragon (IACS)",
+      "name": "Martínez-Lizaga, Natalia"
+    },
+    {
+      "@id": "https://quarto.org/docs/authoring/markdown-basics.html",
+      "@type": "WebPage",
+      "name": "Quarto Markdown"
+    },
+    {
+      "@id": "https://spdx.org/licenses/CC-BY-4.0",
+      "identifier": "CC-BY-4.0",
+      "name": "Creative Commons Attribution 4.0 International",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+
+
+    {
+      "@id": "_:b0",
+      "@type": "Place",
+      "geo": {
+        "@id": "_:b42"
+      },
+      "name": "Europe"
+    },
+    {
+      "@id": "_:b1",
+      "@type": "PropertyValue",
+      "description": "Pseudoid  of the person included in the cohort",
+      "name": "person_id"
+    },
+    {
+      "@id": "_:b10",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort an essential worker? (at  the time of entering the cohort)",
+      "name": "essential_worker_bl"
+    },
+    {
+      "@id": "_:b11",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort institutionalized? (at  the time of entering the cohort)",
+      "name": "institutionalized_bl"
+    },
+    {
+      "@id": "_:b12",
+      "@type": "PropertyValue",
+      "description": "Brand of first dose of the vaccine",
+      "name": "dose_1_brand_cd"
+    },
+    {
+      "@id": "_:b13",
+      "@type": "PropertyValue",
+      "description": "Date of the first dose of the vaccine",
+      "name": "dose_1_dt"
+    },
+    {
+      "@id": "_:b14",
+      "@type": "PropertyValue",
+      "description": "Brand of second dose of the vaccine",
+      "name": "dose_2_brand_cd"
+    },
+    {
+      "@id": "_:b15",
+      "@type": "PropertyValue",
+      "description": "Date of the second dose of the vaccine",
+      "name": "dose_2_dt"
+    },
+    {
+      "@id": "_:b16",
+      "@type": "PropertyValue",
+      "description": "Brand of third dose of the vaccine",
+      "name": "dose_3_brand_cd"
+    },
+    {
+      "@id": "_:b17",
+      "@type": "PropertyValue",
+      "description": "Date of the third dose of the vaccine",
+      "name": "dose_3_dt"
+    },
+    {
+      "@id": "_:b18",
+      "@type": "PropertyValue",
+      "description": "Number of doses (independently of the vaccine brand) received  by a person during the period of study",
+      "name": "number_doses"
+    },
+    {
+      "@id": "_:b19",
+      "@type": "PropertyValue",
+      "description": "Date on which the person included in the cohort is considered  fully vaccinated",
+      "name": "fully_vaccinated_dt"
+    },
+    {
+      "@id": "_:b2",
+      "@type": "PropertyValue",
+      "description": "Age of the person included in  the cohort (at the time of entering the cohort)",
+      "maxValue": 115,
+      "minValue": 5,
+      "name": "age_nm",
+      "unitText": "years"
+    },
+    {
+      "@id": "_:b20",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort fully vaccinated?",
+      "name": "fully_vaccinated_bl"
+    },
+    {
+      "@id": "_:b21",
+      "@type": "PropertyValue",
+      "description": "Vaccine types received for 1st and 2nd dose concatenated with  hyphen",
+      "name": "vaccination_schedule_cd"
+    },
+    {
+      "@id": "_:b22",
+      "@type": "PropertyValue",
+      "description": "Date of diagnosis or test result positive of the last  known/confirmed infection",
+      "name": "confirmed_case_dt"
+    },
+    {
+      "@id": "_:b23",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort a confirmed COVID-19  case?",
+      "name": "confirmed_case_bl"
+    },
+    {
+      "@id": "_:b24",
+      "@type": "PropertyValue",
+      "description": "If the person experienced a confirmed infection proceeding the  last confirmed infection with more than 60 days, date of diagnosis of this  previous infection",
+      "name": "previous_infection_dt"
+    },
+    {
+      "@id": "_:b25",
+      "@type": "PropertyValue",
+      "description": "Did the person experience a confirmed infection proceeding the  last confirmed infection?",
+      "name": "previous_infection_bl"
+    },
+    {
+      "@id": "_:b26",
+      "@type": "PropertyValue",
+      "description": "Type of COVID-19 test used to detect the last known SARS-CoV-2  infection (i.e. first positive test for SARS-CoV-2)",
+      "name": "test_type_cd"
+    },
+    {
+      "@id": "_:b27",
+      "@type": "PropertyValue",
+      "description": "Identified variant (WHO label) for last known SARS-CoV-2  infection",
+      "name": "variant_cd"
+    },
+    {
+      "@id": "_:b28",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from type II  diabetes (at the time of entering the cohort)?",
+      "name": "diabetes_bl"
+    },
+    {
+      "@id": "_:b29",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ",
+      "name": "obesity_bl"
+    },
+    {
+      "@id": "_:b3",
+      "@type": "PropertyValue",
+      "description": "Sex of the person included in  the cohort (at the time of entering the cohort)",
+      "name": "sex_cd"
+    },
+    {
+      "@id": "_:b30",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from heart  failure (at the time of entering the cohort)?",
+      "name": "heart_failure_bl"
+    },
+    {
+      "@id": "_:b31",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from chronic  lung disease (at the time of entering the cohort)?",
+      "name": "copd_bl"
+    },
+    {
+      "@id": "_:b32",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from solid  cancer without metastatis (at the time of entering the cohort)?",
+      "name": "solid_tumor_without_metastasis_bl"
+    },
+    {
+      "@id": "_:b33",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from chronic  kidney disease (at the time of entering the cohort)?",
+      "name": "chronic_kidney_disease_bl"
+    },
+    {
+      "@id": "_:b34",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from sickle cell  disease (at the time of entering the cohort)?",
+      "name": "sickle_cell_disease_bl"
+    },
+    {
+      "@id": "_:b35",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from  hypertension (at the time of entering the cohort)?",
+      "name": "hypertension_bl"
+    },
+    {
+      "@id": "_:b36",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from blood  cancer (leukemia) (at the time of entering the cohort)?",
+      "name": "blood_cancer_bl"
+    },
+    {
+      "@id": "_:b37",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort a transplant patient  (i.e. solid organ transplantation) (at the time of entering the cohort)?",
+      "name": "transplanted_bl"
+    },
+    {
+      "@id": "_:b38",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from a HIV  infection (at the time of entering the cohort)?",
+      "name": "hiv_infection_bl"
+    },
+    {
+      "@id": "_:b39",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from a primary  immuno deficiency disease (lymphoma) (at the time of entering the cohort)?",
+      "name": "primary_immunodeficiency_bl"
+    },
+    {
+      "@id": "_:b4",
+      "@type": "PropertyValue",
+      "description": "Socioeconomic level of the person in the cohort (at the time  of entering the cohort)",
+      "name": "socecon_lvl_cd"
+    },
+    {
+      "@id": "_:b40",
+      "@type": "PropertyValue",
+      "description": "Does the person included in the cohort suffer from drugs  induced immunosuppression (at the time of entering the cohort)?",
+      "name": "immunosuppression_bl"
+    },
+    {
+      "@id": "_:b41",
+      "@type": "PropertyValue",
+      "description": "Is the person included in the cohort pregnant (at the time of  entering the cohort)?",
+      "name": "pregnancy_bl"
+    },
+    {
+      "@id": "_:b42",
+      "@type": "GeoShape",
+      "box": "66.78398 11.50546 44.4272 -15.84884"
+    },
+    {
+      "@id": "_:b5",
+      "@type": "PropertyValue",
+      "description": "Area of residence of the person included in the cohort (NUTS  3) (at the time of entering the cohort)",
+      "name": "residence_area_cd"
+    },
+    {
+      "@id": "_:b6",
+      "@type": "PropertyValue",
+      "description": "Country of residence of the person included in the cohort (at  the time of entering the cohort)",
+      "name": "country_cd"
+    },
+    {
+      "@id": "_:b7",
+      "@type": "PropertyValue",
+      "description": "Is the country of residence different from the country that is  doing the analyses?",
+      "name": "foreign_bl"
+    },
+    {
+      "@id": "_:b8",
+      "@type": "PropertyValue",
+      "description": "Date of death of the person (if the person has died)",
+      "name": "exitus_dt"
+    },
+    {
+      "@id": "_:b9",
+      "@type": "PropertyValue",
+      "description": "Date of death of the person (if the person has died during the  period of study)",
+      "name": "exitus_bl"
+    },
+    {
+      "@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8",
+      "@type": "FormalParameter",
+      "conformsTo": {
+        "@id": "https://bioschemas.org/profiles/FormalParameter/1.0-RELEASE"
+      },
+      "description": "Note: The synthetic dataset is saved as a CSV file, UTF-8 format, pipe-separated (|)",
+      "name": "vaccines_synthetic_1M.csv"
+    },
+    {
+      "@id": "#dataspice-creation",
+      "@type": "CreateAction",
+      "endTime": "2022-07-27",
+      "instrument": {
+        "@id": "https://docs.ropensci.org/dataspice/"
+      },
+      "name": "dataspice JSON-LD created from CSV templates",
+      "object": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+        }
+      ],
+      "result": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
+        }
+      ]
+    },
+    {
+      "@id": "#metadata-creation",
+      "@type": "CreateAction",
+      "actionStatus": {
+        "@id": "schema:CompletedActionStatus"
+      },
+      "agent": {
+        "@id": "https://orcid.org/0000-0001-9842-9718"
+      },
+      "endTime": "2023-01-06",
+      "name": "RO-Crate metadata created based on README and dataspice JSON-LD",
+      "object": [
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+        },
+        {
+          "@id": "README.md"
+        }
+      ],
+      "result": {
+        "@id": "ro-crate-metadata.json"
+      }
+    },
+    {
+      "@id": "#notebook-execution-1M",
+      "@type": "CreateAction",
+      "endTime": "2022-05-24",
+      "instrument": {
+        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+      },
+      "name": "Execution of Jupyter Notebook to generate 1M synthetic dataset",
+      "result": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+      }
+    },
+    {
+      "@id": "#notebook-execution-650k",
+      "@type": "CreateAction",
+      "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A modified notebook must have been executed.",
+      "endTime": "2022-05-24",
+      "instrument": {
+        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+      },
+      "name": "Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset",
+      "result": {
+        "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+      }
+    },
+    {
+      "@id": "#panda-analysis",
+      "@type": "CreateAction",
+      "endTime": "2022-05-27T09:52:32.926250",
+      "instrument": {
+        "@id": "https://github.com/pandas-profiling/pandas-profiling"
+      },
+      "name": "Execution of pandas-profiling for exploratory data analysis",
+      "object": [
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/config.json"
+        }
+      ],
+      "result": [
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"
+        },
+        {
+          "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"
+        }
+      ],
+      "startTime": "2022-05-27T09:52:29.847284"
+    },
+    {
+      "@id": "#qmd-generation",
+      "@type": "CreateAction",
+      "endTime": "2022-07-27T12:00:00+01:00",
+      "instrument": {
+        "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8"
+      },
+      "name": "Generating HTML from QMD",
+      "object": {
+        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"
+      },
+      "result": {
+        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
+      }
     }
   ]
 }
