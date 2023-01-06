@@ -111,7 +111,7 @@
       ],
       "result": [
         { "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json" },
-        { "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html" }
+        { "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html" }
       ],
       "instrument": {
         "@id": "https://docs.ropensci.org/dataspice/"
@@ -177,9 +177,6 @@
     {
       "@id": "#qmd-generation",
       "@type": "CreateAction",
-      "xx-unknown-agent": {
-        "@id": "#SomeUser"
-      },
       "endTime": "2022-07-27T12:00:00+01:00",
       "instrument": {
         "@id": "https://github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8"
@@ -316,14 +313,14 @@
       "@type": "Dataset",
       "name": "Documentation for Common data model specification",
       "hasPart": [
-        {"@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html"}
+        {"@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"}
       ],
       "about": { 
         "@id": "vaccines_effectiveness_common_data_model_specification/"
       }
     },    
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
+      "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
       "@type": "File",
       "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
       "encodingFormat": "text/html",
@@ -402,10 +399,7 @@
           "@id": "https://orcid.org/0000-0002-8783-5478"
         }
       ],
-      "datePublished": {
-        "@type": "Date",
-        "@value": "27-07-2022"
-      },
+      "datePublished": "2022-07-27",
       "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
       "distribution": {
         "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
@@ -564,7 +558,8 @@
       "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv",
       "@type": ["DataDownload", "File"],
       "encodingFormat": "text/csv",
-      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
+      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1",
+      "description": "synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)"
     },
     {
       "@id": "_:b10",
