@@ -33,6 +33,8 @@
       "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
       "encodingFormat": "application/ld+json",
       "@type": "File",
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)",
+      "description": "Machine-readable version",
       "mainEntity": {
         "@id": "vaccines_effectiveness_common_data_model_specification/"
       }
@@ -69,7 +71,10 @@
           "@id": "#dataspice-creation"
         },
         {
-          "@id": "#notebook-execution"
+          "@id": "#notebook-execution-650k"
+        },
+        {
+          "@id": "#notebook-execution-1M"
         },
         {
           "@id": "#metadata-creation"
@@ -139,14 +144,17 @@
           "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/metadata/"
+          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/"
         },
         {
           "@id": "vaccines_effectiveness_common_data_model_specification/docs/"
+        },
+        {
+          "@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx"
         }
       ],
       "subjectOf": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/metadata/"
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/"
       },
       "keywords": [
         "synthetic data",
@@ -394,7 +402,7 @@
       "endTime": "2022-07-27"
     },
     {
-      "@id": "#notebook-execution",
+      "@id": "#notebook-execution-650k",
       "@type": "CreateAction",
       "instrument": {
         "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
@@ -402,8 +410,20 @@
       "result": {
         "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
       },
-      "name": "Execution of Jupyter Notebook to generate synthetic dataset",
-      "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A different notebook was executed.",
+      "name": "Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset",
+      "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A modified notebook must have been executed.",
+      "endTime": "2022-05-24"
+    },
+    {
+      "@id": "#notebook-execution-1M",
+      "@type": "CreateAction",
+      "instrument": {
+        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+      },
+      "result": {
+        "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+      },
+      "name": "Execution of Jupyter Notebook to generate 1M synthetic dataset",
       "endTime": "2022-05-24"
     },
     {
@@ -504,7 +524,8 @@
     {
       "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
       "@type": "File",
-      "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)",
+      "description": "Human-readable version (interactive report)",
       "encodingFormat": "text/html",
       "about": {
         "@id": "vaccines_effectiveness_common_data_model_specification/"
@@ -541,7 +562,8 @@
     {
       "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv",
       "@type": "File",
-      "encodingFormat": "text/csv"
+      "encodingFormat": "text/csv",
+      "name": "Synthetic dataset with 650k entries"
     },
     {
       "@id": "https://github.com/pandas-profiling/pandas-profiling",
@@ -651,7 +673,7 @@
       }
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/metadata/",
+      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/",
       "@type": "Dataset",
       "name": "Metadata for Common data model specification",
       "hasPart": [
@@ -674,6 +696,13 @@
       "about": {
         "@id": "vaccines_effectiveness_common_data_model_specification/"
       }
+    },
+    {
+      "@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx",
+      "@type": "File",
+      "name": "vaccine effectiveness data model specification (XLXS)",
+      "description": "Human-readable version (Excel)",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     },
     {
       "@id": "_:b2",
@@ -1043,7 +1072,9 @@ table.table {
                         
                         <li><a href="#%23dataspice-creation">dataspice JSON-LD created from CSV templates</a></li>
                         
-                        <li><a href="#%23notebook-execution">Execution of Jupyter Notebook to generate synthetic dataset</a></li>
+                        <li><a href="#%23notebook-execution-650k">Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset</a></li>
+                        
+                        <li><a href="#%23notebook-execution-1M">Execution of Jupyter Notebook to generate 1M synthetic dataset</a></li>
                         
                         <li><a href="#%23metadata-creation">RO-Crate metadata created based on README and dataspice JSON-LD</a></li>
                         </ul></td>
@@ -1310,13 +1341,15 @@ table.table {
             <td style='text-align:left'><ul>
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></li>
                         
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
+                        
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx">vaccine effectiveness data model specification (XLXS)</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">subjectOf<span>&nbsp;</span><a href="http://schema.org/subjectOf">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">keywords<span>&nbsp;</span><a href="http://schema.org/keywords">[?]</a></th>
             <td style='text-align:left'><ul>
@@ -1434,13 +1467,13 @@ table.table {
             <td style='text-align:left'><ul>
                         <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/metadata/">Metadata for Common data model specification</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">mainEntity<span>&nbsp;</span><a href="http://schema.org/mainEntity">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1477,7 +1510,7 @@ table.table {
                         
                         <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json">COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv</a></li>
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">Synthetic dataset with 650k entries</a></li>
                         </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
@@ -1584,7 +1617,7 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv</a></li>
+                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">Synthetic dataset with 650k entries</a></li>
                         
                         <li><a href="#vaccines_effectiveness_synthetic_dataset/config.json">pandas-profiling config</a></li>
                         </ul></td>
@@ -1644,9 +1677,9 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
@@ -1664,32 +1697,68 @@ table.table {
         </div>
         <hr/><br/><br/>
            <div>
-            <h3> Execution of Jupyter Notebook to generate synthetic dataset</h3>
+            <h3> Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset</h3>
             
             
             
             
-        <div id="#notebook-execution">
+        <div id="#notebook-execution-650k">
             
             <table class="table metadata table-striped" >
                 <tbody><tr>
             <th style="text-align:left;" class="prop">@id</th>
-            <td style='text-align:left'><span>#notebook-execution</span></td>
+            <td style='text-align:left'><span>#notebook-execution-650k</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
-            <td style='text-align:left'><span>Execution of Jupyter Notebook to generate synthetic dataset</span></td>
+            <td style='text-align:left'><span>Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">@type</th>
             <td style='text-align:left'><span>CreateAction</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
-            <td style='text-align:left'><span>Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A different notebook was executed.</span></td>
+            <td style='text-align:left'><span>Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A modified notebook must have been executed.</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
             <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv</a></td>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">Synthetic dataset with 650k entries</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">endTime<span>&nbsp;</span><a href="http://schema.org/endTime">[?]</a></th>
+            <td style='text-align:left'><span>2022-05-24</span></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//doi.org/10.5281/zenodo.6913045">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> Execution of Jupyter Notebook to generate 1M synthetic dataset</h3>
+            
+            
+            
+            
+        <div id="#notebook-execution-1M">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>#notebook-execution-1M</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>Execution of Jupyter Notebook to generate 1M synthetic dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>CreateAction</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
+            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">endTime<span>&nbsp;</span><a href="http://schema.org/endTime">[?]</a></th>
             <td style='text-align:left'><span>2022-05-24</span></td>
@@ -1723,7 +1792,7 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json</a></li>
+                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
                         
                         <li><a href="#README.md">README.md</a></li>
                         </ul></td>
