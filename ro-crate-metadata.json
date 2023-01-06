@@ -318,7 +318,8 @@
     {
       "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv",
       "@type": "File",
-      "encodingFormat": "text/csv"
+      "encodingFormat": "text/csv",
+      "name": "Synthetic dataset with 650k entries"
     },
     { "@id": "vaccines_effectiveness_common_data_model_specification/docs/",
       "@type": "Dataset",
