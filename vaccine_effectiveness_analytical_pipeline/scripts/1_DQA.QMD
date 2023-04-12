@@ -1,0 +1,421 @@
+---
+title: "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness"
+subtitle: "Data Quality Assessment (DQA)"
+format: 
+  html:
+    self-contained: true
+code-fold: false
+echo: false
+editor: visual
+always_allow_html: yes
+title-block-banner: "#27445C"
+---
+
+```{r, metadata, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+################
+### Metadata ###
+################
+
+# DATE LAST MODIFIED:
+# 11/04/2023
+
+# METADATA: 
+if(FALSE) {
+  title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - data quality assessment'
+  author     <- list('Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero', 'Marjan Meurisse', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  version    <- '1.0.0'
+  maintainer <- 'Marjan Meurisse'
+  email      <- 'Marjan.Meurisse@sciensano.be'
+  input      <- list('cohort_data (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
+  output     <- list('1_DQA.html (report)','missing_profile (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
+}
+
+```
+
+```{css}
+
+.box {
+  padding: 1em;
+  color: black;
+  background: transparant;
+  border: 1px solid lightgrey;
+}
+
+```
+
+```{r, general settings, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: load packages
+source("./0_global.R")
+
+```
+
+```{r, load data, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: load the data into memory
+tryCatch(
+  {
+    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    df <- dbGetQuery(con,
+    "CREATE TEMPORARY TABLE Temp AS SELECT * FROM cohort_data;
+    ALTER TABLE Temp DROP COLUMN flag_violating_val;
+    ALTER TABLE Temp DROP COLUMN flag_listwise_del;
+    SELECT * FROM Temp") 
+  },
+  finally={
+    dbDisconnect(con, shutdown=TRUE)
+  })
+
+```
+
+## Overview {.tabset}
+
+This section provides an overview of your imported dataset. Dataset statistics, variable types, missing data profiles and potential alerts are shown below.
+
+::: panel-tabset
+##### Dataset statistics
+
+```{r, introduce, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: obtain basic information about the cohort_data
+dt_ind <- as.data.frame(introduce(df))
+
+```
+
+```{r, dataset statistics, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table with overall dataset statistics (nr columns, nr rows, nr observations, ...)
+
+dt_stat <- dt_ind
+dt_stat$perc_missing_values <- 
+  paste0(round(100*dt_stat$total_missing_values/dt_stat$total_observations,1),"%")
+dt_stat$memory_usage <- utils:::format.object_size(dt_stat$memory_usage,"auto")
+dt_stat$rows <- formatC(dt_stat$rows, format="f", big.mark = " ", digits = 0)
+dt_stat$total_observations <- formatC(dt_stat$total_observations, format="f", big.mark = " ", digits = 0)
+dt_stat$total_missing_values <- formatC(dt_stat$total_missing_values, format="f", big.mark = " ", digits = 0)
+dt_stat <- t(dt_stat[,c("columns", "rows", "total_observations", "total_missing_values","perc_missing_values","memory_usage")])
+DT::datatable(dt_stat,
+              class = 'cell-border stripe',
+              colnames = "",
+              options = list(dom = 't'),
+              caption = htmltools::tags$caption(
+                style = "text-align: left",
+                'Dataset statistics'),
+              rownames = c("Number of variables","Number of rows", "Total observation","Total missing cells", "Missing cells (%)", "Memory usage")) 
+
+```
+
+##### Variables
+
+```{r, variables, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table with basic column information (discrete, continuous, all missing columns)
+
+dt_var <- dt_ind
+dt_var <- t(dt_var[,c("discrete_columns","continuous_columns","all_missing_columns")])
+DT::datatable(dt_var,
+              class = 'cell-border stripe',
+              colnames = "",
+              options = list(dom = 't'),
+              caption = htmltools::tags$caption(
+                style = "text-align: left",
+                ''),
+              rownames = c("Discrete column","Continuous column","All missing column"))
+
+```
+
+```{r, classes, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table with information on the variable classes
+
+dt_var_class <- as.data.frame(sapply(df, class))
+DT::datatable(dt_var_class,
+              class = 'cell-border stripe',
+              options = list(dom = 'pt'),
+              caption = htmltools::tags$caption(
+                style = "text-align: left",
+                'Variable class'),
+              colnames = c("Variable","Class"))
+
+```
+
+##### Missing data profile
+
+```{r, missing data profile 1, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table with missing data profile (feature/variable, nr missing, % missing)
+
+dt_prof <- profile_missing(df)
+DT::datatable(dt_prof,
+              class = 'cell-border stripe',
+              options = list(dom = 'ptl', 
+                             pageLegth = 50),
+              caption = htmltools::tags$caption(
+                style = "text-align: left",
+                'Missing data profile'),
+              rownames = NULL,
+              colnames=c("Feature","Number missing","Percentage missing")) %>%
+  formatPercentage("pct_missing",
+                   digits=1) %>%
+  formatStyle(
+    'pct_missing',
+    background = styleColorBar(dt_prof$pct_missing, 'steelblue'),
+    backgroundSize = '100% 90%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  )
+
+tryCatch(
+  {
+    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    ## create 'missing_profile' table
+    dbExecute(con, "CREATE OR REPLACE TABLE missing_profile (
+                    feature VARCHAR,  
+                    num_missing INT,
+                    pct_missing DOUBLE)")
+    dbWriteTable(con, "missing_profile",dt_prof,overwrite = TRUE, append=FALSE)
+    # print(dbGetQuery(conn = con, "SELECT * FROM missing_profile"))
+  },
+  finally={
+    dbDisconnect(con, shutdown=TRUE)
+  })
+
+```
+
+<br>
+
+```{r, missing data profile 2, results='hide', fig.show='hide', echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create plot with missing data profile 
+
+pl <- ggplotly(plot_missing(df) + theme_minimal() + 
+  theme(axis.title.y=element_blank()))
+
+```
+
+```{r, missing data profile 3, message=FALSE, warning=FALSE, error=FALSE}
+  
+pl
+
+```
+
+##### Alerts
+
+```{r, alerts, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table with alerts when:
+# - A variable has a constant value ('Constant')
+# - A variable has more than 50% missing values ('Missing')
+# - A variable has all unique values ('Unique')
+
+dt_alert <- data.frame(matrix(NA, nrow = 0, ncol = 2))
+
+# Constant values
+for(i in colnames(df)) {
+  if((length(unique(df[,i]))==1 && !is.na(unique(df[,i])))) {
+    dt_alert <- rbind(dt_alert,c(paste0(i," has constant value ",unique(df[,i])),"Constant"))
+  }
+}
+
+# Missing values
+for(k in colnames(df)) {
+  n_miss <- length(df[which(is.na(df[,k])),k])
+  perc_miss <- n_miss/nrow(df)
+  if(perc_miss>0.5) {
+    dt_alert <- rbind(dt_alert,c(paste0(k," has ", n_miss, " (", round(100*perc_miss,1), "%) missing values"),"Missing"))
+  }
+}
+
+# Unique values
+for(h in colnames(df)) {
+  n_unique <- length(unique(df[,h]))
+  if(n_unique==nrow(df)) {
+    dt_alert <- rbind(dt_alert,c(paste0(h," has all unique values"),"Unique"))
+  }
+}
+
+colnames(dt_alert) <- c('V1','V2')
+formattable(dt_alert,
+                            align = c("l","c"),
+                            col.names = NULL,
+                            list(
+                                V2 = formatter("V1",
+                                        style = ~style(
+                                          display = "block", 
+                                          padding = "0 4px", 
+                                          `border-radius` = "4px", 
+                                          `background-color` = 
+                                              case_when(V2 == "Constant" ~ "#F4A460",
+                                                        V2 == "Missing" ~ "lightblue",
+                                                        V2 == "Unique" ~ "#66CDAA")))
+                            ))
+
+```
+
+##### Duplicates
+
+```{r, duplicates, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table with information of paients that appear more than once in the data
+
+dt_duplicates <- data.frame(matrix(NA, nrow = 0, ncol = 3))
+
+if(sum(duplicated(df$person_id))==0) {
+  dt_duplicates <- rbind(dt_duplicates,c("The variable 'person_id' has all unique values",paste0("Number of duplicate values: ", sum(duplicated(df$person_id))),"Unique"))
+} else {
+  dt_duplicates <- rbind(dt_duplicates,c("The variable 'person_id' does not have all unique values",paste0("Number of duplicate values: ", sum(duplicated(df$person_id))),"Not unique"))
+}
+
+colnames(dt_duplicates) <- c('V1','V2','V3')
+formattable(dt_duplicates,
+                            align = c("l","c"),
+                            col.names = NULL,
+                            list(
+                                V3 = formatter("V3",
+                                        style = ~style(
+                                          display = "block", 
+                                          padding = "0 4px", 
+                                          `border-radius` = "4px", 
+                                          `background-color` = 
+                                              case_when(V3 == "Unique" ~ "#66CDAA",
+                                                        V3 == "Not Unique" ~ "#FF4747")))
+                            ))
+
+```
+:::
+
+## Variables
+
+This section provides more detailed information per variable in the imported dataset.
+
+```{r, chunk, message=FALSE, warning=FALSE, error=FALSE, eval=FALSE}
+  
+htmltools::tagList(datatable(df))
+
+```
+
+```{r, individual variables, results='asis', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: 
+# -> iterate over variables
+#    -> for every variable different statistics are shown in different panels:
+#        - panel 1: Overview
+#        - panel 2: Summary
+#        - panel 3: Categories
+#        - panel 4: Distribution
+
+purrr::iwalk(colnames(df), ~ {
+  ## create a box for every variable
+  cat('::: box \n\n')
+  
+  ## within the box print the variable name 
+  cat('###### ', ., ' {style="color: #7F7F7F"} \n\n')
+  
+  ## within the box print the variable class
+  cat('####### Class of the variable: ', class(df[,.]), ' {style="color: #7F7F7F; font-size: 10pt"} \n')
+  
+  ## within the box create a tabset panel
+  cat('::: panel-tabset\n\n')
+  
+  ## panel 1 (Overview: nr and % distinct values, nr and % missing values)
+  cat('###### Overview \n')
+  
+  df_sub <- data.frame(matrix(NA, nrow = 4, ncol = 2))
+  df_sub[,1] <- c("Distinct","Distinct (%)","Missing","Missing (%)")
+  df_sub[1,2] <- length(unique(df[,.]))
+  # df_sub[1,2] <- nrow(unique(df[,.]))
+  df_sub[2,2] <- round(100*length(unique(df[,.]))/nrow(df),3)
+  # df_sub[2,2] <- round(100*nrow(unique(df[,.]))/nrow(df),3)
+  df_sub[3,2] <- sum(is.na(df[,.]))
+  df_sub[4,2] <- round(100*sum(is.na(df[,.]))/nrow(df),3)
+  print(htmltools::tagList(DT::datatable(df_sub,
+                                         rownames = NULL,
+                                         class = 'cell-border stripe',
+                                         colnames = NULL,
+                                         options = list(dom = 't'),
+                                         caption = htmltools::tags$caption(
+                                            style = "text-align: left")
+                                         )))
+  
+  ## panel 2 (Summary: summary information of the variable)
+  cat('###### Summary \n')
+  
+  if(class(df[,.])!="Date") {
+    c_sum <- as.data.frame(unclass(summary(df[,.])))
+    colnames(c_sum) <- c(.)
+    print(htmltools::tagList(DT::datatable(c_sum,
+                                           options = list(dom = 't'),
+                                           caption = htmltools::tags$caption(
+                                              style = "text-align: left"))))
+  } else {
+    c_sum <- data.frame(`Date_range`= paste0(min(df[,.],na.rm=TRUE)," - ", max(df[,.],na.rm=TRUE)))
+    rownames(c_sum) <- c(.)
+    print(htmltools::tagList(DT::datatable(c_sum,
+                                           options = list(dom = 't'),
+                                           caption = htmltools::tags$caption(
+                                              style = "text-align: left"))))
+  }
+  
+ 
+  
+  ## panel 3 (Categories: count and frequency of every distinct value of the variable (if less than 100 distinct values))
+  cat('###### Categories \n')
+
+  if(length(unique(df[,.]))<100) {
+    df_values <- as.data.frame(table(df[,.],useNA = 'always'))
+    df_values$Freq_perc <- round(100*df_values$Freq/nrow(df),3)
+    df_values$Freq_perc <- df_values$Freq/nrow(df)
+    print(htmltools::tagList(DT::datatable(df_values,
+                                           rownames = NULL,
+                                           class = 'cell-border stripe',
+                                           colnames = c("Value","Count","Frequency (%)"),
+                                           caption = htmltools::tags$caption(
+                                              style = "text-align: left")
+                                           ) %>%
+                                          formatPercentage("Freq_perc",
+                                                       digits=1) %>%
+                                          formatStyle(
+                                            'Freq_perc',
+                                            background = styleColorBar(c(0,1), 'steelblue'),
+                                            backgroundSize = '98% 88%%',
+                                            backgroundRepeat = 'no-repeat',
+                                            backgroundPosition = 'center'
+                                          )))
+  } else {
+    cat('More than 100 distinct values \n\n')
+  } 
+    
+  cat('\n')
+
+  ## panel 4 (Distribution: distribution of the variable) 
+  cat('###### Distribution \n\n')
+  
+  if((class(df[,.])=="character") && (length(unique(df[,.]))>=100)) {
+    
+    cat('More than 100 distinct values \n\n')
+    
+  } else if(class(df[,.])=="character" || class(df[,.])=="logical") {
+    
+    pl_dist <- ggplot(df, aes_string(x = .)) +
+      geom_bar(fill="steelblue") +
+      theme_minimal() +
+      theme(axis.title.y=element_blank())
+    print(htmltools::tagList(ggplotly(pl_dist)))
+    
+  } else if(class(df[,.])=="integer" || class(df[,.])=="Date") {
+    
+    pl_dist <- ggplot(df, aes_string(x = .)) +
+              geom_histogram(fill="steelblue", color="black") +
+              theme_minimal() + 
+              theme(axis.title.y=element_blank())
+    print(htmltools::tagList(ggplotly(pl_dist)))
+  }
+
+  cat('::: \n\n')
+  cat('::: \n\n')
+  
+})
+
+
+```
