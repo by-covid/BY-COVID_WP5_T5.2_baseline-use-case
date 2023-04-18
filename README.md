@@ -2,6 +2,10 @@
 
 This repository is making an RO-Crate of the [BY-COVID](https://by-covid.org/) **WP5 T5.2** baseline use case on "*SARS-CoV-2 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection*".
 
+## RO-Crate preview
+
+The RO-Crate can be browsed at <https://by-covid.github.io/baseline-use-case-synthetic-crate/> (HTML) and as [ro-crate-metadata.json](https://by-covid.github.io/baseline-use-case-synthetic-crate/ro-crate-metadata.json)
+
 ## Table of contents
 
 -   [Description](#description)
