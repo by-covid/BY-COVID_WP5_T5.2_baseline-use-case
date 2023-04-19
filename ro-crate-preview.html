@@ -21,7 +21,7 @@
         "@id": "https://orcid.org/0000-0001-9842-9718"
       },
       "isBasedOn": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+        "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
       }
     },
     {
@@ -49,24 +49,32 @@
       ],
       "hasPart": [
         {
-          "@id": "vaccines_effectiveness_causal_model/"
+          "@id": "vaccine_effectiveness_causal_model/"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/"
+          "@id": "vaccine_effectiveness_common_data_model_specification/"
         },
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/"
+          "@id": "vaccine_effectiveness_synthetic_dataset/"
         },
         {
           "@id": "README.md"
         }
       ],
       "identifier": "https://doi.org/10.5281/zenodo.6913045",
-      "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
+      "isBasedOn": [
+        {
+          "@id": "https://doi.org/10.5281/zenodo.7572373"
+        },
+        {
+          "@id": "https://github.com/by-covid/baseline-use-case-synthetic-crate/releases/tag/1.0.1"
+        }
+      ],
+      "keywords": "COVID-19, vaccines, comparative effective ness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
       "license": {
         "@id": "https://spdx.org/licenses/CC-BY-4.0"
       },
-      "datePublished": "2023-01-06",
+      "datePublished": "2023-04-19",
       "publisher": {
         "@id": "https://by-covid.eu/"
       },
@@ -97,13 +105,15 @@
         }
       ],
       "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification",
+      "version": "1.1.0",
       "description": "This publication corresponds to the Common Data Model (CDM) specification of the Baseline Use Case proposed in T.5.2 (WP5) in the BY-COVID project on “COVID-19 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection.”",
       "assesses": "Research Question: How effective have the SARS-CoV-2 vaccination programmes been in preventing SARS-CoV-2 infections?",
       "material": "Cohort definition: All people, eligible to be vaccinated (from 5 to 115 years old, included) or with, at least, one dose of a SARS-CoV-2 vaccine (any of the available brands) having or not a previous SARS-CoV-2 infection.",
       "materialExtent": "Inclusion criteria: \n All people vaccinated with at least one dose of the COVID-19 vaccine (any of the available brands) in an area of residence. Any person eligible to be vaccinated (from 5 to 115 years old, included) with a positive diagnosis (irrespective of the type of test) for SARS-CoV-2 infection (COVID-19) during the period of study.  \n\n Exclusion criteria: \n People not eligible for the vaccine (from 0 to 4 years old, included)",
       "publishingPrinciples": "Study Design: An observational retrospective longitudinal study to assess the effectiveness of the COVID-19 vaccine(s) in preventing SARS-CoV-2 infections using routinely collected social, health and care data from several countries.\n\nA causal model was established using Directed Acyclic Graphs (DAGs) to map domain knowledge, theories and assumptions about the causal relationship between exposure and outcome. ",
       "temporalCoverage": "Study Period: From the date of the first documented SARS-CoV-2 infection in each country to the most recent date in which data is available at the time of analysis. Roughly from 01-03-2020 to 30-06-2022, depending on the country.",
-      "usageInfo": "The scripts (software) accompanying the data model specification are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit."
+      "usageInfo": "The scripts (software) accompanying the data model specification are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit.",
+      "releaseNotes": "- Updated Causal model to eliminate the consideration of 'vaccination_schedule_cd' as a mediator\n- Adjusted the study period to be consistent with the Study Protocol\n- Updated 'sex_cd' as a required variable\n- Added 'chronic_liver_disease_bl' as a comorbidity at the individual level\n- Updated 'socecon_lvl_cd' at the area level as a recommended variable\n -Added crosswalks for the definition of 'chronic_liver_disease_bl' in a separate sheet\n -Updated the 'vaccination_schedule_cd' reference to the 'Vaccine' node in the updated DAG\n -Updated the description of the 'confirmed_case_dt' and 'previous_infection_dt' variables to clarify the definition and the need for a single registry per person"
     },
     {
       "@id": "https://orcid.org/0000-0001-9842-9718",
@@ -114,12 +124,12 @@
       }
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
+      "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json",
       "@type": "File",
       "description": "Machine-readable version",
       "encodingFormat": "application/ld+json",
       "mainEntity": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/"
+        "@id": "vaccine_effectiveness_common_data_model_specification/"
       },
       "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)"
     },
@@ -169,21 +179,21 @@
       "name": "Enrique Bernal-Delgado"
     },
     {
-      "@id": "vaccines_effectiveness_causal_model/",
+      "@id": "vaccine_effectiveness_causal_model/",
       "@type": "Dataset",
       "description": "responding to the research question",
       "hasPart": [
         {
-          "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
+          "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html"
         },
         {
-          "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"
+          "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd"
         }
       ],
       "name": "Causal model"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/",
+      "@id": "vaccine_effectiveness_common_data_model_specification/",
       "@type": "Dataset",
       "contributor": [
         {
@@ -219,20 +229,20 @@
       "datePublished": "2022-07-27",
       "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
       "distribution": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+        "@id": "vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
       },
       "hasPart": [
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/docs/"
+          "@id": "vaccine_effectiveness_common_data_model_specification/docs/"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx"
+          "@id": "vaccine_effectiveness_common_data_model_specification/vaccine_effectiveness_data_model_specification_v.1.1.0.xlsx"
         }
       ],
       "keywords": [
@@ -251,7 +261,7 @@
         "@id": "_:b0"
       },
       "subjectOf": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/"
+        "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/"
       },
       "temporalCoverage": "01-01-2020/31-12-2024",
       "variableMeasured": [
@@ -381,21 +391,21 @@
       ]
     },
     {
-      "@id": "vaccines_effectiveness_synthetic_dataset/",
+      "@id": "vaccine_effectiveness_synthetic_dataset/",
       "@type": "Dataset",
       "description": "following the causal model",
       "hasPart": [
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+          "@id": "./vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb"
         },
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"
+          "@id": "vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.html"
         },
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"
+          "@id": "vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.json"
         },
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+          "@id": "vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv"
         }
       ],
       "name": "Common data model specification"
@@ -406,7 +416,10 @@
       "about": {
         "@id": "./"
       },
-      "encodingFormat": "text/markdown"
+      "encodingFormat": "text/markdown",
+      "author": {
+        "@id": "https://orcid.org/0000-0002-4409-0664"
+      }
     },
     {
       "@id": "https://spdx.org/licenses/CC-BY-4.0",
@@ -448,10 +461,10 @@
       },
       "name": "Generating HTML from QMD",
       "object": {
-        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd"
+        "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd"
       },
       "result": {
-        "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html"
+        "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html"
       }
     },
     {
@@ -464,18 +477,18 @@
       "name": "Execution of pandas-profiling for exploratory data analysis",
       "object": [
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+          "@id": "vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv"
         },
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/config.json"
+          "@id": "vaccine_effectiveness_synthetic_dataset/config.json"
         }
       ],
       "result": [
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json"
+          "@id": "vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.json"
         },
         {
-          "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html"
+          "@id": "vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.html"
         }
       ],
       "startTime": "2022-05-27T09:52:29.847284"
@@ -490,27 +503,27 @@
       "name": "dataspice JSON-LD created from CSV templates",
       "object": [
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/access.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/creators.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
         }
       ],
       "result": [
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
+          "@id": "vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html"
         }
       ]
     },
@@ -520,11 +533,11 @@
       "description": "Note that this CSV has only 650k entries, but the Notebook code is meant to crate 1M entries. A modified notebook must have been executed.",
       "endTime": "2022-05-24",
       "instrument": {
-        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+        "@id": "vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb"
       },
       "name": "Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset",
       "result": {
-        "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv"
+        "@id": "vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv"
       }
     },
     {
@@ -532,18 +545,18 @@
       "@type": "CreateAction",
       "endTime": "2022-05-24",
       "instrument": {
-        "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb"
+        "@id": "vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb"
       },
-      "name": "Execution of Jupyter Notebook to generate 1M synthetic dataset",
+      "name": "Execution of Jupyter Notebook to generate 10k synthetic dataset",
       "result": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv"
+        "@id": "vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
       }
     },
     {
       "@id": "#metadata-creation",
       "@type": "CreateAction",
       "actionStatus": {
-        "@id": "schema:CompletedActionStatus"
+        "@id": "http://schema.org/CompletedActionStatus"
       },
       "agent": {
         "@id": "https://orcid.org/0000-0001-9842-9718"
@@ -552,7 +565,7 @@
       "name": "RO-Crate metadata created based on README and dataspice JSON-LD",
       "object": [
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
         },
         {
           "@id": "README.md"
@@ -563,14 +576,14 @@
       }
     },
     {
-      "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html",
+      "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html",
       "@type": "File",
       "description": "Interactive report showcasing the structural causal model (DAG) to answer the research question",
       "encodingFormat": "text/html",
-      "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)"
+      "name": "COVID-19 vaccine effectiveness causal model v.1.1.0 (HTML)"
     },
     {
-      "@id": "vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd",
+      "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd",
       "@type": "File",
       "description": "Quarto RMarkdown script to produce the structural causal model",
       "encodingFormat": [
@@ -579,7 +592,7 @@
           "@id": "https://quarto.org/docs/authoring/markdown-basics.html"
         }
       ],
-      "name": "COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)"
+      "name": "COVID-19 vaccine effectiveness causal model v.1.1.0 (QMD)"
     },
     {
       "@id": "https://quarto.org/docs/authoring/markdown-basics.html",
@@ -619,53 +632,61 @@
       "name": "Martínez-Lizaga, Natalia"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv",
+      "@id": "vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv",
       "@type": [
         "DataDownload",
         "File"
       ],
       "description": "synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
       "encodingFormat": "text/csv",
-      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1"
+      "name": "vaccine_effectiveness_synthetic_pop_10k_v.1.1.0",
+      "sameAs": [
+        {
+          "@id": "vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/input/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
+        }
+      ]
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/",
+      "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/",
       "@type": "Dataset",
       "about": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/"
+        "@id": "vaccine_effectiveness_common_data_model_specification/"
       },
       "hasPart": [
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/access.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/attributes.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/biblio.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/creators.csv"
         },
         {
-          "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
+          "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
         }
       ],
       "name": "Metadata for Common data model specification"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/docs/",
+      "@id": "vaccine_effectiveness_common_data_model_specification/docs/",
       "@type": "Dataset",
       "about": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/"
+        "@id": "vaccine_effectiveness_common_data_model_specification/"
       },
       "hasPart": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html"
+        "@id": "vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html"
       },
       "name": "Documentation for Common data model specification"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx",
+      "@id": "vaccine_effectiveness_common_data_model_specification/vaccine_effectiveness_data_model_specification_v.1.1.0.xlsx",
       "@type": "File",
       "description": "Human-readable version (Excel)",
       "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -929,7 +950,7 @@
       "name": "pregnancy_bl"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv",
+      "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/access.csv",
       "@type": "File",
       "conformsTo": {
         "@id": "https://docs.ropensci.org/dataspice/#completed-metadata-files"
@@ -937,7 +958,7 @@
       "encodingFormat": "text/csv"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv",
+      "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/attributes.csv",
       "@type": "File",
       "conformsTo": {
         "@id": "https://docs.ropensci.org/dataspice/#create-spice"
@@ -945,7 +966,7 @@
       "encodingFormat": "text/csv"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv",
+      "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/biblio.csv",
       "@type": "File",
       "conformsTo": {
         "@id": "https://docs.ropensci.org/dataspice/#create-spice"
@@ -953,7 +974,7 @@
       "encodingFormat": "text/csv"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv",
+      "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/creators.csv",
       "@type": "File",
       "conformsTo": {
         "@id": "https://docs.ropensci.org/dataspice/#create-spice"
@@ -969,17 +990,40 @@
       "name": "dataspice CSV template"
     },
     {
-      "@id": "vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html",
+      "@id": "vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html",
       "@type": "File",
       "about": {
-        "@id": "vaccines_effectiveness_common_data_model_specification/"
+        "@id": "vaccine_effectiveness_common_data_model_specification/"
       },
       "description": "Human-readable version (interactive report)",
       "encodingFormat": "text/html",
       "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)"
     },
     {
-      "@id": "vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb",
+      "@id": "vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.html",
+      "@type": "File",
+      "description": "Interactive report of the exploratory data analysis (EDA) of the synthetic dataset",
+      "encodingFormat": "text/html",
+      "version": "1.1.0",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.json",
+      "@type": "File",
+      "description": "Machine-readable version of the exploratory data analysis (EDA) of the synthetic dataset",
+      "version": "1.1.0",
+      "encodingFormat": "application/json",
+      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)"
+    },
+    {
+      "@id": "vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv",
+      "@type": "File",
+      "version": "1.1.1",
+      "encodingFormat": "text/csv",
+      "name": "Synthetic dataset with 650k entries"
+    },
+    {
+      "@id": "vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb",
       "@type": [
         "File",
         "SoftwareSourceCode",
@@ -997,27 +1041,8 @@
       "input": [],
       "output": {
         "@id": "#960ec5b6-7c87-4feb-966d-c79557ebe8f8"
-      }
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html",
-      "@type": "File",
-      "description": "Interactive report of the exploratory data analysis (EDA) of the synthetic dataset",
-      "encodingFormat": "text/html",
-      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)"
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json",
-      "@type": "File",
-      "description": "Machine-readable version of the exploratory data analysis (EDA) of the synthetic dataset",
-      "encodingFormat": "application/json",
-      "name": "COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)"
-    },
-    {
-      "@id": "vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv",
-      "@type": "File",
-      "encodingFormat": "text/csv",
-      "name": "Synthetic dataset with 650k entries"
+      },
+      "url": ""
     },
     {
       "@id": "https://jupyter.org/",
@@ -1041,7 +1066,7 @@
       "name": "vaccines_synthetic_1M.csv"
     },
     {
-      "@id": "vaccines_effectiveness_synthetic_dataset/config.json",
+      "@id": "vaccine_effectiveness_synthetic_dataset/config.json",
       "@type": "File",
       "encodingFormat": "application/json",
       "name": "pandas-profiling config"
@@ -1189,7 +1214,7 @@ table.table {
             <td style='text-align:left'><a href="#https%3A//ror.org/00k4n6c32">European Commission</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
-            <td style='text-align:left'><span>2023-01-06</span></td>
+            <td style='text-align:left'><span>2023-04-19</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
             <td style='text-align:left'><ul>
@@ -1209,11 +1234,11 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_causal_model/">Causal model</a></li>
+                        <li><a href="#vaccine_effectiveness_causal_model/">Causal model</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/">Common data model specification</a></li>
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/">Common data model specification</a></li>
                         
                         <li><a href="#README.md">README.md</a></li>
                         </ul></td>
@@ -1221,8 +1246,15 @@ table.table {
             <th style="text-align:left;" class="prop">identifier<span>&nbsp;</span><a href="http://schema.org/identifier">[?]</a></th>
             <td style='text-align:left'><a href="https://doi.org/10.5281/zenodo.6913045">https://doi.org/10.5281/zenodo.6913045</a></td>
             </tr><tr>
+            <th style="text-align:left;" class="prop">isBasedOn<span>&nbsp;</span><a href="http://schema.org/isBasedOn">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="https://doi.org/10.5281/zenodo.7572373">https://doi.org/10.5281/zenodo.7572373</a></li>
+                        
+                        <li><a href="https://github.com/by-covid/baseline-use-case-synthetic-crate/releases/tag/1.0.1">https://github.com/by-covid/baseline-use-case-synthetic-crate/releases/tag/1.0.1</a></li>
+                        </ul></td>
+            </tr><tr>
             <th style="text-align:left;" class="prop">keywords<span>&nbsp;</span><a href="http://schema.org/keywords">[?]</a></th>
-            <td style='text-align:left'><span>COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data</span></td>
+            <td style='text-align:left'><span>COVID-19, vaccines, comparative effective ness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">license<span>&nbsp;</span><a href="http://schema.org/license">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//spdx.org/licenses/CC-BY-4.0">Creative Commons Attribution 4.0 International</a></td>
@@ -1243,10 +1275,13 @@ table.table {
                         
                         <li><a href="#%23notebook-execution-650k">Second (?) execution of Jupyter Notebook to generate 650k synthetic dataset</a></li>
                         
-                        <li><a href="#%23notebook-execution-1M">Execution of Jupyter Notebook to generate 1M synthetic dataset</a></li>
+                        <li><a href="#%23notebook-execution-1M">Execution of Jupyter Notebook to generate 10k synthetic dataset</a></li>
                         
                         <li><a href="#%23metadata-creation">RO-Crate metadata created based on README and dataspice JSON-LD</a></li>
                         </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">version<span>&nbsp;</span><a href="http://schema.org/version">[?]</a></th>
+            <td style='text-align:left'><span>1.1.0</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">assesses<span>&nbsp;</span><a href="http://schema.org/assesses">[?]</a></th>
             <td style='text-align:left'><span>Research Question: How effective have the SARS-CoV-2 vaccination programmes been in preventing SARS-CoV-2 infections?</span></td>
@@ -1271,6 +1306,16 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">usageInfo<span>&nbsp;</span><a href="http://schema.org/usageInfo">[?]</a></th>
             <td style='text-align:left'><span>The scripts (software) accompanying the data model specification are offered "as-is", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit.</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">releaseNotes<span>&nbsp;</span><a href="http://schema.org/releaseNotes">[?]</a></th>
+            <td style='text-align:left'><span>- Updated Causal model to eliminate the consideration of 'vaccination_schedule_cd' as a mediator
+- Adjusted the study period to be consistent with the Study Protocol
+- Updated 'sex_cd' as a required variable
+- Added 'chronic_liver_disease_bl' as a comorbidity at the individual level
+- Updated 'socecon_lvl_cd' at the area level as a recommended variable
+ -Added crosswalks for the definition of 'chronic_liver_disease_bl' in a separate sheet
+ -Updated the 'vaccination_schedule_cd' reference to the 'Vaccine' node in the updated DAG
+ -Updated the description of the 'confirmed_case_dt' and 'previous_infection_dt' variables to clarify the definition and the need for a single registry per person</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
             <td style='text-align:left'><ul>
@@ -1344,7 +1389,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1380,7 +1425,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1413,10 +1458,14 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Marjan.Meurisse@sciensano.be</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></li>
+                        
+                        <li><a href="#README.md">README.md</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1452,7 +1501,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1488,7 +1537,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1501,12 +1550,12 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             
             
             
-        <div id="vaccines_effectiveness_causal_model/">
+        <div id="vaccine_effectiveness_causal_model/">
             
             <table class="table metadata table-striped" >
                 <tbody><tr>
             <th style="text-align:left;" class="prop">@id</th>
-            <td style='text-align:left'><span>vaccines_effectiveness_causal_model/</span></td>
+            <td style='text-align:left'><span>vaccine_effectiveness_causal_model/</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
             <td style='text-align:left'><span>Causal model</span></td>
@@ -1519,9 +1568,9 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html">COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)</a></li>
+                        <li><a href="#vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html">COVID-19 vaccine effectiveness causal model v.1.1.0 (HTML)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd">COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)</a></li>
+                        <li><a href="#vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd">COVID-19 vaccine effectiveness causal model v.1.1.0 (QMD)</a></li>
                         </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
@@ -1538,12 +1587,12 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             
             
             
-        <div id="vaccines_effectiveness_common_data_model_specification/">
+        <div id="vaccine_effectiveness_common_data_model_specification/">
             
             <table class="table metadata table-striped" >
                 <tbody><tr>
             <th style="text-align:left;" class="prop">@id</th>
-            <td style='text-align:left'><span>vaccines_effectiveness_common_data_model_specification/</span></td>
+            <td style='text-align:left'><span>vaccine_effectiveness_common_data_model_specification/</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
             <td style='text-align:left'><span>COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</span></td>
@@ -1582,17 +1631,17 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">distribution<span>&nbsp;</span><a href="http://schema.org/distribution">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv">vaccine_effectiveness_synthetic_pop_10k_v.1.1.0</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv">vaccine_effectiveness_synthetic_pop_10k_v.1.1.0</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/vaccines_effectiveness_data_model_specification_v.1.0.0.xlsx">vaccine effectiveness data model specification (XLXS)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/vaccine_effectiveness_data_model_specification_v.1.1.0.xlsx">vaccine effectiveness data model specification (XLXS)</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">keywords<span>&nbsp;</span><a href="http://schema.org/keywords">[?]</a></th>
@@ -1617,7 +1666,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#_%3Ab0">Europe</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">subjectOf<span>&nbsp;</span><a href="http://schema.org/subjectOf">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">temporalCoverage<span>&nbsp;</span><a href="http://schema.org/temporalCoverage">[?]</a></th>
             <td style='text-align:left'><span>01-01-2020/31-12-2024</span></td>
@@ -1712,15 +1761,15 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/">Metadata for Common data model specification</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">mainEntity<span>&nbsp;</span><a href="http://schema.org/mainEntity">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1733,12 +1782,12 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             
             
             
-        <div id="vaccines_effectiveness_synthetic_dataset/">
+        <div id="vaccine_effectiveness_synthetic_dataset/">
             
             <table class="table metadata table-striped" >
                 <tbody><tr>
             <th style="text-align:left;" class="prop">@id</th>
-            <td style='text-align:left'><span>vaccines_effectiveness_synthetic_dataset/</span></td>
+            <td style='text-align:left'><span>vaccine_effectiveness_synthetic_dataset/</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
             <td style='text-align:left'><span>Common data model specification</span></td>
@@ -1751,13 +1800,13 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></li>
+                        <li>./vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb</li>
                         
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html">COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)</a></li>
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.html">COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json">COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)</a></li>
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.json">COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">Synthetic dataset with 650k entries</a></li>
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv">Synthetic dataset with 650k entries</a></li>
                         </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
@@ -1784,6 +1833,9 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <th style="text-align:left;" class="prop">@type</th>
             <td style='text-align:left'><span>File</span></td>
             </tr><tr>
+            <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
+            <td style='text-align:left'><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></td>
+            </tr><tr>
             <th style="text-align:left;" class="prop">encodingFormat<span>&nbsp;</span><a href="http://schema.org/encodingFormat">[?]</a></th>
             <td style='text-align:left'><span>text/markdown</span></td>
             </tr><tr>
@@ -1800,7 +1852,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
         </div>
 
         </div>
-        <hr/><br/><br/>
+        <hr/><br/><br/><hr/><br/><br/><hr/><br/><br/>
            <div>
             <h3><a href="https://spdx.org/licenses/CC-BY-4.0">Go to: </a> Creative Commons Attribution 4.0 International</h3>
             
@@ -1933,10 +1985,10 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#https%3A//github.com/quarto-dev/quarto-cli/releases/tag/v1.0.8">Quarto</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.qmd">COVID-19 vaccine effectiveness causal model v.1.0.0 (QMD)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd">COVID-19 vaccine effectiveness causal model v.1.1.0 (QMD)</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_causal_model/vaccines_effectiveness_causal_model_v.1.0.0.html">COVID-19 vaccine effectiveness causal model v.1.0.0 (HTML)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html">COVID-19 vaccine effectiveness causal model v.1.1.0 (HTML)</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
             <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
@@ -1973,16 +2025,16 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">Synthetic dataset with 650k entries</a></li>
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv">Synthetic dataset with 650k entries</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/config.json">pandas-profiling config</a></li>
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/config.json">pandas-profiling config</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_eda_v.1.0.1.json">COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)</a></li>
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.json">COVID-19 vaccine effectiveness synthetic dataset EDA (JSON)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.0.1.html">COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)</a></li>
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.html">COVID-19 vaccine effectiveness synthetic dataset EDA  (HTML)</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">startTime<span>&nbsp;</span><a href="http://schema.org/startTime">[?]</a></th>
@@ -2023,22 +2075,22 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/access.csv</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/access.csv">vaccine_effectiveness_common_data_model_specification/data/metadata/access.csv</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/attributes.csv</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/attributes.csv">vaccine_effectiveness_common_data_model_specification/data/metadata/attributes.csv</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/biblio.csv</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/biblio.csv">vaccine_effectiveness_common_data_model_specification/data/metadata/biblio.csv</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv">vaccines_effectiveness_common_data_model_specification/data/metadata/creators.csv</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/creators.csv">vaccine_effectiveness_common_data_model_specification/data/metadata/creators.csv</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv">vaccine_effectiveness_synthetic_pop_10k_v.1.1.0</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
                         
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/docs/vaccines_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
                         </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
@@ -2075,10 +2127,10 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>2022-05-24</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.0.1.csv">Synthetic dataset with 650k entries</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv">Synthetic dataset with 650k entries</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
             <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
@@ -2089,7 +2141,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
         </div>
         <hr/><br/><br/>
            <div>
-            <h3> Execution of Jupyter Notebook to generate 1M synthetic dataset</h3>
+            <h3> Execution of Jupyter Notebook to generate 10k synthetic dataset</h3>
             
             
             
@@ -2102,7 +2154,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>#notebook-execution-1M</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
-            <td style='text-align:left'><span>Execution of Jupyter Notebook to generate 1M synthetic dataset</span></td>
+            <td style='text-align:left'><span>Execution of Jupyter Notebook to generate 10k synthetic dataset</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">@type</th>
             <td style='text-align:left'><span>CreateAction</span></td>
@@ -2111,10 +2163,10 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>2022-05-24</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">instrument<span>&nbsp;</span><a href="http://schema.org/instrument">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.0.1.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb">COVID-19 vaccine effectiveness synthetic dataset generation script (IPYNB)</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccines_effectiveness_common_data_model_specification/data/vaccines_synthetic_pop_10k_v.1.0.1.csv">vaccines_effectiveness_synthetic_dataset_v.1.0.1</a></td>
+            <td style='text-align:left'>vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_pop_10k_v.1.1.0.csv</td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
             <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
@@ -2144,7 +2196,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>CreateAction</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">actionStatus<span>&nbsp;</span><a href="http://schema.org/actionStatus">[?]</a></th>
-            <td style='text-align:left'>schema:CompletedActionStatus</td>
+            <td style='text-align:left'><a href="http://schema.org/CompletedActionStatus">http://schema.org/CompletedActionStatus</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">agent<span>&nbsp;</span><a href="http://schema.org/agent">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//orcid.org/0000-0001-9842-9718">Stian Soiland-Reyes</a></td>
@@ -2154,7 +2206,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccines_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
                         
                         <li><a href="#README.md">README.md</a></li>
                         </ul></td>
