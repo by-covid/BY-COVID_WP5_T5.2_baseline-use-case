@@ -258,3 +258,8 @@ By-COVID (Beyond COVID) is a Horizon Europe funded project (101046203).
 ## Contact
 
 Marjan Meurisse - [marjan.meurisse\@sciensano.be](mailto:marjan.meurisse@sciensano.be){.email}
+
+## Disclaimer
+
+Please, note that we provide these scripts as they are, complying with the specifications of BY-COVID WP5 baseline use case for the purposes and objectives specified within the baseline use case protocol. 
+Software is provided as-is without further support out of the scope of the partners participating in BY-COVID WP5. 
