@@ -1,0 +1,195 @@
+---
+title: "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment"
+subtitle: "Survival analysis"
+format: 
+  html:
+    self-contained: true
+code-fold: false
+echo: false
+editor: visual
+always_allow_html: yes
+title-block-banner: "#27445C"
+---
+
+```{r, metadata, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+################
+### Metadata ###
+################
+
+# DATE LAST MODIFIED:
+# 24/03/2023
+
+# METADATA: 
+if(FALSE) {
+  title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - imputation of missing values'
+  author     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero',  'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  version    <- '1.0.0'
+  maintainer <- 'Marjan Meurisse'
+  email      <- 'Marjan.Meurisse@sciensano.be'
+  input      <- list('matched_data (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
+  output     <- list('6_survival-analysis.html (report)')
+}
+
+```
+
+```{r, general settings, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Load packages
+source("./0_global.R")
+
+```
+
+```{r, load data, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Load the data into memory
+
+tryCatch(
+  {
+    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    df_matched <- dbGetQuery(con, "select person_id , fully_vaccinated_bl, CAST(status as INTEGER) as status, futime from matched_data where status is not null")
+  },
+  finally={
+    dbDisconnect(con, shutdown=TRUE)
+  })
+
+```
+
+```{r, survival, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: 
+
+survobj <- Surv(time=df_matched$futime,
+                event=df_matched$status)
+surv_fit <- survfit(survobj ~ fully_vaccinated_bl, data=df_matched)
+
+```
+
+## Survival plot
+
+We estimate the survival function using the Kaplan-Meier estimator and represent this function visually using a Kaplan-Meier curve, showing the probability of not obtaining a SARS-CoV-2 infection at a certain time after onset of follow-up. The survival function is estimated for the control and intervention group.
+
+```{r, survival plot, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+ggsurvplot(surv_fit, data = df_matched, xlab="Days of follow-up",
+           ylab="Survival probability",
+           ylim=c(0.6,1),
+           break.x.by=100,
+           conf.int = TRUE,
+           pval = TRUE,
+           main="Product-Limit Survival Estimates", 
+           risk.table = TRUE)
+
+
+```
+
+## X-time survival
+
+The probability of not obtaining a SARS-CoV-2 infection beyond a certain time after onset of follow-up (survival function, estimated using the Kaplan-Meier estimator) is reported for different periods.
+
+```{r, x-time survival, message=FALSE, warning=FALSE, error=FALSE}
+
+res <- summary(surv_fit)
+cols <- lapply(c(2:11) , function(x) res[x])
+tbl <- do.call(data.frame, cols) %>% select(time,n.risk,n.event,n.censor,surv,std.err,strata)
+formattable(tbl %>% filter(time %in% c(91,182,273,365,730)))
+
+```
+
+## Median survival time
+
+The median survival time is the time corresponding to a probability of not obtaining a SARS-CoV-2 infection probability of 0.5. (if NA, the probability of not obtaining a SARS-CoV-2 infection did not drop below 50%)
+
+```{r, median survival time, message=FALSE, warning=FALSE, error=FALSE}
+
+surv_fit %>% 
+  tbl_survfit(
+    probs = 0.5,
+    label_header = "**Median survival (95% CI)**"
+  )
+
+```
+
+## Cox regression and estimation of the average treatment effect
+
+A Cox regression model was built to examine the relationship between the distribution of the probability of not obtaining a SARS-CoV-2 infection (survival distribution) and completing a primary vaccination schedule (covariate). The Cox proportional hazards regression model was fitted with 'fully_vaccinated_bl' as a covariate and accounts for clustering within individuals (as one individual can be re-sampled as control).
+
+A hazard ratio (HR) is computed for the covariate 'fully_vaccinated_bl'. A hazard can be interpreted as the instantaneous rate of SARS-CoV-2 infections in individuals that are at risk for obtaining an infection (Cox proportional hazards regression assumes stable proportional hazards over time). A HR \< 1 indicates reduced hazard of SARS-CoV-2 infection when having completed a primary vaccination schedule whereas a HR \> 1 indicates an increased hazard of SARS-CoV-2 infection. <!-- HR = exp(β), with β the regression parameter -->
+
+```{r, coxph HR, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+df_matched$fully_vaccinated_bl <- factor(df_matched$fully_vaccinated_bl,levels = c(FALSE,TRUE))
+cph_fit <- coxph(Surv(futime, status) ~ fully_vaccinated_bl + cluster(person_id), data = df_matched)
+# cph_fit <- coxph(Surv(futime, status) ~ fully_vaccinated_bl, data = df_matched)
+# cph_fit %>% tbl_regression(exp=TRUE, intercept=TRUE) # conf.level=0.001
+
+```
+
+```{r, hazard ratio, message=FALSE, warning=FALSE, error=FALSE}
+
+df_sum_cph <- data.frame(coefficients=NA, exp_coefficients=NA, se_coefficients=NA, robust_se=NA, z=NA, p_value=NA)
+df_sum_cph[1,] <- summary(cph_fit)[["coefficients"]]
+rownames(df_sum_cph) <- rownames(summary(cph_fit)[["coefficients"]])
+upper_limit <- round(df_sum_cph$exp_coefficients+1.96*df_sum_cph$robust_se,3) # Adjust critical value? 95% CI?
+lower_limit <- round(df_sum_cph$exp_coefficients-1.96*df_sum_cph$robust_se,3) # Adjust critical value? 95% CI?
+df_sum_cph<- round(df_sum_cph,3)
+df_sum_cph$hr_ci <- paste0(df_sum_cph$exp_coefficients," (",lower_limit,", ",upper_limit,")")
+formattable(df_sum_cph) %>% select(c(coefficients,se_coefficients,robust_se,p_value,hr_ci)) %>% rename("Parameter estimate" = coefficients, "SE coefficient" = se_coefficients, "Robust SE" = robust_se, "P-value" = p_value, "Hazard Ratio (HR)\n(95% CI for HR)" = hr_ci) # 95% CI?
+
+```
+
+The overall significance of the model is tested.
+
+```{r, coxph model fit, message=FALSE, warning=FALSE, error=FALSE}
+
+stat_sign_model <- as.data.frame(rbind(summary(cph_fit)[["logtest"]],summary(cph_fit)[["waldtest"]],summary(cph_fit)[["sctest"]],summary(cph_fit)[["robscore"]]))
+rownames(stat_sign_model) <- c("Likelihood ratio test","Wald test","Score (logrank) test","Robust score test")
+formattable(stat_sign_model, align='c') %>% rename("Test statistic" = test, "Df" = df, "P-value" = pvalue) 
+
+```
+
+Proportional hazards during the study period might be unlikely. As such, the RMST and RMTL ratios are additionally calculated, providing an alternative estimate for the the Average Treatment Effect (ATE), without requiring the proportional hazards assumption to be met.
+
+```{r, rmst2, message=FALSE, warning=FALSE, error=FALSE}
+
+df_rmst <- df_matched
+df_rmst$fully_vaccinated_bl <- as.numeric(ifelse(df_rmst$fully_vaccinated_bl==TRUE,1,0))
+df_rmst <- rmst2(df_rmst$futime, df_rmst$status, df_rmst$fully_vaccinated_bl, tau = 365, alpha = 0.05)
+
+```
+
+```{r, RMST and RMTL, message=FALSE, warning=FALSE, error=FALSE}
+
+df_rmst_result <- data.frame(Arm=NA,Measure=NA,Estimate=NA,SE=NA,CI.lower=NA,CI.upper=NA)
+df_rmst_result[1,] <- c('Arm 0',rownames(df_rmst$RMST.arm0$result)[1],df_rmst$RMST.arm0$result[1,])
+df_rmst_result[2,] <- c('Arm 1',rownames(df_rmst$RMST.arm1$result)[1],df_rmst$RMST.arm1$result[1,])
+df_rmst_result[3,] <- c('Arm 0',rownames(df_rmst$RMST.arm0$result)[2],df_rmst$RMST.arm0$result[2,])
+df_rmst_result[4,] <- c('Arm 1',rownames(df_rmst$RMST.arm1$result)[2],df_rmst$RMST.arm1$result[2,])
+df_rmst_result <- df_rmst_result %>% mutate(
+  Arm = ifelse(Arm=="Arm 0","fully_vaccinated_bl==FALSE","fully_vaccinated_bl==TRUE"),
+  Estimate = round(as.numeric(Estimate),3),
+  SE = round(as.numeric(SE),3),
+  CI.lower = round(as.numeric(CI.lower),3),
+  CI.upper = round(as.numeric(CI.upper),3))
+formattable(df_rmst_result, align = c("l"))  
+
+```
+
+```{r, average treatment effect, message=FALSE, warning=FALSE, error=FALSE}
+
+df_rmst_contrast <- data.frame(Measure=NA,Estimate=NA,SE=NA,CI.lower=NA,CI.upper=NA)
+df_rmst_contrast[1,] <- c(rownames(df_rmst$unadjusted.result)[1],df_rmst$unadjusted.result[1,])
+df_rmst_contrast[2,] <- c(rownames(df_rmst$unadjusted.result)[2],df_rmst$unadjusted.result[2,])
+df_rmst_contrast[3,] <- c(rownames(df_rmst$unadjusted.result)[3],df_rmst$unadjusted.result[3,])
+df_rmst_contrast <- df_rmst_contrast %>% mutate(
+  Measure = case_when(
+    Measure=="RMST (arm=1)-(arm=0)" ~ "RMST (fully_vaccinated_bl==TRUE)-(fully_vaccinated_bl==FALSE)",
+    Measure=="RMST (arm=1)/(arm=0)" ~ "RMST (fully_vaccinated_bl==TRUE)/(fully_vaccinated_bl==FALSE)",
+    Measure=="RMTL (arm=1)/(arm=0)" ~ "RMTL (fully_vaccinated_bl==TRUE)/(fully_vaccinated_bl==FALSE)"),
+  Estimate = round(as.numeric(Estimate),3),
+  SE = round(as.numeric(SE),3),
+  CI.lower = round(as.numeric(CI.lower),3),
+  CI.upper = round(as.numeric(CI.upper),3))
+formattable(df_rmst_contrast, align = c("l"))
+
+```
