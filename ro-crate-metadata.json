@@ -17,11 +17,16 @@
         "@id": "vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json"
       }
     },
+    {   "@id": "https://w3id.org/ro/wfrun/process/0.1",
+        "@type": "CreativeWork",
+        "name": "Process Run Crate",
+        "version": "0.1"
+    },    
     {
       "@id": "./",
       "@type": "Dataset",
       "conformsTo": {
-        "@id": "https://w3id.org/ro/wfrun/process/0.1-DRAFT"
+        "@id": "https://w3id.org/ro/wfrun/process/0.1"
       },
       "author": [
         {
