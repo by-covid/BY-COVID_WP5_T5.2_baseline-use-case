@@ -23,7 +23,7 @@ title-block-banner: "#27445C"
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - validation'
-  author     <- list('Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero', 'Marjan Meurisse', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  authors     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
@@ -125,7 +125,11 @@ validation <- function(data) {
                         !is.na(dose_1_dt) & !is.na(dose_1_brand_cd)),
     is.na(dose_3_dt) | (!is.na(dose_3_dt) & !is.na(dose_3_brand_cd) &
                         !is.na(dose_2_dt) & !is.na(dose_2_brand_cd) &
-                        !is.na(dose_1_dt) & !is.na(dose_1_brand_cd))
+                        !is.na(dose_1_dt) & !is.na(dose_1_brand_cd)),
+    (dose_1_brand_cd=="JJ" & !is.na(dose_1_dt) & !is.na(fully_vaccinated_dt) & fully_vaccinated_bl==TRUE) | 
+      (dose_1_brand_cd!="JJ" & !is.na(dose_2_dt) & !is.na(fully_vaccinated_dt) & fully_vaccinated_bl==TRUE) | 
+      (is.na(dose_1_brand_cd) & is.na(fully_vaccinated_dt) & fully_vaccinated_bl==FALSE) |
+      (dose_1_brand_cd!="JJ" & is.na(dose_2_dt) & is.na(fully_vaccinated_dt) & fully_vaccinated_bl==FALSE)
   )
   
   ## confront the data with the validation rules
