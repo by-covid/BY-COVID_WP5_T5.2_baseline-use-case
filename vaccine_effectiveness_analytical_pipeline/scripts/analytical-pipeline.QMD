@@ -21,7 +21,7 @@ title-block-banner: "#27445C"
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline'
-  authors     <- list('Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero', 'Marjan Meurisse', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  authors     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
@@ -77,14 +77,14 @@ tryCatch({
   file.remove("./1_DQA.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knit_exit()
+  knitr::knit_exit()
 })
 
 ```
 
 ## Validation
 
-```{r, EDA, message=FALSE, warning=FALSE, error=FALSE}
+```{r, validation, message=FALSE, warning=FALSE, error=FALSE}
 
 # 2. Specific Exploratory Data Analysis (EDA)
 
@@ -98,7 +98,7 @@ tryCatch({
   file.remove("./2_validation.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knit_exit()
+  knitr::knit_exit()
 })
 
 ```
@@ -120,7 +120,7 @@ tryCatch({
   file.remove("./3_imputation.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knit_exit()
+  knitr::knit_exit()
 })
 
 ```
@@ -142,7 +142,7 @@ tryCatch({
   file.remove("./4_matching.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knit_exit()
+  knitr::knit_exit()
 })
 
 ```
@@ -161,7 +161,7 @@ tryCatch({
   file.remove("./5_descriptive.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knit_exit()
+  knitr::knit_exit()
 })
 
 ```
@@ -180,7 +180,7 @@ tryCatch({
   file.remove("./6_survival-analysis.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knit_exit()
+  knitr::knit_exit()
 })
 
 ```

@@ -8,7 +8,7 @@
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - general settings and loading of data'
-  author     <- list('Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero', 'Marjan Meurisse', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  authors     <- list('Javier González-Galindo', 'Marjan Meurisse', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
@@ -21,13 +21,12 @@ if(FALSE) {
 ########################
 
 ### Description: load required packages
-x <- c("dplyr","arrow","validate","DataExplorer","DT","purrr","dlookr",
+x <- c("dplyr","arrow","validate","DataExplorer","DT","purrr","dlookr","survminer",
        "quarto","ggplot2","plotly","scales","formattable","naniar","duckdb","DBI","here",
        "grDevices","visdat","mice","tidyr","shiny","consort","parallel","MatchIt",
        "survival","table1","tab","forestmodel","gtsummary","survRM2") 
-lapply(x, require, character.only = TRUE)
+lapply(x, library, character.only = TRUE)
 
-### Description: directories
 input_data_path <- here('input')
 output_data_path <- here('output')
 auxilary_database_name <- 'BY-COVID-WP5-BaselineUseCase-VE.duckdb'
@@ -139,7 +138,7 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
             field("dose_2_dt",date32(),nullable=TRUE),
             field("dose_3_brand_cd",string(),nullable=TRUE),
             field("dose_3_dt",date32(),nullable=TRUE),
-            field("number_doses",double(),nullable=TRUE),
+            field("number_doses",double(),nullable=TRUE), # TODO: Adjust to doses_nm!
             field("fully_vaccinated_dt",date32(),nullable=TRUE),
             field("fully_vaccinated_bl",bool(),nullable=TRUE),
             field("vaccination_schedule_cd",string(),nullable=TRUE),
@@ -163,15 +162,18 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
             field("hiv_infection_bl",bool(),nullable=TRUE), 
             field("primary_immunodeficiency_bl",bool(),nullable=TRUE), 
             field("immunosuppression_bl",bool(),nullable=TRUE), 
-            field("pregnancy_bl",bool(),nullable=TRUE), 
+            field("pregnancy_bl",bool(),nullable=TRUE),
             field("exitus_dt",date32(),nullable=TRUE), 
-            field("exitus_bl",bool(),nullable=TRUE), 
+            field("exitus_bl",bool(),nullable=TRUE)
           )
           
           data_file <- list.files(paste0(input_data_path,"/"),pattern=".csv")
           file <- file.path(paste0(input_data_path,"/"),data_file)
           parse_options <- CsvParseOptions$create(delimiter = "|")
-          convert_options <- CsvConvertOptions$create(true_values = c("True","true","TRUE"),false_values = c("False","false","FALSE"),null_values=c("","NA","None"),strings_can_be_null=TRUE) # null_values=c(""," ","NA","None")
+          convert_options <- CsvConvertOptions$create(true_values = c("True","true","TRUE"),
+                                                      false_values = c("False","false","FALSE"),
+                                                      null_values=c("","NA","None"),
+                                                      strings_can_be_null=TRUE) 
           ddf <- arrow::read_csv_arrow(file,schema = schema,skip = 1L ,parse_options = parse_options, convert_options = convert_options , as_data_frame = FALSE )
           ddf <- ddf %>%
             mutate(flag_violating_val=FALSE,

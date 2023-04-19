@@ -23,12 +23,12 @@ title-block-banner: "#27445C"
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - data quality assessment'
-  author     <- list('Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero', 'Marjan Meurisse', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  authors     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
   input      <- list('cohort_data (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
-  output     <- list('1_DQA.html (report)','missing_profile (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
+  output     <- list('1_DQA.html (report)')
 }
 
 ```
@@ -165,21 +165,6 @@ DT::datatable(dt_prof,
     backgroundRepeat = 'no-repeat',
     backgroundPosition = 'center'
   )
-
-tryCatch(
-  {
-    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
-    ## create 'missing_profile' table
-    dbExecute(con, "CREATE OR REPLACE TABLE missing_profile (
-                    feature VARCHAR,  
-                    num_missing INT,
-                    pct_missing DOUBLE)")
-    dbWriteTable(con, "missing_profile",dt_prof,overwrite = TRUE, append=FALSE)
-    # print(dbGetQuery(conn = con, "SELECT * FROM missing_profile"))
-  },
-  finally={
-    dbDisconnect(con, shutdown=TRUE)
-  })
 
 ```
 

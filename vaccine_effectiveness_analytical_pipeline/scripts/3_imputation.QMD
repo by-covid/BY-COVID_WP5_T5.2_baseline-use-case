@@ -23,11 +23,11 @@ title-block-banner: "#27445C"
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - imputation of missing values'
-  author     <- list('Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero', 'Marjan Meurisse', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  authors     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
-  input      <- list('cohort_data and missing_profile (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
+  input      <- list('cohort_data including the flag_violation_val (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
   output     <- list('3_imputation.html (report)','cohort_data_imputed (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)','flag_listwise_del (variable in cohort_data table)')
 }
 
@@ -47,9 +47,11 @@ source("./0_global.R")
 tryCatch(
   {
     con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
-    df_core <- dbGetQuery(con,
-      "SELECT person_id, age_nm,sex_cd,residence_area_cd,pregnancy_bl,essential_worker_bl,institutionalized_bl,foreign_bl FROM cohort_data")
-    dt_prof <- dbGetQuery(con, "SELECT * FROM missing_profile")
+    dbExecute(con, "CREATE OR REPLACE VIEW cohort_view AS SELECT * FROM cohort_data WHERE flag_violating_val==FALSE")
+    df_not_viol <- dbGetQuery(con,"CREATE TEMPORARY TABLE Temp AS SELECT * FROM cohort_view;
+    ALTER TABLE Temp DROP COLUMN flag_violating_val;
+    ALTER TABLE Temp DROP COLUMN flag_listwise_del;
+    SELECT * FROM Temp")
   },
   finally={
     dbDisconnect(con, shutdown=TRUE)
@@ -89,6 +91,8 @@ comorb_imm_v <- c(
     "blood_cancer_bl","transplanted_bl",
     "hiv_infection_bl","primary_immunodeficiency_bl","immunosuppression_bl")
 
+dt_prof <- profile_missing(df_not_viol)
+
 ## Description: create table to collect characteristics/checks for each variable
 df_var_imputation_method <- data.frame(Variable_name=dt_prof$feature)
 # Number and percentage missing for each variable
@@ -99,6 +103,7 @@ df_var_imputation_method <- merge(x=df_var_imputation_method,y=dt_prof,
 df_var_imputation_method <- df_var_imputation_method %>%
   mutate(Missing_values = ifelse(num_missing==0,FALSE,TRUE)) %>%
   mutate(Perc_miss_lt = ifelse(pct_missing>0.025,FALSE,TRUE)) %>%
+  mutate(Perc_miss_lt5 = ifelse(pct_missing>0.05,FALSE,TRUE)) %>%
   mutate(Perc_miss_lt15 = ifelse(pct_missing>0.15,FALSE,TRUE))
 df_var_imputation_method <- df_var_imputation_method %>%
   mutate(All_missing_values = ifelse(pct_missing==1,TRUE,FALSE))
@@ -106,7 +111,6 @@ df_var_imputation_method <- df_var_imputation_method %>%
   mutate(Required = ifelse(Variable_name %in% required_v,TRUE,FALSE)) %>%
   mutate(Core = ifelse(Variable_name %in% core_v,TRUE,FALSE)) %>%
   mutate(Comorbidity = ifelse(Variable_name %in% comorb_imm_v,TRUE,FALSE)) 
-
 
 ```
 
@@ -120,14 +124,15 @@ df_var_imputation_method <- df_var_imputation_method %>%
 ## Description: test MCAR assumption
 
 v_equal <- c()
-for(i in colnames(df_core)) {
-  if(length(unique(df_core[[i]]))==1) {
+for(i in core_v) {
+  if(length(unique(df_not_viol[[i]]))==1) {
     v_equal <- c(v_equal,i)
   }
 }
 ifelse(df_var_imputation_method[which(df_var_imputation_method$Variable_name=="pregnancy_bl"),"All_missing_values"],
-       mcar_res <- naniar::mcar_test(df_core %>% select(any_of(setdiff(colnames(df_core),v_equal))) %>% select(-c(person_id,pregnancy_bl))),
-       mcar_res <- naniar::mcar_test(df_core %>% select(any_of(setdiff(colnames(df_core),v_equal))) %>% select(-person_id)))
+       mcar_res <- naniar::mcar_test(df_not_viol %>% select(any_of(setdiff(colnames(df_not_viol),v_equal))) %>% select(all_of(setdiff(core_v,"pregnancy_bl")))),
+       mcar_res <- naniar::mcar_test(df_not_viol %>% select(any_of(setdiff(colnames(df_not_viol),v_equal))) %>% select(all_of(core_v)))   
+       )
 # If p-value<0.05 reject the null hypothesis that the data are missing completely at random
 cond_mcar <- mcar_res$p.value>=0.05
 df_var_imputation_method$MCAR <- cond_mcar
@@ -142,8 +147,8 @@ df_var_imputation_method <- df_var_imputation_method %>%
     Missing_values==TRUE & Required==TRUE & Comorbidity==FALSE & Core==TRUE & All_missing_values==TRUE ~ "Don't impute missing values (variable completely missing)",
     Missing_values==TRUE & Required==TRUE & Comorbidity==FALSE & Core==TRUE & All_missing_values==FALSE & cond_mcar==TRUE & Perc_miss_lt==TRUE ~ "Listwise deletion (MCAR)",
     Missing_values==TRUE & Required==TRUE & Comorbidity==FALSE & Core==TRUE & All_missing_values==FALSE & cond_mcar==TRUE & Perc_miss_lt==FALSE ~ "Imputation of missing values (MCAR)",
-    Missing_values==TRUE & Required==TRUE & Comorbidity==FALSE & Core==TRUE & All_missing_values==FALSE & cond_mcar==FALSE & Perc_miss_lt==TRUE ~ "Imputation of missing values (not MCAR)",
-    Missing_values==TRUE & Required==TRUE & Comorbidity==FALSE & Core==TRUE & All_missing_values==FALSE & cond_mcar==FALSE & Perc_miss_lt==FALSE & Perc_miss_lt15==TRUE ~ "Imputation of missing values (not MCAR, need for sensitivity analysis)",
+    Missing_values==TRUE & Required==TRUE & Comorbidity==FALSE & Core==TRUE & All_missing_values==FALSE & cond_mcar==FALSE & Perc_miss_lt5==TRUE ~ "Imputation of missing values (not MCAR)",
+    Missing_values==TRUE & Required==TRUE & Comorbidity==FALSE & Core==TRUE & All_missing_values==FALSE & cond_mcar==FALSE & Perc_miss_lt5==FALSE & Perc_miss_lt15==TRUE ~ "Imputation of missing values (not MCAR, need for sensitivity analysis)",
     Missing_values==TRUE & Required==TRUE & Comorbidity==FALSE & Core==TRUE & All_missing_values==FALSE & cond_mcar==FALSE & Perc_miss_lt==FALSE & Perc_miss_lt15==FALSE ~ "Imputation of missing values (not MCAR, limit causal interpretation)"
   )) 
 
@@ -158,7 +163,7 @@ v_ld <- as.character(df_var_imputation_method[which(df_var_imputation_method$imp
 if(length(v_ld)>0) {
   tryCatch(
     {
-      tmp_ld_rn <- data.frame(person_id=df_core[which(is.na(df_core[,v_ld])),"person_id"])
+      tmp_ld_rn <- data.frame(person_id=df_not_viol[which(is.na(df_not_viol[,v_ld])),"person_id"])
       con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
       duckdb_register(con, name='table_listwise_deletion', df=tmp_ld_rn, overwrite = TRUE, experimental = FALSE)
       qry <- 
@@ -218,7 +223,7 @@ method_imputation <- function(df_inp, v) {
   return(list(data_imp,imp))
 }
 # Use the function to obtain an imputed dataset
-tmp <- method_imputation(df_core,v_imp)
+tmp <- method_imputation(df_not_viol %>% select(c(person_id, core_v)),v_imp)
 data_imp <- tmp[[1]]
 
 ## Create database table with imputed data only
@@ -244,9 +249,11 @@ for(c in 1:length(v_imp)) {
 }
 df_var_imputation_method <- df_var_imputation_method %>% select(-c(num_missing,pct_missing))
 
+df_var_imputation_method <- df_var_imputation_method[, c("Variable_name","imputation_method","Nr_imputed","Missing_values","Required","Comorbidity","Core","All_missing_values","MCAR","Perc_miss_lt","Perc_miss_lt5","Perc_miss_lt15")]
+
 ## Description: print table with information on methods used to deal with missing data
 formattable(df_var_imputation_method,
-            align = c("l","c","c","c","c","c","c","c","c","c","c"),
+            align = c("l","c","c","c","c","c","c","c","c","c","c","c"),
             list(
               `Imputation method` = formatter("imputation_method",
                 style = ~style(display = "block", 
@@ -282,7 +289,9 @@ imp <- tmp[[2]]
 if(!is.null(imp)) {
   ## Create plots
   plot(imp)
-  densityplot(imp)
+  formula <- as.formula(paste("~", paste(v_imp, 
+        collapse = "+", sep = ""), sep = ""))
+  densityplot(imp,formula)
 }
 
 ```
@@ -297,8 +306,8 @@ if(!is.null(imp)) {
 tryCatch(
   {
     con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
-    count_ld_true <- dbGetQuery(conn = con, "SELECT COUNT(*) FROM cohort_data WHERE flag_listwise_del==TRUE")
-    count_ld_false <- dbGetQuery(conn = con, "SELECT COUNT(*) FROM cohort_data WHERE flag_listwise_del==FALSE")
+    count_ld_true <- dbGetQuery(conn = con, "SELECT COUNT(*) FROM cohort_view WHERE flag_listwise_del==TRUE")
+    count_ld_false <- dbGetQuery(conn = con, "SELECT COUNT(*) FROM cohort_view WHERE flag_listwise_del==FALSE")
     count_ld <- data.frame(matrix(ncol = 2, nrow = 0))
     count_ld <- rbind(count_ld,c(count_ld_true,count_ld_false))
     colnames(count_ld) <- c("flag_listwise_del==TRUE","flag_listwise_del==FALSE")
