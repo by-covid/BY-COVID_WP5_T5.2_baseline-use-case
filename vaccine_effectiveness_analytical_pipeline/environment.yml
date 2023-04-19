@@ -35,6 +35,6 @@ dependencies:
     #  - r-tab
   - r-forestmodel=0.6.2
   - r-gtsummary=1.7
-  - r-survrm2=1.0_3
+    #  - r-survrm2
 
 
