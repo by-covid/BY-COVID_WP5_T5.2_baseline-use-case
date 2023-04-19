@@ -1,3 +1,5 @@
+here::i_am("scripts/0_global.R")
+
 ################
 ### Metadata ###
 ################
@@ -15,6 +17,7 @@ if(FALSE) {
   input      <- list('csv upload')
   output     <- list('BY-COVID-WP5-BaselineUseCase-VE.duckdb (database)','cohort_data (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
 }
+
 
 ########################
 ### General settings ###
