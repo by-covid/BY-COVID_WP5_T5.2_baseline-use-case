@@ -221,7 +221,50 @@ The development environment included several R packages (from base R or CRAN) an
 -   gtsummary (gtsummary_1.7.0)
 -   survRM2 (survRM2_1.0-4)
 
-### Installing
+### Using Docker
+
+It is possible to install the required dependencies for the pipeline using 
+[Docker](https://www.docker.com/). At the moment this container has to be built
+manually.
+
+```
+cd vaccine_effectiveness_analytical_pipeline 
+docker build -t pipeline .
+docker run -v `pwd`:/work -w /work/scripts -it pipeline quarto render analytical-pipeline.QMD --execute --output-dir ../output/
+```
+
+Note that when using Docker in this way, file permission on your `output` folder may not match up with the container's permissions when writing outputs. (tip: `chmod -R 777 output`)
+
+### Using Conda/Mamba
+
+Instead of using containers it can be more convenient during development to use a [Conda](https://conda.io/) environment. The below assumes [Miniconda](https://docs.conda.io/en/latest/miniconda.html) have been installed and activated. To install the R packages listed in `environment.yml`, use:
+
+```
+cd vaccine_effectiveness_analytical_pipeline
+conda env crate
+```
+
+The above installs most of the R packages from Conda-Forge, avoiding a compilation phase.  To install the remaining R packages from CRAN:
+
+```
+conda activate vaccine_effectiveness
+Rscript install.R
+```
+
+Finally, to execute the main pipeline using [Quarto](https://quarto.org/):
+
+```
+conda activate vaccine_effectiveness
+cd script
+quarto render analytical-pipeline.QMD --execute --output-dir ../output/
+```
+
+This should populate `output/` content as a series of HTML files.
+
+**Note**: The `environment.yml` is also used by the `Dockerfile` to install its dependencies, and may have R packages in newer version than listed above
+
+
+### Installing R packages manually
 
 To install a specific version of an R package from source, the following R command can be used (example for the R package dplyr, version 1.0.10):
 
@@ -235,6 +278,7 @@ https://github.com/MarjanMeurisse/BY-COVID_WP5_T5.2_baseline-use-case/archive/re
 Extract all from the ZIP file and open the R project file contained within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline` in RStudio.
 
 Input data, compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045) should be provided as the only file within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/input`. Next, the file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
+
 
 ## Version history
 
