@@ -255,7 +255,7 @@ Finally, to execute the main pipeline using [Quarto](https://quarto.org/):
 
 ```
 conda activate vaccine_effectiveness
-cd script
+cd scripts
 quarto render analytical-pipeline.QMD --execute --output-dir ../output/
 ```
 
