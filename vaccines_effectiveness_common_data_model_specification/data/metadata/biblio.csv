@@ -1,2 +1,0 @@
-title,description,datePublished,citation,keywords,license,funder,geographicDescription,northBoundCoord,eastBoundCoord,southBoundCoord,westBoundCoord,wktString,startDate,endDate
-COVID-19 vaccine(s) effectiveness assessment (synthetic dataset),Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s),27-07-2022,NA,"synthetic data, dataset, covid-19, vaccines, effectiveness, causal model",CC BY 4.0,NA,Europe,66.78398,11.50546,44.4272,-15.84884,NA,01-01-2020,31-12-2024

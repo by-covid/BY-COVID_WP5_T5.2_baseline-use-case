@@ -1,7 +1,7 @@
 {
   "@context": "http://schema.org",
   "type": "Dataset",
-  "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
+  "name": "SARS-CoV-2 vaccine effectiveness assessment (synthetic dataset 10k)",
   "creator": [
     {
       "type": "Person",
@@ -39,10 +39,10 @@
       "name": "Javier González-Galindo"
     }
   ],
-  "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
-  "datePublished": "27-07-2022",
+  "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the SARS-CoV-2 vaccine (10k registries and 650k registries)",
+  "datePublished": "26-01-2023",
   "keywords": ["synthetic data", "dataset", "covid-19", "vaccines", "effectiveness", "causal model"],
-  "funder": null,
+  "funder": "European Commission BY-COVID - Beyond COVID (101046203)",
   "temporalCoverage": "01-01-2020/31-12-2024",
   "license": "CC BY 4.0",
   "spatialCoverage": {
@@ -50,7 +50,7 @@
     "name": "Europe",
     "geo": {
       "type": "GeoShape",
-      "box": "66.78398 11.50546 44.4272 -15.84884"
+      "box": "66.78398 11.50546 40.70492 -15.84884"
     }
   },
   "variableMeasured": [
@@ -184,7 +184,7 @@
       "type": "PropertyValue",
       "unitText": null,
       "name": "confirmed_case_dt",
-      "description": "Date of diagnosis or test result positive of the last  known/confirmed infection"
+      "description": "Date of diagnosis or date of test result positive of any known/confirmed infection after 2021-01-01 (SARS-CoV-2 vaccine roll-out) for non-vaccinated or after the person is considered fully vaccinated (see 'fully_vaccinated_dt') if vaccinated"
     },
     {
       "type": "PropertyValue",
@@ -196,7 +196,7 @@
       "type": "PropertyValue",
       "unitText": null,
       "name": "previous_infection_dt",
-      "description": "If the person experienced a confirmed infection proceeding the  last confirmed infection with more than 60 days, date of diagnosis of this  previous infection"
+      "description": "If the person experienced a confirmed infection before 2021-01-01 (SARS-CoV-2 vaccine roll-out) or before being considered fully vaccinated (see 'fully_vaccinated_dt')"
     },
     {
       "type": "PropertyValue",
@@ -267,6 +267,12 @@
     {
       "type": "PropertyValue",
       "unitText": null,
+      "name": "chronic_liver_disease_bl",
+      "description": "Does the person included in the cohort suffer from chronic liver disease (at the time of entering the cohort)?"
+    },
+    {
+      "type": "PropertyValue",
+      "unitText": null,
       "name": "blood_cancer_bl",
       "description": "Does the person included in the cohort suffer from blood  cancer (leukemia) (at the time of entering the cohort)?"
     },
@@ -304,7 +310,7 @@
   "distribution": [
     {
       "type": "DataDownload",
-      "name": "vaccines_effectiveness_synthetic_dataset_v.1.0.1- synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
+      "name": "vaccine_effectiveness_synthetic_pop_10k_v.1.1.0",
       "contentUrl": null,
       "encodingFormat": "csv"
     }

@@ -1,0 +1,43 @@
+fileName,variableName,description,unitText
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,person_id,Pseudoid  of the person included in the cohort,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,age_nm,Age of the person included in  the cohort (at the time of entering the cohort),years
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,sex_cd,Sex of the person included in  the cohort (at the time of entering the cohort),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,socecon_lvl_cd,Socioeconomic level of the person in the cohort (at the time  of entering the cohort),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,residence_area_cd,Area of residence of the person included in the cohort (NUTS  3) (at the time of entering the cohort),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,country_cd,Country of residence of the person included in the cohort (at  the time of entering the cohort),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,foreign_bl,Is the country of residence different from the country that is  doing the analyses?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,exitus_dt,Date of death of the person (if the person has died),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,exitus_bl,Date of death of the person (if the person has died during the  period of study),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,essential_worker_bl,Is the person included in the cohort an essential worker? (at  the time of entering the cohort),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,institutionalized_bl,Is the person included in the cohort institutionalized? (at  the time of entering the cohort),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,dose_1_brand_cd,Brand of first dose of the vaccine,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,dose_1_dt,Date of the first dose of the vaccine,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,dose_2_brand_cd,Brand of second dose of the vaccine,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,dose_2_dt,Date of the second dose of the vaccine,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,dose_3_brand_cd,Brand of third dose of the vaccine,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,dose_3_dt,Date of the third dose of the vaccine,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,number_doses,Number of doses (independently of the vaccine brand) received  by a person during the period of study,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,fully_vaccinated_dt,Date on which the person included in the cohort is considered  fully vaccinated,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,fully_vaccinated_bl,Is the person included in the cohort fully vaccinated?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,vaccination_schedule_cd,Vaccine types received for 1st and 2nd dose concatenated with  hyphen,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,confirmed_case_dt,Date of diagnosis or date of test result positive of any known/confirmed infection after 2021-01-01 (SARS-CoV-2 vaccine roll-out) for non-vaccinated or after the person is considered fully vaccinated (see 'fully_vaccinated_dt') if vaccinated,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,confirmed_case_bl,Is the person included in the cohort a confirmed COVID-19  case?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,previous_infection_dt,If the person experienced a confirmed infection before 2021-01-01 (SARS-CoV-2 vaccine roll-out) or before being considered fully vaccinated (see 'fully_vaccinated_dt'),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,previous_infection_bl,Did the person experience a confirmed infection proceeding the  last confirmed infection?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,test_type_cd,Type of COVID-19 test used to detect the last known SARS-CoV-2  infection (i.e. first positive test for SARS-CoV-2),NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,variant_cd,Identified variant (WHO label) for last known SARS-CoV-2  infection,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,diabetes_bl,Does the person included in the cohort suffer from type II  diabetes (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,obesity_bl,Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,heart_failure_bl,Does the person included in the cohort suffer from heart  failure (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,copd_bl,Does the person included in the cohort suffer from chronic  lung disease (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,solid_tumor_without_metastasis_bl,Does the person included in the cohort suffer from solid  cancer without metastatis (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,chronic_kidney_disease_bl,Does the person included in the cohort suffer from chronic  kidney disease (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,sickle_cell_disease_bl,Does the person included in the cohort suffer from sickle cell  disease (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,hypertension_bl,Does the person included in the cohort suffer from  hypertension (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,chronic_liver_disease_bl,Does the person included in the cohort suffer from chronic liver disease (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,blood_cancer_bl,Does the person included in the cohort suffer from blood  cancer (leukemia) (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,transplanted_bl,Is the person included in the cohort a transplant patient  (i.e. solid organ transplantation) (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,hiv_infection_bl,Does the person included in the cohort suffer from a HIV  infection (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,primary_immunodeficiency_bl,Does the person included in the cohort suffer from a primary  immuno deficiency disease (lymphoma) (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,immunosuppression_bl,Does the person included in the cohort suffer from drugs  induced immunosuppression (at the time of entering the cohort)?,NA
+vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv,pregnancy_bl,Is the person included in the cohort pregnant (at the time of  entering the cohort)?,
