@@ -111,10 +111,9 @@ A DuckDB database file is created (`BY-COVID-WP5-BaselineUseCase-VE.duckdb`). Da
 -   **Input**:
     -   `cohort_data`
 -   **Output**:
-    -   `missing_profile`
     -   `DQA.html`
 
-A data quality assessment on the `cohort_data` is performed and an interactive html report (`DQA.html`) is created. This report provides an overview of the data and includes dataset statistics, variable types, missing data profiles and potential alerts. A database table `missing_profile` is created in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database, to save the missing data profile for use in the imputation process (`3_imputation_missing_values.QMD`).
+A data quality assessment on the `cohort_data` is performed and an interactive html report (`DQA.html`) is created. This report provides an overview of the data and includes dataset statistics, variable types, missing data profiles and potential alerts. 
 
 #### Validation
 
@@ -134,7 +133,6 @@ The `cohort_data` are tested against a set of validation rules (as specified in 
 
 -   **Input**:
     -   `cohort_data`
-    -   `missing_profile`
 -   **Output**:
     -   `cohort_data` including `flag_listwise_del`
     -   `cohort_data_imputed`
