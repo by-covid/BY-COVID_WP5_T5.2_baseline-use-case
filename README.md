@@ -6,19 +6,7 @@ This repository is making an RO-Crate of the [BY-COVID](https://by-covid.org/) *
 
 The RO-Crate can be browsed at <https://by-covid.github.io/baseline-use-case-synthetic-crate/> (HTML) and as [ro-crate-metadata.json](https://by-covid.github.io/baseline-use-case-synthetic-crate/ro-crate-metadata.json)
 
-## Table of contents
-
--   [Description](#description)
--   [Overview of Content](#overview-of-content)
--   [Getting Started](#getting-started)
--   [Step-by-step](#step-by-step)
--   [Version History](#version-history)
--   [Authors](#authors)
--   [Funding](#funding)
--   [Acknowledgements](#acknowledgements)
--   [Contact](#contact)
-
-## Description {#description}
+## Description
 
 ### Background information
 
@@ -40,7 +28,7 @@ The current use case aims to answer the following research question: "*How effec
 
 For more information, please consult the [study protocol](https://doi.org/10.5281/zenodo.7551181).
 
-## Overview of content {#overview-of-content}
+## Overview of content
 
 The current repository contains the following pieces:
 
@@ -79,7 +67,7 @@ The current repository contains the following pieces:
 
 [^1]: For illustrative purposes, the interactive reports contain the output of the scripts of the analytical pipeline applied to the synthetic dataset.
 
-## Step-by-step {#step-by-step}
+## Step-by-step
 
 ### Conceptual phase: the Common Data Model Specification
 
@@ -193,15 +181,15 @@ The descriptive analysis contains four elements which are reported in `descripti
 
 A survival analysis is conducted in the matched study population `matched_data`. A hazard ratio (HR), the Restricted Mean Survival Time (RMST) and Restricted Mean Time Lost (RMTL) are reported in `survival-analysis.html`.
 
-## Getting Started {#getting-started}
+## Getting Started
 
-To execute the analytical pipeline using the synthetic data or your own input data compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045), the dependencies and required installation steps are described below.
+This analytical pipeline has been developed and tested in R (version 4.2.1) using RStudio desktop as a IDE (version 2022.07.1). To execute the analytical pipeline using the synthetic data or your own input data compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045), the dependencies and required installation steps are described below.
 
 ### Dependencies
 
-The analytical pipeline was tested using R version 4.2.1.
+For testing purposes we assume a similar environment to the development environment. 
 
-Required R packages are loaded from base R or installed and loaded from CRAN. The required packages and the version used for testing the analytical pipeline:
+The development environment included several R packages (from base R or CRAN) and the use of the R project file (.Rproj) included with the scripts. The required R packages and the version used for developing and testing the analytical pipeline:
 
 -   parallel (base package)
 -   grDevices (base package)
@@ -237,12 +225,11 @@ Required R packages are loaded from base R or installed and loaded from CRAN. Th
 
 ### Installing
 
-To install a specific version of an R package from source, the following R command can be used:
+To install a specific version of an R package from source, the following R command can be used (example for the R package dplyr, version 1.0.10):
 
 ```
 packageurl <- "https://cran.r-project.org/src/contrib/Archive/dplyr/dplyr_1.0.10.tar.gz"
 install.packages(packageurl, repos=NULL, type="source")
-
 ```
 To execute the analytical pipeline using the synthetic data as input data, download the ZIP file of the repository using the following link:
 https://github.com/MarjanMeurisse/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip
@@ -251,9 +238,9 @@ Extract all from the ZIP file and open the R project file contained within the f
 
 Input data, compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045) should be provided as the only file within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/input`. Next, the file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
 
-## Version history {#version-history}
+## Version history
 
-## Authors {#authors}
+## Authors 
 
 -   Meurisse, Marjan
 -   Estupiñán-Romero, Francisco
@@ -262,12 +249,12 @@ Input data, compliant with the [Common Data Model specification](https://doi.org
 -   Royo-Sierra, Santiago
 -   Bernal-Delgado, Enrique
 
-## Funding {#funding}
+## Funding
 
 By-COVID (Beyond COVID) is a Horizon Europe funded project (101046203).
 
-## Acknowledgements {#acknowledgements}
+## Acknowledgements
 
-## Contact {#contact}
+## Contact
 
 Marjan Meurisse - [marjan.meurisse\@sciensano.be](mailto:marjan.meurisse@sciensano.be){.email}
