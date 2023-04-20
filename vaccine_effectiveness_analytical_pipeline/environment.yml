@@ -6,7 +6,7 @@ dependencies:
   - r-devtools=2.4
   - quarto=1.1.145
   - r-quarto=1.2
-  - r-arrow=11
+  - r-arrow=10.0.1
   - r-dplyr=1.1
   - r-validate=1.1
   - r-dataexplorer=0.8.2
@@ -19,7 +19,7 @@ dependencies:
   - r-scales=1.2
   - r-formattable=0.2.1
   - r-naniar=1.0
-  - r-duckdb=0.7
+  - r-duckdb=0.6.2
   - r-dbi=1.1
   - r-here=1.0
     #  - r-grDevices
