@@ -3,18 +3,17 @@
 ################
 
 # DATE LAST MODIFIED:
-# 23/03/2023
+# 20/04/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - matching'
-  author     <- list('Javier González-Galindo', 'Marjan Meurisse', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  author     <- list('Javier González-Galindo','Francisco Estupiñán-Romero','Marjan Meurisse','Santiago Royo-Sierra','Nina Van Goethem','Enrique Bernal-Delgado')
   version    <- '1.0.0'
-  maintainer <- ''
-  email      <- ''
-  status     <- 'production'
-  input      <- list()
-  output     <- list()
+  maintainer <- 'Marjan Meurisse'
+  email      <- 'Marjan.Meurisse@sciensano.be'
+  input      <- list('cohort_data and cohort_data_imputed (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
+  output     <- list('group_similarity, result_matching_alg, matched_data (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
 }
 
 ##################################
@@ -36,7 +35,7 @@ f_computation_new_variables <- function() {
                   ALTER TABLE cohort_data ADD COLUMN boost_bl BOOLEAN;
                   ALTER TABLE cohort_data ADD COLUMN group_id INTEGER;
                   ALTER TABLE cohort_data ADD COLUMN flag_inclusion_record BOOLEAN;")
-      ## Description: compute the variables 'comorbidities_bl', 'immunestatus_bl', 'age_cd' and 'group_id'
+      ## Description: compute the variables 'comorbidities_bl', 'immunestatus_bl', 'age_cd' and 'group_id' in cohort_data
       dbExecute(con, 
                 "UPDATE cohort_data set
                       	comorbidities_bl = CASE  
@@ -90,11 +89,23 @@ f_computation_new_variables <- function() {
                         group_id=b.group_id from(
                         select person_id ,
                         dense_rank() over (order by sex_cd,	age_cd, residence_area_cd, pregnancy_bl, essential_worker_bl, institutionalized_bl, foreign_bl,
-                                             comorbidities_bl, immunestatus_bl) as group_id from cohort_data) b
-                        where cohort_data.person_id =b.person_id
-            ")
+                                             comorbidities_bl, immunestatus_bl) as group_id from (  
+                         select COALESCE(cohort_data.person_id,cohort_data_imputed.person_id) as person_id,
+                  							COALESCE(cohort_data.sex_cd,cohort_data_imputed.sex_cd) as sex_cd,
+                  							COALESCE(cohort_data.age_cd,cohort_data_imputed.age_cd) as age_cd,
+                  							COALESCE(cohort_data.residence_area_cd,cohort_data_imputed.residence_area_cd) as residence_area_cd,
+                  							COALESCE(cohort_data.pregnancy_bl,cohort_data_imputed.pregnancy_bl) as pregnancy_bl,
+                  							COALESCE(cohort_data.essential_worker_bl,cohort_data_imputed.essential_worker_bl) as essential_worker_bl,
+                  							COALESCE(cohort_data.institutionalized_bl,cohort_data_imputed.institutionalized_bl) as institutionalized_bl,
+                  							COALESCE(cohort_data.foreign_bl,cohort_data_imputed.foreign_bl) as foreign_bl,
+                  							cohort_data.comorbidities_bl,
+                  							cohort_data.immunestatus_bl
+                                              from main.cohort_data
+                                              left join main.cohort_data_imputed
+                  						    on cohort_data.person_id = cohort_data_imputed.person_id) table_with_imputed  ) b
+                        where cohort_data.person_id =b.person_id")
       
-      ## Description: compute the variable 'age_cd'
+      ## Description: compute the variable 'age_cd' in cohort_data imputed
       dbExecute(con,"
               UPDATE cohort_data_imputed set
                         age_cd = CASE
@@ -138,7 +149,7 @@ tryCatch(
   {
     ## Description: get database connection
     con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
-    ## Description: create view where only records with flag_listwise_del==TRUE are selected
+    ## Description: create view where only records with flag_inclusion_record==TRUE are selected
     dbExecute(con, "CREATE OR REPLACE VIEW cohort_view AS SELECT * FROM cohort_data WHERE flag_inclusion_record==TRUE")
   },
   finally={
@@ -160,17 +171,8 @@ getDates <- function() {
       con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=TRUE)
       
       ## query 'cohort_data' table to obtain distinct dates
-      # TODO: fixed starting date (1 JAN 2021)? changing end date depending on country (start booster campaign)?
-      result <- dbGetQuery(con, "WITH booster as (select min(booster_date) as booster_date from (
-                                  select min(dose_2_dt) as booster_date from cohort_view
-                                    where vaccination_schedule_cd =='JJ' and dose_2_dt is not NULL  	
-                                  union all 
-                                  select min(dose_3_dt) as booster_date from cohort_view 
-                                    where vaccination_schedule_cd !='JJ' and dose_3_dt is not NULL  
-                                  )
-                                )
-                                select DISTINCT fully_vaccinated_dt from cohort_view 
-                     where fully_vaccinated_dt < (select * from booster) ORDER BY random()")
+      result <- dbGetQuery(con, "select DISTINCT fully_vaccinated_dt from cohort_view 
+                     where fully_vaccinated_dt < '2021-09-01' and fully_vaccinated_dt >= '2021-01-01'  ORDER BY random()")
     },
     finally={
       ## disconnect from database
@@ -209,7 +211,6 @@ calculate_similarity <- function() {
                     FROM cohort_view a    
                     LEFT JOIN cohort_data_imputed b on a.person_id = b.person_id
                     ORDER BY a.group_id")
-      
       df_original$residence_area_cd <- as.numeric(df_original$residence_area_cd)
       
       ## group numbers
@@ -238,7 +239,6 @@ calculate_similarity <- function() {
       }
       ## apply function
       clusterExport(cl, c("n_groups","df_original"), envir = environment())
-      # output_lapply <- lapply(1:length(n_groups),loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance))
       output <- parLapply(cl, 1:length(n_groups),loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance))
       
       ## create table 'group_similarity
@@ -261,9 +261,8 @@ calculate_similarity()
 ### Functions used for matching  ###
 ####################################
 
-getGroupsByDate <- function(date_, cursor){
+getGroupsByDate <- function(date_, cursor) {
   ## returns a dataset of the groups involved on this date  
-  # adding information on how many individuals correspond to the control or intervention groups (discarding censored) ## 
   data_ <- dbGetQuery(cursor, paste0("select * from (
                     select group_id as full_vaccine_group, COUNT(*) as full_vaccine_n_group 
                     from cohort_view
@@ -281,12 +280,13 @@ getGroupsByDate <- function(date_, cursor){
                                         or confirmed_case_dt is NULL)
                                     and
                                       (exitus_dt > '", date_, "'
-                                        or exitus_dt is NULL) group by group_id) b
+                                        or exitus_dt is NULL)
+                                     group by group_id) b
                 on a.full_vaccine_group = b.control_group_id"))
   return(data_)
 }
 
-getSampleNBigger <- function(date_, group, n_sample, cursor){ 
+getSampleNBigger <- function(date_, group, n_sample, cursor) { 
   query <- paste0("select * from (
             select
               a.person_id,
@@ -311,7 +311,8 @@ getSampleNBigger <- function(date_, group, n_sample, cursor){
                     and (confirmed_case_dt > '", date_,  "'
                         or confirmed_case_dt is NULL)
                     and (exitus_dt > '", date_, "'
-                        or exitus_dt is NULL) and group_id = ", as.character(group),  ") USING SAMPLE ",  as.character(n_sample), " 
+                        or exitus_dt is NULL) 
+                    and group_id = ", as.character(group),  ") USING SAMPLE ",  as.character(n_sample), " 
             union all         
               select 
                 c.person_id,
@@ -336,9 +337,6 @@ getSampleNBigger <- function(date_, group, n_sample, cursor){
 }
 
 getSampleForMatch <- function(date_, group, n_sample, cursor){
-  ## rows without null values with individuals to perform the matching.
-  
-  # ? If you expect incomplete data, apply some imputation algorithm ('matchit' does not accept null values).
   query <- paste0("select 
               a.person_id,
               a.fully_vaccinated_bl,
@@ -415,7 +413,8 @@ getSampleForMatch <- function(date_, group, n_sample, cursor){
                           or confirmed_case_dt is NULL)
                         and
                           (exitus_dt > '", date_, "'
-                          or exitus_dt is NULL)) v
+                          or exitus_dt is NULL)
+                          ) v
                       inner join (select matched_group from group_similarity where group_id = ", as.character(group), "
                           and matched_group != ", as.character(group), ") gs
                           on v.group_id = gs.matched_group) a       
@@ -428,87 +427,78 @@ getSampleForMatch <- function(date_, group, n_sample, cursor){
 }
 
 getSamplesRandom <-function(date_, group, n_sample, cursor){
-    ## rows without null values with individuals to perform the matching.
-     query <- paste0("select 
-              a.person_id,
-              a.fully_vaccinated_bl,
-              COALESCE(a.sex_cd, c.sex_cd) AS sex_cd,
-              COALESCE(a.age_cd,c.age_cd) AS age_cd,
-              COALESCE(a.residence_area_cd,c.residence_area_cd) AS residence_area_cd,
-              COALESCE(a.pregnancy_bl,c.pregnancy_bl) AS pregnancy_bl,
-              COALESCE(a.essential_worker_bl,c.essential_worker_bl) AS essential_worker_bl,
-              COALESCE(a.institutionalized_bl,c.institutionalized_bl) AS institutionalized_bl,
-              COALESCE(a.foreign_bl,c.foreign_bl) AS foreign_bl, 
-              a.comorbidities_bl,
-              a.immunestatus_bl from
-              (select
-                person_id,
-                fully_vaccinated_bl,
-                sex_cd,
-                age_cd,
-                residence_area_cd,
-                pregnancy_bl,
-                essential_worker_bl,
-                institutionalized_bl,
-                foreign_bl,
-                comorbidities_bl,
-                immunestatus_bl 
-              from
-                cohort_view
-              where
-                (fully_vaccinated_dt == '", date_, "') and group_id = ", as.character(group), "
-              union all
-                select 
-                  person_id,
-                  FALSE as fully_vaccinated_bl,
-                  sex_cd,
-                  age_cd,
-                  residence_area_cd,
-                  pregnancy_bl,
-                  essential_worker_bl,
-                  institutionalized_bl,
-                  foreign_bl,
-                  comorbidities_bl,
-                  immunestatus_bl from (
-                select
-                  person_id,
-                  fully_vaccinated_bl,
-                  sex_cd,
-                  age_cd,
-                  residence_area_cd,
-                  pregnancy_bl,
-                  essential_worker_bl,
-                  institutionalized_bl,
-                  foreign_bl,
-                  comorbidities_bl,
-                  immunestatus_bl,
-                  row_number() OVER (PARTITION BY 
-                    sex_cd,
-                    age_cd,
-                    residence_area_cd,
-                    pregnancy_bl,
-                    essential_worker_bl,
-                    institutionalized_bl,
-                    foreign_bl,
-                    comorbidities_bl,
-                    immunestatus_bl
-                ORDER BY random()) AS person_num
-                    from (select * from (select * from cohort_view v
-                      where
-                          (fully_vaccinated_dt > '", date_, "'
-                          or fully_vaccinated_bl == FALSE)
-                        and 
-                          (previous_infection_dt > '", date_, "'
-                          or previous_infection_dt is NULL)
-                        and
-                          (confirmed_case_dt > '", date_, "'
-                          or confirmed_case_dt is NULL)
-                        and
-                          (exitus_dt > '", date_, "'
-                          or exitus_dt is NULL)) v) a       
-                          ) b where person_num <= ", as.character(n_sample), ") a
-                  LEFT join cohort_data_imputed c
-                          ON a.person_id = c.person_id")
+     query <- paste0("select a.person_id,
+        a.fully_vaccinated_bl,
+        COALESCE(a.sex_cd, c.sex_cd) AS sex_cd,
+        COALESCE(a.age_cd,c.age_cd) AS age_cd,
+        COALESCE(a.residence_area_cd,c.residence_area_cd) AS residence_area_cd,
+        COALESCE(a.pregnancy_bl,c.pregnancy_bl) AS pregnancy_bl,
+        COALESCE(a.essential_worker_bl,c.essential_worker_bl) AS essential_worker_bl,
+        COALESCE(a.institutionalized_bl,c.institutionalized_bl) AS institutionalized_bl,
+        COALESCE(a.foreign_bl,c.foreign_bl) AS foreign_bl, 
+        a.comorbidities_bl,
+        a.immunestatus_bl from
+        (select
+          person_id,
+          fully_vaccinated_bl,
+          sex_cd,
+          age_cd,
+          residence_area_cd,
+          pregnancy_bl,
+          essential_worker_bl,
+          institutionalized_bl,
+          foreign_bl,
+          comorbidities_bl,
+          immunestatus_bl 
+        from
+          cohort_view
+        where
+          (fully_vaccinated_dt ==  '", date_, "') and group_id = ", as.character(group), "
+        union all
+          select 
+            person_id,
+            FALSE as fully_vaccinated_bl,
+            sex_cd,
+            age_cd,
+            residence_area_cd,
+            pregnancy_bl,
+            essential_worker_bl,
+            institutionalized_bl,
+            foreign_bl,
+            comorbidities_bl,
+            immunestatus_bl from (
+          select
+            person_id,
+            fully_vaccinated_bl,
+            sex_cd,
+            age_cd,
+            residence_area_cd,
+            pregnancy_bl,
+            essential_worker_bl,
+            institutionalized_bl,
+            foreign_bl,
+            comorbidities_bl,
+            immunestatus_bl,
+            row_number() OVER (
+          ORDER BY random()) AS person_num
+              from (select * from (select * from cohort_view v
+                where
+                    (fully_vaccinated_dt >  '", date_, "'
+                    or fully_vaccinated_bl == FALSE)
+                  and 
+                    (previous_infection_dt >  '", date_, "'
+                    or previous_infection_dt is NULL)
+                  and
+                    (confirmed_case_dt >  '", date_, "'
+                    or confirmed_case_dt is NULL)
+                  and
+                    (exitus_dt >  '", date_, "'
+                    or exitus_dt is NULL)
+                   ) v
+                ) a       
+                    ) b where person_num <= ", as.character(n_sample), ") a
+            LEFT join cohort_data_imputed c
+                    ON a.person_id = c.person_id")
 
     data_ <- dbGetQuery(cursor, query)
     return(data_)
@@ -518,11 +508,10 @@ getSamplesRandom <-function(date_, group, n_sample, cursor){
 #########################
 
 doMatch <- function(dates) {
-  
   tryCatch(
     {
       con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
-      n_sample = 150
+      n_sample <- 150
       
       ### Loop by date ###
       for(i in 1:length(dates)) {
@@ -639,7 +628,6 @@ doMatch <- function(dates) {
                  })
           return(df)
         }
-        # df <-lapply(1,loop_group) %>% bind_rows()
         df <-lapply(1:nrow(groups_by_date),loop_group) %>% bind_rows()
         dbWriteTable(con, "result_matching_alg",df,overwrite = FALSE, append=TRUE)
       }
@@ -652,36 +640,153 @@ doMatch <- function(dates) {
 
 system.time(doMatch(dates_v))
 
+### Calculate status and follow-up time for survival analysis  ###
+##################################################################
+
 getStatusMatch <- function() {
   tryCatch(
     {
       con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
-
-      dbExecute(con, "CREATE OR REPLACE TABLE matched_data as
-                    select b.person_id , b.fully_vaccinated_dt, false as fully_vaccinated_bl , b.confirmed_case_dt , b.exitus_dt,
-                    CASE 
-                        WHEN b.vaccination_schedule_cd == 'JJ' THEN b.dose_2_dt
-                        WHEN b.vaccination_schedule_cd != 'JJ' and b.vaccination_schedule_cd is not null THEN b.dose_3_dt
-                        ELSE NULL
-                    END as boost_dt, date_onset from (
-                        SELECT matched_ID, SUBSTRING(subclass,1,10)::DATE as date_onset FROM result_matching_alg) a  
-                    inner join cohort_view b
-                    on a.matched_ID = b.person_id
-                    union all
-                    select b.person_id ,b.fully_vaccinated_dt, b.fully_vaccinated_bl , b.confirmed_case_dt ,b.exitus_dt,
-                    CASE 
-                        WHEN b.vaccination_schedule_cd == 'JJ' THEN b.dose_2_dt
-                        WHEN b.vaccination_schedule_cd != 'JJ' and b.vaccination_schedule_cd is not null THEN b.dose_3_dt
-                        ELSE NULL
-                    END as boost_dt, date_onset from (
-                        SELECT person_id, NULL as date_onset FROM result_matching_alg) a  
-                    inner join cohort_view b
-                    on a.person_id = b.person_id ")
+      end_follow_up <- "'2022-09-01'"
+      # Calculate censorship date for pairs.      
+      dbExecute(con, paste0("
+      CREATE OR REPLACE TABLE result_matching_alg AS		
+      select
+      	censoring_table.person_id,
+      	censoring_table.matched_ID,
+      	censoring_table.subclass,
+      	COALESCE( 
+      least(boost_dt_intervention,
+      	least(exitus_dt_intervention,
+      	least(fully_vaccinated_dt_control,
+      	least(boost_dt_control,
+      	exitus_dt_control))))
+      ,
+      	",end_follow_up,"::DATE) as censoring_dt
+      from
+      	(
+      	select
+      		person_id ,
+      		matched_ID,
+      		subclass,
+      		date_onset,
+      		CASE
+      			WHEN boost_dt_intervention >= date_onset and boost_dt_intervention  <= ",end_follow_up,"::DATE  THEN boost_dt_intervention
+      			ELSE NULL
+      		END as boost_dt_intervention,
+      		CASE
+      			WHEN exitus_dt_intervention >= date_onset and exitus_dt_intervention  <= ",end_follow_up,"::DATE THEN exitus_dt_intervention
+      			ELSE NULL
+      		END as exitus_dt_intervention,
+      		CASE
+      			WHEN fully_vaccinated_dt_control >= date_onset and fully_vaccinated_dt_control  <= ",end_follow_up,"::DATE  THEN fully_vaccinated_dt_control
+      			ELSE NULL
+      		END as fully_vaccinated_dt_control,
+      		CASE
+      			WHEN boost_dt_control >= date_onset and boost_dt_control  <= ",end_follow_up,"::DATE THEN boost_dt_control
+      			ELSE NULL
+      		END as boost_dt_control,
+      		CASE
+      			WHEN exitus_dt_control >= date_onset and exitus_dt_control  <= ",end_follow_up,"::DATE THEN exitus_dt_control
+      			ELSE NULL
+      		END as exitus_dt_control
+      	from
+      		(
+      		select
+      			result_matching_alg.*,
+      			boost_dt_intervention,
+      			exitus_dt_intervention,
+      			fully_vaccinated_dt_control,
+      			boost_dt_control,
+      			exitus_dt_control,
+      			SUBSTRING(subclass, 1, 10)::DATE as date_onset
+      		from
+      			main.result_matching_alg
+      		left join (
+      			select
+      				person_id,
+      				CASE
+          		  WHEN vaccination_schedule_cd == 'JJ' THEN dose_2_dt
+          		  WHEN vaccination_schedule_cd != 'JJ'
+          		    and  vaccination_schedule_cd is not null THEN dose_3_dt
+          		  ELSE NULL
+          	  END as boost_dt_intervention,
+      				exitus_dt as exitus_dt_intervention
+      			from
+      				main.cohort_view ) intervention_dates
+      			on
+      			result_matching_alg.person_id = intervention_dates.person_id
+      		left join (
+      			select
+      				person_id,
+      				fully_vaccinated_dt as fully_vaccinated_dt_control ,
+      				CASE
+          		  WHEN vaccination_schedule_cd == 'JJ' THEN dose_2_dt
+          		  WHEN vaccination_schedule_cd != 'JJ'
+          		  and  vaccination_schedule_cd is not null THEN dose_3_dt
+          		ELSE NULL
+          	  END as boost_dt_control,
+      				exitus_dt as exitus_dt_control
+      			from
+      				main.cohort_view) control_dates
+      			on
+      			result_matching_alg.matched_ID = control_dates.person_id )c) censoring_table"))
+      
+      dbExecute(con, "
+                CREATE OR REPLACE TABLE matched_data as
+                  	select
+                  	b.person_id ,
+                  	b.fully_vaccinated_dt,
+                  	false as fully_vaccinated_bl ,
+                  	b.confirmed_case_dt ,
+                  	b.exitus_dt,
+                  	CASE
+                  		WHEN b.vaccination_schedule_cd == 'JJ' THEN b.dose_2_dt
+                  		WHEN b.vaccination_schedule_cd != 'JJ'
+                  		and b.vaccination_schedule_cd is not null THEN b.dose_3_dt
+                  		ELSE NULL
+                  	END as boost_dt,
+                  	a.date_onset,
+                  	subclass,
+                  	a.censoring_dt
+                  from
+                  	(
+                  	SELECT
+                  		matched_ID,
+                  		SUBSTRING(subclass, 1, 10)::DATE as date_onset,
+                  		subclass,
+                  		censoring_dt
+                  	FROM
+                  		result_matching_alg) a
+                  inner join cohort_view b
+                                      on
+                  	a.matched_ID = b.person_id
+                  union all
+                                      select
+                  	b.person_id ,
+                  	b.fully_vaccinated_dt,
+                  	b.fully_vaccinated_bl ,
+                  	b.confirmed_case_dt ,
+                  	b.exitus_dt,
+                  	CASE
+                  		WHEN b.vaccination_schedule_cd == 'JJ' THEN b.dose_2_dt
+                  		WHEN b.vaccination_schedule_cd != 'JJ'
+                  		and b.vaccination_schedule_cd is not null THEN b.dose_3_dt
+                  		ELSE NULL
+                  	END as boost_dt,
+                  	a.date_onset,
+                  	subclass,
+                  	censoring_dt
+                  from
+                  	(SELECT	person_id, NULL as date_onset,subclass,censoring_dt
+                  	FROM result_matching_alg) a
+                  inner join cohort_view b
+                      on a.person_id = b.person_id ")
       
       dbExecute(con, "ALTER TABLE matched_data ADD COLUMN status VARCHAR;
-    ALTER TABLE matched_data ADD COLUMN futime INTEGER;")
+                      ALTER TABLE matched_data ADD COLUMN futime INTEGER;")
       
-      dbExecute(con, "update matched_data set
+      dbExecute(con, paste0("update matched_data set
     	status = CASE
     	   WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == FALSE AND fully_vaccinated_dt IS NULL THEN '0-1'
            WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == FALSE AND fully_vaccinated_dt IS NOT NULL THEN '0-2'
@@ -717,21 +822,31 @@ getStatusMatch <- function() {
     	where exitus_dt is NOT NULL;
     	update matched_data set 	
     	futime = case
-    	      WHEN status == '0-1' THEN datediff('day',date_onset,current_date)
-    	      WHEN status == '0-2' THEN datediff('day',date_onset,fully_vaccinated_dt)
-    	      WHEN status == '0-3' THEN datediff('day',fully_vaccinated_dt,current_date)
-    	      WHEN status == '0-4' THEN datediff('day',fully_vaccinated_dt,boost_dt)
-    	      WHEN status == '0-6' THEN datediff('day',date_onset,exitus_dt)
-    	      WHEN status == '0-7' THEN datediff('day',fully_vaccinated_dt,exitus_dt)
-    	      WHEN status == '1-1' THEN datediff('day',date_onset,confirmed_case_dt)
-    	      WHEN status == '1-2' THEN datediff('day',fully_vaccinated_dt,confirmed_case_dt)
-    	END;
+    	      WHEN status == '0-1' THEN datediff('day',date_onset,least(censoring_dt,",end_follow_up,"::DATE))
+    	      WHEN status == '0-2' THEN datediff('day',date_onset,least(censoring_dt,fully_vaccinated_dt))
+    	      WHEN status == '0-3' THEN datediff('day',fully_vaccinated_dt,least(censoring_dt,",end_follow_up,"::DATE))
+			      WHEN status == '0-4' THEN datediff('day',fully_vaccinated_dt,least(censoring_dt,boost_dt))		     
+    	      WHEN status == '0-6' THEN datediff('day',date_onset,least(censoring_dt,exitus_dt))
+    	      WHEN status == '0-7' THEN datediff('day',fully_vaccinated_dt,least(censoring_dt,exitus_dt)) 
+    	      WHEN status == '1-1' THEN datediff('day',date_onset,least(censoring_dt,confirmed_case_dt))
+    	      WHEN status == '1-2' THEN datediff('day',fully_vaccinated_dt,least(censoring_dt,confirmed_case_dt))
+    	END;    
     	update matched_data set 	
     	status = case
     	      WHEN SUBSTRING(status,1,1) == '0' THEN '0'
     	      WHEN SUBSTRING(status,1,1) == '1' THEN '1'
     	      ELSE NULL
+    	      END;
+                
+      "))
+      # Change the status if the confirmed date is after the censorship date.
+      dbExecute(con, "
+      update matched_data set 	
+    	status = case
+    	      WHEN status == '1' and confirmed_case_dt > censoring_dt THEN '0'
+    	      ELSE status
     	      END;")
+      
     },
     finally={
       ## disconnect from database

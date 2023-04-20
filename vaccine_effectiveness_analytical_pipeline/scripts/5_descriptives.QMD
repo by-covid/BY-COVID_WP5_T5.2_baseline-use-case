@@ -18,12 +18,12 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 24/03/2023
+# 20/04/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - imputation of missing values'
-  author     <- list('Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero', 'Marjan Meurisse', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  author     <- list('Marjan Meurisse','Javier González-Galindo','Santiago Royo-Sierra','Francisco Estupiñán-Romero','Nina Van Goethem','Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
@@ -436,6 +436,206 @@ formattable(mat,
 ```
 
 Ratio = $\frac{(\frac{confirmed \ cases}{non-vaccinated \ individuals})} {(\frac{confirmed \ cases}{vaccinated \ individuals})}$ = `r ratio_mat`
+:::
 
-##  {.tabset}
+## Survival in un-matched population {.tabset}
+
+```{r, unadjusted survival, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: survival analysis in un-matched population
+
+tryCatch(
+  {
+    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    end_follow_up <- "'2022-09-01'"
+    
+    dbExecute(con, paste0("
+      Create temporary table temp_table as select * from main.cohort_view;
+			
+			ALTER TABLE temp_table ADD COLUMN boost_dt DATE;
+    	ALTER TABLE temp_table ADD COLUMN date_onset DATE;
+			
+			UPDATE temp_table SET
+	        boost_dt = CASE
+        	          WHEN vaccination_schedule_cd == 'JJ' THEN dose_2_dt
+        	          WHEN vaccination_schedule_cd != 'JJ' and vaccination_schedule_cd is not null THEN dose_3_dt
+        	          ELSE NULL
+	                  END;
+      UPDATE temp_table set
+      date_onset = CASE
+        WHEN fully_vaccinated_bl == TRUE THEN fully_vaccinated_dt
+        WHEN fully_vaccinated_bl == FALSE THEN '2021-01-01'
+        ELSE NULL
+        END;
+	         
+      ALTER TABLE temp_table ADD COLUMN status VARCHAR;
+      ALTER TABLE temp_table ADD COLUMN futime INTEGER;
+       
+      UPDATE temp_table SET
+        status = CASE
+          WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == FALSE AND fully_vaccinated_dt IS NULL THEN '0-1'
+          WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == TRUE AND fully_vaccinated_dt IS NOT NULL AND boost_dt is NULL THEN '0-3'
+          WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == TRUE AND fully_vaccinated_dt IS NOT NULL AND boost_dt is NOT NULL THEN '0-4'
+          WHEN confirmed_case_dt IS NOT NULL AND fully_vaccinated_bl == FALSE AND fully_vaccinated_dt IS NULL THEN '1-1'
+          WHEN fully_vaccinated_bl == FALSE AND fully_vaccinated_dt <= confirmed_case_dt THEN '0-2'
+          WHEN fully_vaccinated_bl == FALSE AND confirmed_case_dt < fully_vaccinated_dt THEN '1-1'
+          WHEN fully_vaccinated_bl == TRUE AND confirmed_case_dt >= fully_vaccinated_dt  AND boost_dt is NULL  THEN '1-2'
+          WHEN confirmed_case_dt < fully_vaccinated_dt and fully_vaccinated_bl == TRUE and boost_dt is NULL THEN '0-3'
+          WHEN fully_vaccinated_bl == TRUE AND confirmed_case_dt >= boost_dt THEN '0-4'
+          WHEN fully_vaccinated_bl == TRUE AND confirmed_case_dt >= fully_vaccinated_dt AND confirmed_case_dt < boost_dt THEN '1-2'
+          WHEN confirmed_case_dt < fully_vaccinated_dt and fully_vaccinated_bl == TRUE and boost_dt is NOT NULL THEN '0-4'
+          ELSE 'exc'
+        END
+        WHERE exitus_dt is NULL;
+       
+        UPDATE temp_table SET
+        status = CASE
+          WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == FALSE AND fully_vaccinated_dt IS NULL THEN '0-6'
+          WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == FALSE AND fully_vaccinated_dt IS NOT NULL THEN '0-2'
+          WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == TRUE AND fully_vaccinated_dt IS NOT NULL AND boost_dt is NULL THEN '0-7'
+          WHEN confirmed_case_dt IS NULL AND fully_vaccinated_bl == TRUE AND fully_vaccinated_dt IS NOT NULL AND boost_dt is NOT NULL THEN '0-4'
+          WHEN confirmed_case_dt IS NOT NULL AND fully_vaccinated_bl == FALSE AND fully_vaccinated_dt IS NULL THEN '1-1'
+          WHEN fully_vaccinated_bl == FALSE AND fully_vaccinated_dt <= confirmed_case_dt THEN '0-2'
+          WHEN fully_vaccinated_bl == FALSE AND confirmed_case_dt < fully_vaccinated_dt THEN '1-1'
+          WHEN fully_vaccinated_bl == TRUE AND confirmed_case_dt >= fully_vaccinated_dt  AND boost_dt is NULL  THEN '1-2'
+          WHEN confirmed_case_dt < fully_vaccinated_dt and fully_vaccinated_bl == TRUE and boost_dt is NULL THEN '0-7'
+          WHEN fully_vaccinated_bl == TRUE AND confirmed_case_dt >= boost_dt THEN '0-4'
+          WHEN fully_vaccinated_bl == TRUE AND confirmed_case_dt >= fully_vaccinated_dt AND confirmed_case_dt < boost_dt THEN '1-2'
+          WHEN confirmed_case_dt < fully_vaccinated_dt and fully_vaccinated_bl == TRUE and boost_dt is NOT NULL THEN '0-4'
+          ELSE 'exc'
+        END
+        WHERE exitus_dt is NOT NULL;
+        UPDATE temp_table SET
+        futime = case
+  	      WHEN status == '0-1' THEN datediff('day',date_onset,",end_follow_up,"::DATE)
+  	      WHEN status == '0-2' THEN datediff('day',date_onset,fully_vaccinated_dt)
+  	      WHEN status == '0-3' THEN datediff('day',fully_vaccinated_dt,",end_follow_up,"::DATE)
+  	      WHEN status == '0-4' THEN datediff('day',fully_vaccinated_dt,boost_dt)
+  	      WHEN status == '0-6' THEN datediff('day',date_onset,exitus_dt)
+  	      WHEN status == '0-7' THEN datediff('day',fully_vaccinated_dt,exitus_dt)
+  	      WHEN status == '1-1' THEN datediff('day',date_onset,confirmed_case_dt)
+  	      WHEN status == '1-2' THEN datediff('day',fully_vaccinated_dt,confirmed_case_dt)
+       END;
+     
+     UPDATE temp_table set
+       status = case
+          WHEN SUBSTRING(status,1,1) == '0' THEN '0'
+          WHEN SUBSTRING(status,1,1) == '1' THEN '1'
+          ELSE NULL
+       END;"))
+    
+    df_notmatched <- dbGetQuery(con,"SELECT person_id,fully_vaccinated_bl,age_cd,sex_cd,residence_area_cd,essential_worker_bl,
+			institutionalized_bl,foreign_bl,comorbidities_bl,immunestatus_bl, CAST(status as INTEGER) as status,futime 
+			FROM temp_table WHERE futime >=0")
+    
+  },
+  finally={
+    dbDisconnect(con, shutdown=TRUE)
+  })
+
+# df_notmatched <- df_notmatched %>% mutate(status=ifelse(status==1,TRUE,FALSE)) %>% filter(futime>=0)
+
+```
+
+::: panel-tabset
+##### Simple model
+
+```{r, survival not matched and simple model, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: survival not matched and simple model
+
+survobj_unadj <- Surv(time=df_notmatched$futime,
+                event=df_notmatched$status)
+
+fit_unadj <- coxph(survobj_unadj ~ fully_vaccinated_bl, data = df_notmatched)
+
+fit_unadj_surfit <- survfit(survobj_unadj ~ fully_vaccinated_bl,  data=df_notmatched)
+
+```
+
+```{r, summary survival not matched and simple model, message=FALSE, warning=FALSE, error=FALSE}
+
+tabcoxph(fit_unadj)
+
+```
+
+```{r, survival plot not matched and simple model, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+ggsurvplot(fit_unadj_surfit, data = df_notmatched, xlab="Days of follow-up",
+           ylab="Survival probability",
+           surv.median.line = "hv",
+           ylim=c(0,1),
+           xlim=c(0,700),
+           break.x.by=100,
+           conf.int = TRUE,
+           pval = TRUE,
+           main="Product-Limit Survival Estimates",
+           risk.table = FALSE,
+           legend.labs = c("Not fully-vaccinated", "Fully-vaccinated"))
+
+```
+
+```{r, cumulative events plot not matched and simple model, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+# Plot cumulative events
+ggsurvplot(fit_unadj_surfit,data = df_notmatched, conf.int = TRUE,
+           ylim=c(0,1), xlim=c(0,700),
+           break.x.by=100,
+           risk.table = FALSE,
+            cumevents = FALSE,
+           cumcensor = FALSE,
+           fun = "event",legend.labs = c("Not fully-vaccinated", "Fully-vaccinated"))
+
+```
+
+```{r, survival plot cumulative events table, message=FALSE, warning=FALSE, error=FALSE}
+
+res <- summary(fit_unadj_surfit, times = c(0,100*(1:6)))
+
+cols <- lapply(c(2:7, 8:12) , function(x) res[x])
+tbl <- do.call(data.frame, cols)[,1:9] %>% mutate(strata = ifelse(strata=="fully_vaccinated_bl=FALSE", "Not fully vaccinated", "Fully vaccinated")) %>% relocate(strata)
+
+formattable(tbl,
+            list(Strata = formatter("Strata",
+                style = ~style(display = "block", 
+                                padding = "0 4px", 
+                                `border-radius` = "4px", 
+                                `background-color` = case_when(Strata=="Not fully vaccinated" ~"#F8766D",
+                                                               Strata=="Fully vaccinated" ~ "#00C1AA"
+                                                               ))))) %>%
+  rename("Time" = time, "Number at risk" = n.risk, "Number of events" = n.event, "Number censored" = n.censor, "Survival" = surv, "Std. error" = std.err, "Cumulative hazard" = cumhaz, "Std. error cumulative hazard" = std.chaz, "Strata" = strata) 
+
+
+```
+
+##### Complex model
+
+```{r, survival not matched and complex model, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: adjusted survival in un-matched population
+
+survobj_adj <- Surv(time=df_notmatched$futime,
+                event=df_notmatched$status)
+fit_adj <- coxph(survobj_adj ~ fully_vaccinated_bl + age_cd + sex_cd + residence_area_cd + essential_worker_bl +
+                                          institutionalized_bl + foreign_bl + comorbidities_bl + immunestatus_bl, data = df_notmatched)
+
+fit_adj_surfit <- survfit(survobj_adj ~ fully_vaccinated_bl + age_cd + sex_cd + residence_area_cd + essential_worker_bl +
+                                          institutionalized_bl + foreign_bl + comorbidities_bl + immunestatus_bl,  data=df_notmatched)
+
+```
+
+```{r, summary survival not matched and complex model, message=FALSE, warning=FALSE, error=FALSE}
+
+tabcoxph(fit_adj)
+
+```
+
+```{r, survival plot not matched and complex model, message=FALSE, warning=FALSE, error=FALSE}
+
+forest_model(coxph(survobj_adj ~ fully_vaccinated_bl + age_cd + sex_cd + essential_worker_bl +
+                                          institutionalized_bl + foreign_bl + comorbidities_bl + immunestatus_bl, data = df_notmatched))
+
+
+```
+
 :::

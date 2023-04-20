@@ -16,12 +16,12 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 11/04/2023
+# 20/04/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline'
-  authors     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  authors     <- list('Marjan Meurisse','Javier González-Galindo','Santiago Royo-Sierra','Francisco Estupiñán-Romero','Nina Van Goethem','Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
@@ -39,16 +39,22 @@ if(FALSE) {
 #      -> Script: 0_global.R
 # 1. Data Quality Assessment (DQA)
 #      -> Script: 1_DQA.QMD
+#      -> Output: 1_DQA.html
 # 2. Validation
 #      -> Script: 2_validation.QMD
+#      -> Output: 2_validation.html
 # 3. Imputation of missing values
 #      -> Script: 3_imputation.QMD
+#      -> Output: 3_imputation.html
 # 4. Matching cases to controls (1:1) and assessing covariate balance after matching
 #      -> Script: 4_matching.QMD
+#      -> Output: 4_matching.html
 # 5. Descriptive analysis
 #      -> Script: 5_descriptives.R
+#      -> Output: 5_descriptive.html
 # 6. Survival analysis
 #      -> Script: 6_survival-analysis.R
+#      -> Output: 6_survival-analysis.html
 
 ```
 
@@ -68,12 +74,13 @@ f_load_data(create_db_tables = TRUE,
 
 # 1. Data Quality Assessment (DQA)
 
-file.remove("../output/1_DQA.html")
-
+if (file.exists("../output/1_DQA.html")) {
+  file.remove("../output/1_DQA.html")
+}
 tryCatch({
   quarto::quarto_render("./1_DQA.QMD", output_file = "1_DQA.html")
   file.copy(from = "./1_DQA.html",
-               to = "../output/1_DQA.html")
+                to = "../output/1_DQA.html")
   file.remove("./1_DQA.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
@@ -86,9 +93,11 @@ tryCatch({
 
 ```{r, validation, message=FALSE, warning=FALSE, error=FALSE}
 
-# 2. Specific Exploratory Data Analysis (EDA)
+# 2. Validation
 
-file.remove("../output/2_validation.html")
+if (file.exists("../output/2_validation.html")) {
+  file.remove("../output/2_validation.html")
+}
 
 tryCatch({
   quarto::quarto_render("./2_validation.QMD",
@@ -98,7 +107,7 @@ tryCatch({
   file.remove("./2_validation.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knitr::knit_exit()
+  quarto::knit_exit()
 })
 
 ```
@@ -109,7 +118,9 @@ tryCatch({
 
 # 3. Imputation of missing values
 
-file.remove("../output/3_imputation.html")
+if (file.exists("../output/3_imputation.html")) {
+  file.remove("../output/3_imputation.html")
+}
 
 tryCatch({
   quarto::quarto_render("./3_imputation.QMD",
@@ -132,7 +143,9 @@ tryCatch({
 
 # 4. Matching cases to controls (1:1) and assessing covariate balance after matching
 
-file.remove("../output/4_matching.html")
+if (file.exists("../output/4_matching.html")) {
+  file.remove("../output/4_matching.html")
+}
 
 tryCatch({
   quarto::quarto_render("./4_matching.QMD",
@@ -151,8 +164,9 @@ tryCatch({
 
 ```{r, descriptive, message=FALSE, warning=FALSE, error=FALSE}
 
-file.remove("../output/5_descriptive.html")
-
+if (file.exists("../output/5_descriptive.html")) {
+  file.remove("../output/5_descriptive.html")
+}
 tryCatch({
   quarto::quarto_render("./5_descriptives.QMD",
                       output_file = "5_descriptive.html")
@@ -170,8 +184,9 @@ tryCatch({
 
 ```{r, survival analysis, message=FALSE, warning=FALSE, error=FALSE}
 
-file.remove("../output/6_survival-analysis.html")
-
+if (file.exists("../output/6_survival-analysis.html")) {
+  file.remove("../output/6_survival-analysis.html")
+}
 tryCatch({
   quarto::quarto_render("./6_survival-analysis.QMD",
                       output_file = "6_survival-analysis.html")

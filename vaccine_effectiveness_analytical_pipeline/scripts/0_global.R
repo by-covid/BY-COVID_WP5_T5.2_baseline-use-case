@@ -1,23 +1,20 @@
-here::i_am("scripts/0_global.R")
-
 ################
 ### Metadata ###
 ################
 
 # DATE LAST MODIFIED:
-# 11/04/2023
+# 20/04/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - general settings and loading of data'
-  authors     <- list('Javier González-Galindo', 'Marjan Meurisse', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  author     <- list('Marjan Meurisse','Javier González-Galindo','Francisco Estupiñán-Romero','Santiago Royo-Sierra','Nina Van Goethem','Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
   input      <- list('csv upload')
   output     <- list('BY-COVID-WP5-BaselineUseCase-VE.duckdb (database)','cohort_data (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
 }
-
 
 ########################
 ### General settings ###
@@ -28,8 +25,9 @@ x <- c("dplyr","arrow","validate","DataExplorer","DT","purrr","dlookr","survmine
        "quarto","ggplot2","plotly","scales","formattable","naniar","duckdb","DBI","here",
        "grDevices","visdat","mice","tidyr","shiny","consort","parallel","MatchIt",
        "survival","table1","tab","forestmodel","gtsummary","survRM2") 
-lapply(x, library, character.only = TRUE)
+lapply(x, require, character.only = TRUE)
 
+### Description: directories
 input_data_path <- here('input')
 output_data_path <- here('output')
 auxilary_database_name <- 'BY-COVID-WP5-BaselineUseCase-VE.duckdb'
@@ -61,6 +59,8 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
                   	residence_area_cd VARCHAR,
                   	country_cd VARCHAR,
                   	foreign_bl BOOLEAN,
+                  	exitus_dt DATE,
+                  	exitus_bl BOOLEAN,
                   	essential_worker_bl BOOLEAN,
                   	institutionalized_bl BOOLEAN,
                   	dose_1_brand_cd VARCHAR,
@@ -69,7 +69,7 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
                   	dose_2_dt DATE,
                   	dose_3_brand_cd VARCHAR,
                   	dose_3_dt DATE,
-                  	number_doses TINYINT,
+                  	doses_nm TINYINT,
                   	fully_vaccinated_dt DATE,
                   	fully_vaccinated_bl BOOLEAN,
                   	vaccination_schedule_cd VARCHAR,
@@ -94,8 +94,6 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
                   	primary_immunodeficiency_bl BOOLEAN,
                   	immunosuppression_bl BOOLEAN,
                   	pregnancy_bl BOOLEAN,
-                  	exitus_dt DATE,
-                  	exitus_bl BOOLEAN,
                   	flag_violating_val BOOLEAN DEFAULT FALSE,
                   	flag_listwise_del BOOLEAN DEFAULT FALSE
           )")
@@ -132,7 +130,9 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
             field("socecon_lvl_cd",string(),nullable=TRUE),
             field("residence_area_cd",string(),nullable=TRUE),
             field("country_cd",string(),nullable=TRUE),
-            field("foreign_bl",bool(),nullable=TRUE), 
+            field("foreign_bl",bool(),nullable=TRUE),
+            field("exitus_dt",date32(),nullable=TRUE), 
+            field("exitus_bl",bool(),nullable=TRUE),
             field("essential_worker_bl",bool(),nullable=TRUE), 
             field("institutionalized_bl",bool(),nullable=TRUE), 
             field("dose_1_brand_cd",string(),nullable=TRUE),
@@ -141,7 +141,7 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
             field("dose_2_dt",date32(),nullable=TRUE),
             field("dose_3_brand_cd",string(),nullable=TRUE),
             field("dose_3_dt",date32(),nullable=TRUE),
-            field("number_doses",double(),nullable=TRUE), # TODO: Adjust to doses_nm!
+            field("doses_nm",double(),nullable=TRUE),
             field("fully_vaccinated_dt",date32(),nullable=TRUE),
             field("fully_vaccinated_bl",bool(),nullable=TRUE),
             field("vaccination_schedule_cd",string(),nullable=TRUE),
@@ -165,9 +165,8 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
             field("hiv_infection_bl",bool(),nullable=TRUE), 
             field("primary_immunodeficiency_bl",bool(),nullable=TRUE), 
             field("immunosuppression_bl",bool(),nullable=TRUE), 
-            field("pregnancy_bl",bool(),nullable=TRUE),
-            field("exitus_dt",date32(),nullable=TRUE), 
-            field("exitus_bl",bool(),nullable=TRUE)
+            field("pregnancy_bl",bool(),nullable=TRUE)
+            
           )
           
           data_file <- list.files(paste0(input_data_path,"/"),pattern=".csv")

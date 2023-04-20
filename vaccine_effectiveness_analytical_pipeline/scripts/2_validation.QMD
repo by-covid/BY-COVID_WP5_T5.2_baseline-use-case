@@ -18,12 +18,12 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 11/04/2023
+# 20/04/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - validation'
-  authors     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  author     <- list('Marjan Meurisse','Javier González-Galindo','Francisco Estupiñán-Romero','Santiago Royo-Sierra','Nina Van Goethem','Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
@@ -89,7 +89,7 @@ validation <- function(data) {
     is.na(sex_cd) | sex_cd %in% c(0,1,2,9),
     is.na(dose_1_brand_cd) | dose_1_brand_cd %in% c("BP","MD","JJ","AZ","NV"),
     is.na(dose_2_brand_cd) | dose_2_brand_cd %in% c("BP","MD","JJ","AZ","NV"),
-    is.na(number_doses) | number_doses >= 0 & number_doses <= 10,
+    is.na(doses_nm) | doses_nm >= 0 & doses_nm <= 10,
     fully_vaccinated_bl==FALSE |
       fully_vaccinated_bl==TRUE & !is.na(vaccination_schedule_cd),
     is.na(test_type_cd) | test_type_cd %in% c("PCR","AG","other"),
@@ -116,10 +116,10 @@ validation <- function(data) {
       !is.na(fully_vaccinated_dt) & !is.na(exitus_dt) & 
       fully_vaccinated_dt <= exitus_dt,
     
-    (!is.na(dose_1_dt) & !is.na(dose_2_dt) & !is.na(dose_3_dt) & number_doses>=3) | 
-        (!is.na(dose_1_dt) & !is.na(dose_2_dt) & is.na(dose_3_dt) & number_doses==2) |
-        (!is.na(dose_1_dt) & is.na(dose_2_dt) & is.na(dose_3_dt) & number_doses==1) | 
-        (is.na(dose_1_dt) & is.na(dose_2_dt) & is.na(dose_3_dt) & number_doses==0),
+    (!is.na(dose_1_dt) & !is.na(dose_2_dt) & !is.na(dose_3_dt) & doses_nm>=3) | 
+        (!is.na(dose_1_dt) & !is.na(dose_2_dt) & is.na(dose_3_dt) & doses_nm==2) |
+        (!is.na(dose_1_dt) & is.na(dose_2_dt) & is.na(dose_3_dt) & doses_nm==1) | 
+        (is.na(dose_1_dt) & is.na(dose_2_dt) & is.na(dose_3_dt) & doses_nm==0),
     is.na(dose_1_dt) | (!is.na(dose_1_dt) & !is.na(dose_1_brand_cd)),
     is.na(dose_2_dt) | (!is.na(dose_2_dt) & !is.na(dose_2_brand_cd) &
                         !is.na(dose_1_dt) & !is.na(dose_1_brand_cd)),
@@ -139,7 +139,6 @@ validation <- function(data) {
 
 out <- validation(df)
 summary_validation_tmp <- summary(out)
-
 
 ```
 
@@ -218,7 +217,6 @@ pl <- summary_validation %>%
               "Missing" = "grey"),
       breaks=c("Fails","Passes","Missing")) 
 ply <- ggplotly(pl)
-
 
 ```
 

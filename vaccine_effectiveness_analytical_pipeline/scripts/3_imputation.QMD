@@ -18,17 +18,17 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 11/04/2023
+# 20/04/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - imputation of missing values'
-  authors     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Francisco Estupiñán-Romero', 'Santiago Royo-Sierra', 'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  authors     <- list('Marjan Meurisse','Javier González-Galindo','Francisco Estupiñán-Romero','Santiago Royo-Sierra','Nina Van Goethem','Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
   input      <- list('cohort_data including the flag_violation_val (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
-  output     <- list('3_imputation.html (report)','cohort_data_imputed (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)','flag_listwise_del (variable in cohort_data table)')
+  output     <- list('3_imputation.html (report)','cohort_data including the flag_violation_val and flag_listwise_del, and cohort_data_imputed (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
 }
 
 ```
@@ -91,6 +91,7 @@ comorb_imm_v <- c(
     "blood_cancer_bl","transplanted_bl",
     "hiv_infection_bl","primary_immunodeficiency_bl","immunosuppression_bl")
 
+## Description: create missing data profile
 dt_prof <- profile_missing(df_not_viol)
 
 ## Description: create table to collect characteristics/checks for each variable
