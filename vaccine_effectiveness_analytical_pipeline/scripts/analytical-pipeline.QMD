@@ -199,3 +199,13 @@ tryCatch({
 })
 
 ```
+
+```{r, remove , message=FALSE, warning=FALSE, error=TRUE}
+
+# 0. General settings and loading of data
+
+if (file.exists(auxilary_database_path)) {
+  file.remove(auxilary_database_path)
+}
+
+```
