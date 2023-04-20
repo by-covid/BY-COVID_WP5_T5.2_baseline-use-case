@@ -224,13 +224,14 @@ The development environment included several R packages (from base R or CRAN) an
 ### Using Docker
 
 It is possible to install the required dependencies for the pipeline using 
-[Docker](https://www.docker.com/). At the moment this container has to be built
-manually.
+[Docker](https://www.docker.com/).  You may skip the `docker build` command 
+to download the [latest container](https://github.com/by-covid/baseline-use-case-synthetic-crate/pkgs/container/vaccine_effectiveness_analytical_pipeline) from GitHub. 
 
 ```
 cd vaccine_effectiveness_analytical_pipeline 
-docker build -t pipeline .
-docker run -v `pwd`:/work -w /work/scripts -it pipeline quarto render analytical-pipeline.QMD --execute --output-dir ../output/
+# Enable below if you have modified scripts dependencies
+#docker build -t ghcr.io/by-covid/vaccine_effectiveness_analytical_pipeline .
+docker run -v `pwd`/input:/pipeline/input -v `pwd`/output:/pipeline/output -it ghcr.io/by-covid/vaccine_effectiveness_analytical_pipeline
 ```
 
 Note that when using Docker in this way, file permission on your `output` folder may not match up with the container's permissions when writing outputs. (tip: `chmod -R 777 output`)
