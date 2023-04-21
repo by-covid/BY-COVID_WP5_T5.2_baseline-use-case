@@ -285,12 +285,12 @@ Input data, compliant with the [Common Data Model specification](https://doi.org
 
 ## Authors 
 
--   Meurisse, Marjan
--   Estupiñán-Romero, Francisco
--   Van Goethem, Nina
--   González-Galindo, Javier
--   Royo-Sierra, Santiago
--   Bernal-Delgado, Enrique
+-   [Meurisse, Marjan](https://orcid.org/0000-0002-4409-0664)
+-   [Estupiñán-Romero, Francisco](https://orcid.org/0000-0002-6285-8120)
+-   [Van Goethem, Nina](https://orcid.org/0000-0001-7316-6990)
+-   [González-Galindo, Javier](https://orcid.org/0000-0002-8783-5478)
+-   [Royo-Sierra, Santiago](https://orcid.org/0000-0002-0048-4370)
+-   [Bernal-Delgado, Enrique](https://orcid.org/0000-0002-0961-3298)
 
 ## Funding
 
