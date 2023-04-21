@@ -115,8 +115,24 @@ The probability of not getting infected by SARS-CoV-2 beyond a certain time afte
 
 res <- summary(surv_fit, times = c(0,100*(1:6)))
 
+# cols <- lapply(c(2:7, 8:12) , function(x) res[x])
+# tbl <- do.call(data.frame, cols)[,1:9] %>% mutate(strata = ifelse(strata=="fully_vaccinated_bl=FALSE", "Not fully vaccinated", "Fully vaccinated")) %>% relocate(strata)
+# 
+# formattable(tbl,
+#             list(Strata = formatter("Strata",
+#                 style = ~style(display = "block", 
+#                                 padding = "0 4px", 
+#                                 `border-radius` = "4px", 
+#                                 `background-color` = case_when(Strata=="Not fully vaccinated" ~"#F8766D",
+#                                                                Strata=="Fully vaccinated" ~ "#00C1AA"
+#                                                                ))))) %>%
+#   rename("Time" = time, "Number at risk" = n.risk, "Number of events" = n.event, "Number censored" = n.censor, "Survival" = surv, "Std. error" = std.err, "Cumulative hazard" = cumhaz, "Std. error cumulative hazard" = std.chaz, "Strata" = strata) 
+
 cols <- lapply(c(2:7, 8:12) , function(x) res[x])
 tbl <- do.call(data.frame, cols)[,1:9] %>% mutate(strata = ifelse(strata=="fully_vaccinated_bl=FALSE", "Not fully vaccinated", "Fully vaccinated")) %>% relocate(strata)
+tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)))
+tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)))
+tbl <- tbl %>% relocate(n.event.cumsum, .after = n.risk)%>% relocate(n.censor.cumsum, .before = n.censor) %>% select(-n.event) %>% select(-n.censor)
 
 formattable(tbl,
             list(Strata = formatter("Strata",
@@ -126,7 +142,9 @@ formattable(tbl,
                                 `background-color` = case_when(Strata=="Not fully vaccinated" ~"#F8766D",
                                                                Strata=="Fully vaccinated" ~ "#00C1AA"
                                                                ))))) %>%
-  rename("Time" = time, "Number at risk" = n.risk, "Number of events" = n.event, "Number censored" = n.censor, "Survival" = surv, "Std. error" = std.err, "Cumulative hazard" = cumhaz, "Std. error cumulative hazard" = std.chaz, "Strata" = strata) 
+  rename("Time" = time, "Number at risk" = n.risk, "Cumulative sum of number of events" = n.event.cumsum, "Cumulative sum of number censored" = n.censor.cumsum, "Survival" = surv, "Std. error" = std.err, "Cumulative hazard" = cumhaz, "Std. error cumulative hazard" = std.chaz, "Strata" = strata) 
+
+
 
 ```
 

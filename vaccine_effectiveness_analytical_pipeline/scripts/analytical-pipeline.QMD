@@ -164,6 +164,8 @@ tryCatch({
 
 ```{r, descriptive, message=FALSE, warning=FALSE, error=FALSE}
 
+# 5. Descriptive analysis
+
 if (file.exists("../output/5_descriptive.html")) {
   file.remove("../output/5_descriptive.html")
 }
@@ -184,6 +186,8 @@ tryCatch({
 
 ```{r, survival analysis, message=FALSE, warning=FALSE, error=FALSE}
 
+# 6. Survival analysis
+
 if (file.exists("../output/6_survival-analysis.html")) {
   file.remove("../output/6_survival-analysis.html")
 }
@@ -200,9 +204,7 @@ tryCatch({
 
 ```
 
-```{r, remove , message=FALSE, warning=FALSE, error=TRUE}
-
-# 0. General settings and loading of data
+```{r, remove duckdb, message=FALSE, warning=FALSE, error=TRUE}
 
 if (file.exists(auxilary_database_path)) {
   file.remove(auxilary_database_path)

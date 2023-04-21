@@ -72,6 +72,12 @@ tryCatch(
 
 ## Periods
 
+Different time periods are specified for the analysis:
+
+- *The data extraction period*: Data extraction is foreseen from the first date of a documented SARS-CoV-2 infection in the population until the most recent date at which data is available at the time of analysis. All individuals vaccinated with at least one dose of the SARS-CoV-2 vaccine (any of the available brands) and all individuals eligible to be vaccinated with a documented positive diagnosis (irrespective of the type of test) for SARS-CoV-2 infection during the data extraction period are included in the study population.
+- *The enrollment period*: A sequence of nested (daily) trials are emulated with increasing time (t1, t2, ..., tn), iterating over the days in the enrollment period. At each eligible time during the enrollment period, the vaccination status of eligible individuals is assessed and every individual who has completed a primary vaccination schedule at that time (treated/exposed) is matched to an individual who has not (yet) completed the primary vaccination schedule (control).
+- *The study period*: The study period is considered from the start of the enrollment period until one year after the end of the enrollment period, to allow a minimal possible follow-up period of one year.
+
 ```{r, periods, message=FALSE, warning=FALSE, error=FALSE}
 
 ## Description: extract enrollment and study period
@@ -122,6 +128,8 @@ formattable(periods,
 ```
 
 ## Study population and enrollment
+
+A flow diagram displaying the process of obtaining a matched study population considered for survival analysis.
 
 ```{r, create consort graph, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
@@ -284,11 +292,28 @@ layout(xaxis = list(
        )) 
 ```
 
-## Description of the study population: table 1
+## Description of the study population: table 1 {.tabset}
 
-```{r, table 1, message=FALSE, warning=FALSE, error=FALSE}
+::: panel-tabset
 
-## Description: create table 1
+##### Population eligible for matching
+
+```{r, table 1 un-matched, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table 1 un-matched population
+
+tryCatch(
+  {
+    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    
+    df_notmatched <- dbGetQuery(con,"SELECT person_id,fully_vaccinated_bl,age_cd,sex_cd,residence_area_cd,essential_worker_bl,
+			institutionalized_bl,foreign_bl,comorbidities_bl,immunestatus_bl,pregnancy_bl
+			FROM cohort_view")
+    
+  },
+  finally={
+    dbDisconnect(con, shutdown=TRUE)
+  })
 
 pvalue <- function(x, ...) {
     # Construct vectors of data y, and groups (strata) g
@@ -308,8 +333,25 @@ pvalue <- function(x, ...) {
 
 caption  <- "Table 1"
 footnote <- "ᵃ5-year age groups"
+df_notmatched$fully_vaccinated_bl <- factor(df_notmatched$fully_vaccinated_bl, levels=c(TRUE,FALSE),
+         labels=c("Intervention group (Completed a primary vaccination schedule)", "Control group (Not completed a primary vaccination schedule)"))
+label(df_notmatched$age_cd) <- "age_cdᵃ"
+table1(~ sex_cd + age_cd + residence_area_cd + institutionalized_bl + foreign_bl + pregnancy_bl + 
+                    essential_worker_bl + comorbidities_bl + immunestatus_bl | fully_vaccinated_bl,
+       data=df_notmatched,caption=caption,footnote=footnote, overall=FALSE,extra.col=list(`P-value`=pvalue))
+
+```
+
+##### Matched population
+
+```{r, table 1 matched, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table 1 matched population
+
+caption  <- "Table 1"
+footnote <- "ᵃ5-year age groups"
 df_matched$fully_vaccinated_bl <- factor(df_matched$fully_vaccinated_bl, levels=c(TRUE,FALSE),
-         labels=c("Intervention group", "Control group"))
+         labels=c("Intervention group (Completed a primary vaccination schedule)", "Control group (Not completed a primary vaccination schedule)"))
 label(df_matched$age_cd) <- "age_cdᵃ"
 table1(~ sex_cd + age_cd + residence_area_cd + institutionalized_bl + foreign_bl + pregnancy_bl + 
                     essential_worker_bl + comorbidities_bl + immunestatus_bl | fully_vaccinated_bl,
@@ -317,11 +359,13 @@ table1(~ sex_cd + age_cd + residence_area_cd + institutionalized_bl + foreign_bl
 
 ```
 
-## Tables {.tabset}
+:::
+
+## Two-by-two tables {.tabset}
 
 ```{r, tables, message=FALSE, warning=FALSE, error=FALSE}
 
-## Description:
+## Description: extract info from duckDB
 
 tryCatch(
   {
@@ -353,29 +397,29 @@ The individuals in the imported dataset are counted by 'fully_vaccinated_bl' and
 
 ```{r, print table un-matched start population, message=FALSE, warning=FALSE, error=FALSE}
 
-## Description:
+## Description: construct two-by-two table for the original input data
 
 unm_start <- data.frame(matrix(ncol = 3, nrow = 3))
-colnames(unm_start) <- c("Not completed a primary vaccination schedule","Completed a primary vaccination schedule","Total")
-rownames(unm_start) <- c("No confirmed case","Confirmed case","Total")
-unm_start[1,] <- c(df_unm_start[which(df_unm_start$fully_vaccinated_bl==FALSE & df_unm_start$confirmed_case_bl==FALSE),"count_nm"],
+colnames(unm_start) <- c("Confirmed case","Not confirmed case","Total") 
+rownames(unm_start) <- c("Completed a primary vaccination schedule","Not completed a primary vaccination schedule","Total")
+unm_start[1,] <- c(df_unm_start[which(df_unm_start$fully_vaccinated_bl==TRUE & df_unm_start$confirmed_case_bl==TRUE),"count_nm"],
                    df_unm_start[which(df_unm_start$fully_vaccinated_bl==TRUE & df_unm_start$confirmed_case_bl==FALSE),"count_nm"],
-                   df_unm_start[which(is.na(df_unm_start$fully_vaccinated_bl) & df_unm_start$confirmed_case_bl==FALSE),"count_nm"])
+                   df_unm_start[which(df_unm_start$fully_vaccinated_bl==TRUE & is.na(df_unm_start$confirmed_case_bl)),"count_nm"])
 unm_start[2,] <- c(df_unm_start[which(df_unm_start$fully_vaccinated_bl==FALSE & df_unm_start$confirmed_case_bl==TRUE),"count_nm"],
-                   df_unm_start[which(df_unm_start$fully_vaccinated_bl==TRUE & df_unm_start$confirmed_case_bl==TRUE),"count_nm"],
-                   df_unm_start[which(is.na(df_unm_start$fully_vaccinated_bl) & df_unm_start$confirmed_case_bl==TRUE),"count_nm"])
-unm_start[3,] <- c(df_unm_start[which(df_unm_start$fully_vaccinated_bl==FALSE & is.na(df_unm_start$confirmed_case_bl)),"count_nm"],
-                   df_unm_start[which(df_unm_start$fully_vaccinated_bl==TRUE & is.na(df_unm_start$confirmed_case_bl)),"count_nm"],
+                   df_unm_start[which(df_unm_start$fully_vaccinated_bl==FALSE & df_unm_start$confirmed_case_bl==FALSE),"count_nm"],
+                   df_unm_start[which(df_unm_start$fully_vaccinated_bl==FALSE & is.na(df_unm_start$confirmed_case_bl)),"count_nm"])
+unm_start[3,] <- c(df_unm_start[which(is.na(df_unm_start$fully_vaccinated_bl) & df_unm_start$confirmed_case_bl==TRUE),"count_nm"],
+                   df_unm_start[which(is.na(df_unm_start$fully_vaccinated_bl) & df_unm_start$confirmed_case_bl==FALSE),"count_nm"],
                    df_unm_start[which(is.na(df_unm_start$fully_vaccinated_bl) & is.na(df_unm_start$confirmed_case_bl)),"count_nm"])
 
-ratio_start <- (unm_start["Confirmed case","Completed a primary vaccination schedule"]/unm_start["Total","Completed a primary vaccination schedule"])/(unm_start["Confirmed case","Not completed a primary vaccination schedule"]/unm_start["Total","Not completed a primary vaccination schedule"])
+ratio_start <- (unm_start["Completed a primary vaccination schedule","Confirmed case"]/unm_start["Completed a primary vaccination schedule","Total"])/(unm_start["Not completed a primary vaccination schedule","Confirmed case"]/unm_start["Not completed a primary vaccination schedule","Total"])
 
 formattable(unm_start,
             align="c")
 
 ```
 
-Ratio = $\frac{(\frac{confirmed \ cases}{non-vaccinated \ individuals})} {(\frac{confirmed \ cases}{vaccinated \ individuals})}$ = `r ratio_start`
+Ratio = $\frac{(\frac{confirmed \ cases}{primary vaccinated \ individuals})} {(\frac{confirmed \ cases}{not-primary vaccinated \ individuals})}$ = `r ratio_start`
 
 ##### Population eligible for matching
 
@@ -383,30 +427,30 @@ The individuals eligible for analysis are counted by 'fully_vaccinated_bl' and '
 
 ```{r, print table un-matched eligible population, message=FALSE, warning=FALSE, error=FALSE}
 
-## Description:
+## Description: construct two-by-two table for the population eligible for matching
 
 unm_elig <- data.frame(matrix(ncol = 3, nrow = 3))
-colnames(unm_elig) <- c("Not completed a primary vaccination schedule","Completed a primary vaccination schedule","Total")
-rownames(unm_elig) <- c("No confirmed case","Confirmed case","Total")
-unm_elig[1,] <- c(df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==FALSE & df_unm_elig$confirmed_case_bl==FALSE),"count_nm"],
+colnames(unm_elig) <- c("Confirmed case","Not confirmed case","Total") 
+rownames(unm_elig) <- c("Completed a primary vaccination schedule","Not completed a primary vaccination schedule","Total")
+unm_elig[1,] <- c(df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==TRUE & df_unm_elig$confirmed_case_bl==TRUE),"count_nm"],
                    df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==TRUE & df_unm_elig$confirmed_case_bl==FALSE),"count_nm"],
-                   df_unm_elig[which(is.na(df_unm_elig$fully_vaccinated_bl) & df_unm_elig$confirmed_case_bl==FALSE),"count_nm"])
+                   df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==TRUE & is.na(df_unm_elig$confirmed_case_bl)),"count_nm"])
 unm_elig[2,] <- c(df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==FALSE & df_unm_elig$confirmed_case_bl==TRUE),"count_nm"],
-                   df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==TRUE & df_unm_elig$confirmed_case_bl==TRUE),"count_nm"],
-                   df_unm_elig[which(is.na(df_unm_elig$fully_vaccinated_bl) & df_unm_elig$confirmed_case_bl==TRUE),"count_nm"])
-unm_elig[3,] <- c(df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==FALSE & is.na(df_unm_elig$confirmed_case_bl)),"count_nm"],
-                   df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==TRUE & is.na(df_unm_elig$confirmed_case_bl)),"count_nm"],
+                   df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==FALSE & df_unm_elig$confirmed_case_bl==FALSE),"count_nm"],
+                   df_unm_elig[which(df_unm_elig$fully_vaccinated_bl==FALSE & is.na(df_unm_elig$confirmed_case_bl)),"count_nm"])
+unm_elig[3,] <- c(df_unm_elig[which(is.na(df_unm_elig$fully_vaccinated_bl) & df_unm_elig$confirmed_case_bl==TRUE),"count_nm"],
+                   df_unm_elig[which(is.na(df_unm_elig$fully_vaccinated_bl) & df_unm_elig$confirmed_case_bl==FALSE),"count_nm"],
                    df_unm_elig[which(is.na(df_unm_elig$fully_vaccinated_bl) & is.na(df_unm_elig$confirmed_case_bl)),"count_nm"])
 
-ratio_elig <- (unm_elig["Confirmed case","Completed a primary vaccination schedule"]/unm_elig["Total","Completed a primary vaccination schedule"])/(unm_elig["Confirmed case","Not completed a primary vaccination schedule"]/unm_elig["Total","Not completed a primary vaccination schedule"])
+
+ratio_elig <- (unm_elig["Completed a primary vaccination schedule","Confirmed case"]/unm_elig["Completed a primary vaccination schedule","Total"])/(unm_elig["Not completed a primary vaccination schedule","Confirmed case"]/unm_elig["Not completed a primary vaccination schedule","Total"])
 
 formattable(unm_elig,
             align="c")
 
-
 ```
 
-Ratio = $\frac{(\frac{confirmed \ cases}{non-vaccinated \ individuals})} {(\frac{confirmed \ cases}{vaccinated \ individuals})}$ = `r ratio_elig`
+Ratio = $\frac{(\frac{confirmed \ cases}{primary vaccinated \ individuals})} {(\frac{confirmed \ cases}{not-primary vaccinated \ individuals})}$ = `r ratio_elig`
 
 ##### Matched population
 
@@ -414,33 +458,39 @@ The matched individuals are counted by 'fully_vaccinated_bl' and 'confirmed_case
 
 ```{r, print table matched population, message=FALSE, warning=FALSE, error=FALSE}
 
-## Description:
+# TODO: check!
+
+## Description: construct two-by-two table for the matched population
+
 mat <- data.frame(matrix(ncol = 3, nrow = 3))
-colnames(mat) <- c("Not completed a primary vaccination schedule","Completed a primary vaccination schedule","Total")
-rownames(mat) <- c("No confirmed case","Confirmed case","Total")
-mat[1,] <- c(df_m[which(df_m$fully_vaccinated_bl==FALSE & df_m$confirmed_case_bl==FALSE),"count_nm"],
+colnames(mat) <- c("Confirmed case","Not confirmed case","Total") 
+rownames(mat) <- c("Completed a primary vaccination schedule","Not completed a primary vaccination schedule","Total")
+mat[1,] <- c(df_m[which(df_m$fully_vaccinated_bl==TRUE & df_m$confirmed_case_bl==TRUE),"count_nm"],
                    df_m[which(df_m$fully_vaccinated_bl==TRUE & df_m$confirmed_case_bl==FALSE),"count_nm"],
-                   df_m[which(is.na(df_m$fully_vaccinated_bl) & df_m$confirmed_case_bl==FALSE),"count_nm"])
+                   df_m[which(df_m$fully_vaccinated_bl==TRUE & is.na(df_m$confirmed_case_bl)),"count_nm"])
 mat[2,] <- c(df_m[which(df_m$fully_vaccinated_bl==FALSE & df_m$confirmed_case_bl==TRUE),"count_nm"],
-                   df_m[which(df_m$fully_vaccinated_bl==TRUE & df_m$confirmed_case_bl==TRUE),"count_nm"],
-                   df_m[which(is.na(df_m$fully_vaccinated_bl) & df_m$confirmed_case_bl==TRUE),"count_nm"])
-mat[3,] <- c(df_m[which(df_m$fully_vaccinated_bl==FALSE & is.na(df_m$confirmed_case_bl)),"count_nm"],
-                   df_m[which(df_m$fully_vaccinated_bl==TRUE & is.na(df_m$confirmed_case_bl)),"count_nm"],
+                   df_m[which(df_m$fully_vaccinated_bl==FALSE & df_m$confirmed_case_bl==FALSE),"count_nm"],
+                   df_m[which(df_m$fully_vaccinated_bl==FALSE & is.na(df_m$confirmed_case_bl)),"count_nm"])
+mat[3,] <- c(df_m[which(is.na(df_m$fully_vaccinated_bl) & df_m$confirmed_case_bl==TRUE),"count_nm"],
+                   df_m[which(is.na(df_m$fully_vaccinated_bl) & df_m$confirmed_case_bl==FALSE),"count_nm"],
                    df_m[which(is.na(df_m$fully_vaccinated_bl) & is.na(df_m$confirmed_case_bl)),"count_nm"])
 
-ratio_mat <- (mat["Confirmed case","Completed a primary vaccination schedule"]/mat["Total","Completed a primary vaccination schedule"])/(mat["Confirmed case","Not completed a primary vaccination schedule"]/mat["Total","Not completed a primary vaccination schedule"])
+ratio_mat <- (mat["Completed a primary vaccination schedule","Confirmed case"]/mat["Completed a primary vaccination schedule","Total"])/(mat["Not completed a primary vaccination schedule","Confirmed case"]/mat["Not completed a primary vaccination schedule","Total"])
+
 
 formattable(mat,
             align="c")
 
+
 ```
 
-Ratio = $\frac{(\frac{confirmed \ cases}{non-vaccinated \ individuals})} {(\frac{confirmed \ cases}{vaccinated \ individuals})}$ = `r ratio_mat`
+Ratio = $\frac{(\frac{confirmed \ cases}{primary vaccinated \ individuals})} {(\frac{confirmed \ cases}{not-primary vaccinated \ individuals})}$ = `r ratio_mat`
+
 :::
 
 ## Survival in un-matched population {.tabset}
 
-```{r, unadjusted survival, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+```{r, survival in un-matched population, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
 ## Description: survival analysis in un-matched population
 
@@ -533,8 +583,6 @@ tryCatch(
     dbDisconnect(con, shutdown=TRUE)
   })
 
-# df_notmatched <- df_notmatched %>% mutate(status=ifelse(status==1,TRUE,FALSE)) %>% filter(futime>=0)
-
 ```
 
 ::: panel-tabset
@@ -570,7 +618,7 @@ ggsurvplot(fit_unadj_surfit, data = df_notmatched, xlab="Days of follow-up",
            conf.int = TRUE,
            pval = TRUE,
            main="Product-Limit Survival Estimates",
-           risk.table = FALSE,
+           risk.table = FALSE, 
            legend.labs = c("Not fully-vaccinated", "Fully-vaccinated"))
 
 ```
@@ -581,19 +629,22 @@ ggsurvplot(fit_unadj_surfit, data = df_notmatched, xlab="Days of follow-up",
 ggsurvplot(fit_unadj_surfit,data = df_notmatched, conf.int = TRUE,
            ylim=c(0,1), xlim=c(0,700),
            break.x.by=100,
-           risk.table = FALSE,
-            cumevents = FALSE,
+           risk.table = FALSE, 
+           cumevents = FALSE, 
            cumcensor = FALSE,
            fun = "event",legend.labs = c("Not fully-vaccinated", "Fully-vaccinated"))
 
 ```
 
-```{r, survival plot cumulative events table, message=FALSE, warning=FALSE, error=FALSE}
+```{r, survival cumulative events table, message=FALSE, warning=FALSE, error=FALSE}
 
-res <- summary(fit_unadj_surfit, times = c(0,100*(1:6)))
+res <- summary(fit_unadj_surfit, times = c(0,1,100*(1:6)))
 
 cols <- lapply(c(2:7, 8:12) , function(x) res[x])
 tbl <- do.call(data.frame, cols)[,1:9] %>% mutate(strata = ifelse(strata=="fully_vaccinated_bl=FALSE", "Not fully vaccinated", "Fully vaccinated")) %>% relocate(strata)
+tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)))
+tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)))
+tbl <- tbl %>% relocate(n.event.cumsum, .after = n.risk)%>% relocate(n.censor.cumsum, .before = n.censor) %>% select(-n.event) %>% select(-n.censor)
 
 formattable(tbl,
             list(Strata = formatter("Strata",
@@ -603,7 +654,7 @@ formattable(tbl,
                                 `background-color` = case_when(Strata=="Not fully vaccinated" ~"#F8766D",
                                                                Strata=="Fully vaccinated" ~ "#00C1AA"
                                                                ))))) %>%
-  rename("Time" = time, "Number at risk" = n.risk, "Number of events" = n.event, "Number censored" = n.censor, "Survival" = surv, "Std. error" = std.err, "Cumulative hazard" = cumhaz, "Std. error cumulative hazard" = std.chaz, "Strata" = strata) 
+  rename("Time" = time, "Number at risk" = n.risk, "Cumulative sum of number of events" = n.event.cumsum, "Cumulative sum of number censored" = n.censor.cumsum, "Survival" = surv, "Std. error" = std.err, "Cumulative hazard" = cumhaz, "Std. error cumulative hazard" = std.chaz, "Strata" = strata) 
 
 
 ```
