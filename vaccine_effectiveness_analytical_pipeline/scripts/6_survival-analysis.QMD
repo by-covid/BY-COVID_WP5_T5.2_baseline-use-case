@@ -23,7 +23,7 @@ title-block-banner: "#27445C"
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - imputation of missing values'
-  author     <- list('Marjan Meurisse', 'Javier González-Galindo', 'Santiago Royo-Sierra', 'Francisco Estupiñán-Romero',  'Nina Van Goethem', 'Enrique Bernal-Delgado')
+  author     <- list('Marjan Meurisse','Javier González-Galindo','Santiago Royo-Sierra','Francisco Estupiñán-Romero','Nina Van Goethem','Enrique Bernal-Delgado')
   version    <- '1.0.0'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
@@ -47,52 +47,104 @@ source("./0_global.R")
 tryCatch(
   {
     con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
-    df_matched <- dbGetQuery(con, "select person_id , fully_vaccinated_bl, CAST(status as INTEGER) as status, futime from matched_data where status is not null")
+    # df_matched <- dbGetQuery(con, "select person_id , fully_vaccinated_bl,subclass ,CAST(status as INTEGER) as status, futime from matched_data where status is not null")
+     df_matched <- dbGetQuery(con, "	select person_id , fully_vaccinated_bl ,CAST(status as INTEGER) as status, futime  from main.matched_data")
   },
   finally={
     dbDisconnect(con, shutdown=TRUE)
   })
 
+
 ```
 
 ```{r, survival, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
-## Description: 
+## Description: Survival 
 
 survobj <- Surv(time=df_matched$futime,
                 event=df_matched$status)
-surv_fit <- survfit(survobj ~ fully_vaccinated_bl, data=df_matched)
+
+surv_fit <- survfit(survobj ~ fully_vaccinated_bl,  data=df_matched)
+
 
 ```
 
 ## Survival plot
 
-We estimate the survival function using the Kaplan-Meier estimator and represent this function visually using a Kaplan-Meier curve, showing the probability of not obtaining a SARS-CoV-2 infection at a certain time after onset of follow-up. The survival function is estimated for the control and intervention group.
+We estimate the survival function using the Kaplan-Meier estimator and represent this function visually using a Kaplan-Meier curve, showing the probability of not getting infected by SARS-CoV-2 at a certain time after onset of follow-up. The survival function is estimated for the control and intervention group.
 
 ```{r, survival plot, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
+## Description: Plot survival probability
+
 ggsurvplot(surv_fit, data = df_matched, xlab="Days of follow-up",
            ylab="Survival probability",
-           ylim=c(0.6,1),
+           surv.median.line = "hv",
+           ylim=c(0,1),
+           xlim=c(0,700),
            break.x.by=100,
            conf.int = TRUE,
            pval = TRUE,
-           main="Product-Limit Survival Estimates", 
-           risk.table = TRUE)
+           main="Product-Limit Survival Estimates",
+           risk.table = FALSE,
+           legend.labs = c("Not fully-vaccinated", "Fully-vaccinated"))
 
 
 ```
 
-## X-time survival
+The cumulative incidence of the event (SARS-CoV-2 infection) was additionally plotted.
 
-The probability of not obtaining a SARS-CoV-2 infection beyond a certain time after onset of follow-up (survival function, estimated using the Kaplan-Meier estimator) is reported for different periods.
+```{r, survival plot cumulative events, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Plot cumulative events
+
+ggsurvplot(surv_fit,data = df_matched, conf.int = TRUE,
+           ylim=c(0,1), xlim=c(0,700),break.x.by=100,
+            risk.table = FALSE,
+            cumevents = FALSE,
+           cumcensor = FALSE,
+           fun = "event",legend.labs = c("Not fully-vaccinated", "Fully-vaccinated"))
+
+```
+
+## Survival (time-to-event)
+
+The probability of not getting infected by SARS-CoV-2 beyond a certain time after onset of follow-up (survival function, estimated using the Kaplan-Meier estimator) is reported for different periods.
 
 ```{r, x-time survival, message=FALSE, warning=FALSE, error=FALSE}
 
-res <- summary(surv_fit)
-cols <- lapply(c(2:11) , function(x) res[x])
-tbl <- do.call(data.frame, cols) %>% select(time,n.risk,n.event,n.censor,surv,std.err,strata)
-formattable(tbl %>% filter(time %in% c(91,182,273,365,730)))
+res <- summary(surv_fit, times = c(0,100*(1:6)))
+
+# cols <- lapply(c(2:7, 8:12) , function(x) res[x])
+# tbl <- do.call(data.frame, cols)[,1:9] %>% mutate(strata = ifelse(strata=="fully_vaccinated_bl=FALSE", "Not fully vaccinated", "Fully vaccinated")) %>% relocate(strata)
+# 
+# formattable(tbl,
+#             list(Strata = formatter("Strata",
+#                 style = ~style(display = "block", 
+#                                 padding = "0 4px", 
+#                                 `border-radius` = "4px", 
+#                                 `background-color` = case_when(Strata=="Not fully vaccinated" ~"#F8766D",
+#                                                                Strata=="Fully vaccinated" ~ "#00C1AA"
+#                                                                ))))) %>%
+#   rename("Time" = time, "Number at risk" = n.risk, "Number of events" = n.event, "Number censored" = n.censor, "Survival" = surv, "Std. error" = std.err, "Cumulative hazard" = cumhaz, "Std. error cumulative hazard" = std.chaz, "Strata" = strata) 
+
+cols <- lapply(c(2:7, 8:12) , function(x) res[x])
+tbl <- do.call(data.frame, cols)[,1:9] %>% mutate(strata = ifelse(strata=="fully_vaccinated_bl=FALSE", "Not fully vaccinated", "Fully vaccinated")) %>% relocate(strata)
+tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)))
+tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)))
+tbl <- tbl %>% relocate(n.event.cumsum, .after = n.risk)%>% relocate(n.censor.cumsum, .before = n.censor) %>% select(-n.event) %>% select(-n.censor)
+
+formattable(tbl,
+            list(Strata = formatter("Strata",
+                style = ~style(display = "block", 
+                                padding = "0 4px", 
+                                `border-radius` = "4px", 
+                                `background-color` = case_when(Strata=="Not fully vaccinated" ~"#F8766D",
+                                                               Strata=="Fully vaccinated" ~ "#00C1AA"
+                                                               ))))) %>%
+  rename("Time" = time, "Number at risk" = n.risk, "Cumulative sum of number of events" = n.event.cumsum, "Cumulative sum of number censored" = n.censor.cumsum, "Survival" = surv, "Std. error" = std.err, "Cumulative hazard" = cumhaz, "Std. error cumulative hazard" = std.chaz, "Strata" = strata) 
+
+
 
 ```
 
@@ -177,7 +229,7 @@ formattable(df_rmst_result, align = c("l"))
 
 ```{r, average treatment effect, message=FALSE, warning=FALSE, error=FALSE}
 
-df_rmst_contrast <- data.frame(Measure=NA,Estimate=NA,SE=NA,CI.lower=NA,CI.upper=NA)
+df_rmst_contrast <- data.frame(Measure=NA,Estimate=NA,CI.lower=NA,CI.upper=NA, p_value=NA)
 df_rmst_contrast[1,] <- c(rownames(df_rmst$unadjusted.result)[1],df_rmst$unadjusted.result[1,])
 df_rmst_contrast[2,] <- c(rownames(df_rmst$unadjusted.result)[2],df_rmst$unadjusted.result[2,])
 df_rmst_contrast[3,] <- c(rownames(df_rmst$unadjusted.result)[3],df_rmst$unadjusted.result[3,])
@@ -187,9 +239,9 @@ df_rmst_contrast <- df_rmst_contrast %>% mutate(
     Measure=="RMST (arm=1)/(arm=0)" ~ "RMST (fully_vaccinated_bl==TRUE)/(fully_vaccinated_bl==FALSE)",
     Measure=="RMTL (arm=1)/(arm=0)" ~ "RMTL (fully_vaccinated_bl==TRUE)/(fully_vaccinated_bl==FALSE)"),
   Estimate = round(as.numeric(Estimate),3),
-  SE = round(as.numeric(SE),3),
   CI.lower = round(as.numeric(CI.lower),3),
-  CI.upper = round(as.numeric(CI.upper),3))
+  CI.upper = round(as.numeric(CI.upper),3),
+  p_value = round(as.numeric(p_value),3))
 formattable(df_rmst_contrast, align = c("l"))
 
 ```
