@@ -4,7 +4,7 @@ This repository is making an RO-Crate of the [BY-COVID](https://by-covid.org/) *
 
 ## RO-Crate preview
 
-The RO-Crate can be browsed at <https://by-covid.github.io/baseline-use-case-synthetic-crate/> (HTML) and as [ro-crate-metadata.json](https://by-covid.github.io/baseline-use-case-synthetic-crate/ro-crate-metadata.json)
+The RO-Crate can be browsed at <https://by-covid.github.io/BY-COVID_WP5_T5.2_baseline-use-case/> (HTML) and as [ro-crate-metadata.json](https://by-covid.github.io/BY-COVID_WP5_T5.2_baseline-use-case/ro-crate-metadata.json)
 
 ## Description
 
@@ -225,7 +225,7 @@ The development environment included several R packages (from base R or CRAN) an
 
 It is possible to install the required dependencies for the pipeline using 
 [Docker](https://www.docker.com/).  You may skip the `docker build` command 
-to download the [latest container](https://github.com/by-covid/baseline-use-case-synthetic-crate/pkgs/container/vaccine_effectiveness_analytical_pipeline) from GitHub. 
+to download the [latest container](https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/pkgs/container/vaccine_effectiveness_analytical_pipeline) from GitHub. 
 
 ```
 cd vaccine_effectiveness_analytical_pipeline 
