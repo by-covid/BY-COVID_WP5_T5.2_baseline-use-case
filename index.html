@@ -50,10 +50,19 @@
       "codeRepository": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case",
       "hasPart": [
         {
+          "@id": "vaccine_effectiveness_analytical_pipeline/"
+        },
+        {
           "@id": "vaccine_effectiveness_causal_model/"
         },
         {
           "@id": "vaccine_effectiveness_common_data_model_specification/"
+        },
+        {
+          "@id": "vaccine_effectiveness_data_management_plan/"
+        },
+        {
+          "@id": "vaccine_effectiveness_study_protocol/"
         },
         {
           "@id": "vaccine_effectiveness_synthetic_dataset/"
@@ -65,13 +74,19 @@
       "identifier": "https://doi.org/10.5281/zenodo.6913045",
       "isBasedOn": [
         {
-          "@id": "https://doi.org/10.5281/zenodo.7572373"
+          "@id": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/releases/tag/1.0.1"
         },
         {
-          "@id": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/releases/tag/1.0.1"
+          "@id": "https://doi.org/10.5281/zenodo.6913045"
+        },
+        {
+          "@id": "https://doi.org/10.5281/zenodo.7551181"
+        },
+        {
+          "@id": "https://doi.org/10.5281/zenodo.7625783"
         }
       ],
-      "keywords": "COVID-19, vaccines, comparative effective ness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
+      "keywords": "COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data",
       "license": {
         "@id": "https://spdx.org/licenses/CC-BY-4.0"
       },
@@ -106,15 +121,15 @@
         }
       ],
       "url": "https://by-covid.github.io/BY-COVID_WP5_T5.2_baseline-use-case/",
-      "name": "BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification",
-      "version": "1.1.0",
-      "description": "This publication corresponds to the Common Data Model (CDM) specification of the Baseline Use Case proposed in T.5.2 (WP5) in the BY-COVID project on “COVID-19 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection.”",
+      "name": "BY-COVID WP5 T5.2 Baseline Use Case",
+      "version": "1.2.0",
+      "description": "This publication corresponds to the Research Objects (RO) of the Baseline Use Case proposed in T.5.2 (WP5) in the BY-COVID project on “COVID-19 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection”.",
       "assesses": "Research Question: How effective have the SARS-CoV-2 vaccination programmes been in preventing SARS-CoV-2 infections?",
-      "material": "Cohort definition: All people, eligible to be vaccinated (from 5 to 115 years old, included) or with, at least, one dose of a SARS-CoV-2 vaccine (any of the available brands) having or not a previous SARS-CoV-2 infection.",
-      "materialExtent": "Inclusion criteria: \n All people vaccinated with at least one dose of the COVID-19 vaccine (any of the available brands) in an area of residence. Any person eligible to be vaccinated (from 5 to 115 years old, included) with a positive diagnosis (irrespective of the type of test) for SARS-CoV-2 infection (COVID-19) during the period of study.  \n\n Exclusion criteria: \n People not eligible for the vaccine (from 0 to 4 years old, included)",
-      "publishingPrinciples": "Study Design: An observational retrospective longitudinal study to assess the effectiveness of the COVID-19 vaccine(s) in preventing SARS-CoV-2 infections using routinely collected social, health and care data from several countries.\n\nA causal model was established using Directed Acyclic Graphs (DAGs) to map domain knowledge, theories and assumptions about the causal relationship between exposure and outcome. ",
+      "material": "Cohort definition: All individuals (from 5 to 115 years old, included) vaccinated with at least one dose of the SARS-CoV-2 vaccine (any of the available brands) and all individuals eligible to be vaccinated with a documented positive diagnosis (irrespective of the type of test) for a SARS-CoV-2 infection during the data extraction period.",
+      "materialExtent": "Inclusion criteria: \n All people vaccinated with at least one dose of the COVID-19 vaccine (any of the available brands) in an area of residence. Any person eligible to be vaccinated (from 5 to 115 years old, included) with a positive diagnosis (irrespective of the type of test) for SARS-CoV-2 infection (COVID-19) during the period of data extraction.  \n\n Exclusion criteria: \n People not eligible for the vaccine (from 0 to 4 years old, included)",
+      "publishingPrinciples": "Study Design: An observational retrospective longitudinal study to assess the effectiveness of the SARS-CoV-2 vaccines in preventing SARS-CoV-2 infections using routinely collected social, health and care data from several countries.\n\nA causal model was established using Directed Acyclic Graphs (DAGs) to map domain knowledge, theories and assumptions about the causal relationship between exposure and outcome. ",
       "temporalCoverage": "Study Period: From the date of the first documented SARS-CoV-2 infection in each country to the most recent date in which data is available at the time of analysis. Roughly from 01-03-2020 to 30-06-2022, depending on the country.",
-      "usageInfo": "The scripts (software) accompanying the data model specification are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit.",
+      "usageInfo": "The scripts (software) included in the publication are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit.",
       "releaseNotes": "- Updated Causal model to eliminate the consideration of 'vaccination_schedule_cd' as a mediator\n- Adjusted the study period to be consistent with the Study Protocol\n- Updated 'sex_cd' as a required variable\n- Added 'chronic_liver_disease_bl' as a comorbidity at the individual level\n- Updated 'socecon_lvl_cd' at the area level as a recommended variable\n -Added crosswalks for the definition of 'chronic_liver_disease_bl' in a separate sheet\n -Updated the 'vaccination_schedule_cd' reference to the 'Vaccine' node in the updated DAG\n -Updated the description of the 'confirmed_case_dt' and 'previous_infection_dt' variables to clarify the definition and the need for a single registry per person"
     },
     {
@@ -133,7 +148,7 @@
       "mainEntity": {
         "@id": "vaccine_effectiveness_common_data_model_specification/"
       },
-      "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)"
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)"
     },
     {
       "@id": "https://w3id.org/ro/wfrun/process/0.1",
@@ -187,22 +202,85 @@
       "name": "Enrique Bernal-Delgado"
     },
     {
-      "@id": "vaccine_effectiveness_causal_model/",
+      "@id": "vaccine_effectiveness_analytical_pipeline/",
       "@type": "Dataset",
-      "description": "responding to the research question",
-      "hasPart": [
+      "version": "1.0.0",
+      "datePublished": "2023-04-26",
+      "url": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/tree/main/vaccine_effectiveness_analytical_pipeline",
+      "description": "Reproducable analytical pipeline to apply causal inference techniques using distributed observational data",
+      "author": [
         {
-          "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html"
+          "@id": "https://orcid.org/0000-0002-6285-8120"
         },
         {
-          "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd"
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
         }
       ],
-      "name": "Causal model"
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/docker/"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/documentation/BY-COVID-WP5-BaselineUseCase-VE-documentation-analytical-pipeline.pdf"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/input/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/Dockerfile"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/analytical-pipeline.Rproj"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/environment.yml"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/install.R"
+        }
+      ],
+      "name": "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline"
     },
     {
-      "@id": "vaccine_effectiveness_common_data_model_specification/",
-      "@type": "Dataset",
+      "@id": "vaccine_effectiveness_causal_model/",
+      "@type": "File",
+      "description": "Causal model responding to the research question, using a Directed Acyclic Graph",
+      "version": "1.1.0",
+      "datePublished": "2023-01-26",
+      "identifier": "https://doi.org/10.5281/zenodo.6913045",
+      "url": "https://zenodo.org/record/7572373",
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
       "contributor": [
         {
           "@id": "https://orcid.org/0000-0002-1145-7829"
@@ -217,7 +295,27 @@
           "@id": "https://orcid.org/0000-0002-9586-7955"
         }
       ],
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd"
+        }
+      ],
+      "name": "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model"
+    },
+    {
+      "@id": "vaccine_effectiveness_common_data_model_specification/",
+      "@type": "Dataset",
+      "version": "1.1.0",
+      "datePublished": "2023-01-26",
+      "identifier": "https://doi.org/10.5281/zenodo.6913045",
+      "url": "https://zenodo.org/record/7572373",
       "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
         {
           "@id": "https://orcid.org/0000-0001-7316-6990"
         },
@@ -225,16 +323,26 @@
           "@id": "https://orcid.org/0000-0002-4409-0664"
         },
         {
-          "@id": "https://orcid.org/0000-0002-0961-3298"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-6285-8120"
-        },
-        {
           "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
         }
       ],
-      "datePublished": "2022-07-27",
+      "contributor": [
+        {
+          "@id": "https://orcid.org/0000-0002-1145-7829"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-7873-6152"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0493-4711"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-9586-7955"
+        }
+      ],
       "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
       "distribution": {
         "@id": "vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
@@ -399,8 +507,106 @@
       ]
     },
     {
+      "@id": "vaccine_effectiveness_data_management_plan/",
+      "@type": "Dataset",
+      "description": "Data management plan",
+      "version": "0.0.1",
+      "datePublished": "2023-02-09",
+      "identifier": "https://doi.org/10.5281/zenodo.7625783",
+      "url": "https://zenodo.org/record/7625784",
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-9586-7955"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_data_management_plan/DMPBeyond_COVID0.json"
+        },
+        {
+          "@id": "vaccine_effectiveness_data_management_plan/DMP_Beyond COVID_0.pdf"
+        },
+        {
+          "@id": "vaccine_effectiveness_synthetic_dataset/"
+        },
+        {
+          "@id": "vaccine_effectiveness_causal_model/"
+        },
+        {
+          "@id": "vaccine_effectiveness_common_data_model_specification/"
+        },
+        {
+          "@id": "vaccine_effectiveness_study_protocol/"
+        }
+      ],
+      "name": "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan"
+    },
+    {
+      "@id": "vaccine_effectiveness_study_protocol/",
+      "@type": "Dataset",
+      "description": "Study protocol",
+      "version": "1.0.3",
+      "datePublished": "2023-04-13",
+      "identifier": "https://doi.org/10.5281/zenodo.7551181",
+      "url": "https://zenodo.org/record/7825979",
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0048-4370"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-9586-7955"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_study_protocol/BY-COVID_WP5.2_baseline-use-case_study-protocol.pdf"
+        },
+        {
+          "@id": "vaccine_effectiveness_synthetic_dataset/"
+        },
+        {
+          "@id": "vaccine_effectiveness_causal_model/"
+        },
+        {
+          "@id": "vaccine_effectiveness_common_data_model_specification/"
+        }
+      ],
+      "name": "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol"
+    },
+    {
       "@id": "vaccine_effectiveness_synthetic_dataset/",
       "@type": "Dataset",
+      "version": "1.1.0",
+      "datePublished": "2023-01-26",
+      "identifier": "https://doi.org/10.5281/zenodo.6913045",
+      "url": "https://zenodo.org/record/7572373",
       "description": "following the causal model",
       "hasPart": [
         {
@@ -425,9 +631,14 @@
         "@id": "./"
       },
       "encodingFormat": "text/markdown",
-      "author": {
-        "@id": "https://orcid.org/0000-0002-4409-0664"
-      }
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        }
+      ]
     },
     {
       "@id": "https://spdx.org/licenses/CC-BY-4.0",
@@ -584,28 +795,33 @@
       }
     },
     {
-      "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html",
-      "@type": "File",
-      "description": "Interactive report showcasing the structural causal model (DAG) to answer the research question",
-      "encodingFormat": "text/html",
-      "name": "COVID-19 vaccine effectiveness causal model v.1.1.0 (HTML)"
+      "@id": "https://orcid.org/0000-0002-9586-7955",
+      "@type": "Person",
+      "affiliation": {
+        "@id": "https://ror.org/05p0enq35"
+      },
+      "name": "Martínez-Lizaga, Natalia"
     },
     {
-      "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd",
+      "@id": "vaccine_effectiveness_data_management_plan/DMPBeyond_COVID0.json",
       "@type": "File",
-      "description": "Quarto RMarkdown script to produce the structural causal model",
-      "encodingFormat": [
-        "text/markdown",
-        {
-          "@id": "https://quarto.org/docs/authoring/markdown-basics.html"
-        }
-      ],
-      "name": "COVID-19 vaccine effectiveness causal model v.1.1.0 (QMD)"
+      "description": "SARS-CoV-2 vaccine effectiveness assessment data management plan (machine-readable)",
+      "encodingFormat": "text/json",
+      "name": "Data management plan v.0.0.1 (JSON)"
     },
     {
-      "@id": "https://quarto.org/docs/authoring/markdown-basics.html",
-      "@type": "WebPage",
-      "name": "Quarto Markdown"
+      "@id": "vaccine_effectiveness_data_management_plan/DMP_Beyond COVID_0.pdf",
+      "@type": "File",
+      "description": "SARS-CoV-2 vaccine effectiveness assessment data management plan (human-readable)",
+      "encodingFormat": "text/pdf",
+      "name": "Data management plan v.0.0.1 (PDF)"
+    },
+    {
+      "@id": "vaccine_effectiveness_study_protocol/BY-COVID_WP5.2_baseline-use-case_study-protocol.pdf",
+      "@type": "File",
+      "description": "SARS-CoV-2 vaccine effectiveness assessment study protocol",
+      "encodingFormat": "text/pdf",
+      "name": "Study protocol v.1.0.3 (PDF)"
     },
     {
       "@id": "https://orcid.org/0000-0002-1145-7829",
@@ -632,12 +848,28 @@
       "name": "Alexander Degelsegger-Marquez"
     },
     {
-      "@id": "https://orcid.org/0000-0002-9586-7955",
-      "@type": "Person",
-      "affiliation": {
-        "@id": "https://ror.org/05p0enq35"
-      },
-      "name": "Martínez-Lizaga, Natalia"
+      "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html",
+      "@type": "File",
+      "description": "Interactive report showcasing the structural causal model (DAG) to answer the research question",
+      "encodingFormat": "text/html",
+      "name": "COVID-19 vaccine effectiveness causal model v.1.1.0 (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd",
+      "@type": "File",
+      "description": "Quarto RMarkdown script to produce the structural causal model",
+      "encodingFormat": [
+        "text/markdown",
+        {
+          "@id": "https://quarto.org/docs/authoring/markdown-basics.html"
+        }
+      ],
+      "name": "COVID-19 vaccine effectiveness causal model v.1.1.0 (QMD)"
+    },
+    {
+      "@id": "https://quarto.org/docs/authoring/markdown-basics.html",
+      "@type": "WebPage",
+      "name": "Quarto Markdown"
     },
     {
       "@id": "vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv",
@@ -698,7 +930,7 @@
       "@type": "File",
       "description": "Human-readable version (Excel)",
       "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "name": "vaccine effectiveness data model specification (XLXS)"
+      "name": "vaccine effectiveness data model specification (XLXS)"
     },
     {
       "@id": "_:b0",
@@ -882,7 +1114,7 @@
     {
       "@id": "_:b29",
       "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ",
+      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ",
       "name": "obesity_bl"
     },
     {
@@ -998,6 +1230,12 @@
       "name": "dataspice CSV template"
     },
     {
+      "@id": "vaccine_effectiveness_analytical_pipeline/input/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "name": "Synthetic dataset with 10k entries (CSV)"
+    },
+    {
       "@id": "vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html",
       "@type": "File",
       "about": {
@@ -1005,7 +1243,7 @@
       },
       "description": "Human-readable version (interactive report)",
       "encodingFormat": "text/html",
-      "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)"
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)"
     },
     {
       "@id": "vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.html",
@@ -1078,6 +1316,196 @@
       "@type": "File",
       "encodingFormat": "application/json",
       "name": "pandas-profiling config"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/documentation/BY-COVID-WP5-BaselineUseCase-VE-documentation-analytical-pipeline.pdf",
+      "@type": "File",
+      "encodingFormat": "text/pdf",
+      "name": "Documentation analytical pipeline (PDF)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/",
+      "@type": "Dataset",
+      "description": "Analytical pipeline output using synthetic data with 10k entries",
+      "name": "Output analytical pipeline",
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/1_DQA.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/2_validation.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/3_imputation.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/4_matching.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/5_descriptive.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/6_survival-analysis.html"
+        }
+      ]
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/scripts/",
+      "@type": "Dataset",
+      "description": "Consecutive scripts of the analytical pipeline",
+      "name": "Scripts analytical pipeline",
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/0_global.R"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/1_DQA.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/2_validation.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/3_imputation.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/4_matching.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/4_matching.R"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/5_descriptives.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/6_survival-analysis.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.html"
+        }
+      ]
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/Dockerfile",
+      "@type": "File",
+      "encodingFormat": "",
+      "name": "Dockerfile"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/analytical-pipeline.Rproj",
+      "@type": "File",
+      "encodingFormat": "text/rproj",
+      "name": "Analytical pipeline R project file (RPROJ)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/environment.yml",
+      "@type": "File",
+      "encodingFormat": "text/yml",
+      "name": ".yml file listing dependencies (YML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/install.R",
+      "@type": "File",
+      "encodingFormat": "text/r",
+      "name": "Installation required R packages (R)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/1_DQA.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report with dataset statistics, missing data profiles, potential alerts, and detailed per-variable information (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/2_validation.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report summarizing compliance with the logic validation rules (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/3_imputation.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report summarizing used imputation methods and number of imputed values (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/4_matching.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report to assess matching balance in the obtained study population (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/5_descriptive.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report including the results of survival analysis in the unmatched study population, a table with baseline characteristics of the matched study population and CONSORT diagram (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/6_survival-analysis.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report including the analytic results for the meta-analysis (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/0_global.R",
+      "@type": "File",
+      "encodingFormat": "text/r",
+      "name": "Upload the csv file and create a DuckDB database file (R)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/1_DQA.QMD.R",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Exploration and Data Quality Assessment (DQA) of the original data mapped at each Data Hub (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/2_validation.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Validation (applying logic validation rules) of the original data mapped at each Data Hub (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/3_imputation.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Imputation of missing values in the original data mapped at each Data Hub (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/4_matching.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Iterative matching of the exposed and unexposed, and assessing covariate balance in matched population (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/4_matching.R.R",
+      "@type": "File",
+      "encodingFormat": "text/r",
+      "name": "Iterative matching of the exposed and unexposed (R)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/5_descriptives.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Descriptive analysis of the matched and unmatched study population (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/6_survival-analysis.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Survival analysis of the matched study population (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/analytical-pipeline.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Quarto script sourcing consecutive scripts of the analytical pipeline (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/analytical-pipeline.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Quarto document providing a log of the individual code block executions (HTML)"
     },
     {
       "@id": "http://edamontology.org/format_3752",
@@ -1174,17 +1602,17 @@ table.table {
   <nav class="navbar">
 
     <ul class="nav navbar-nav" >
-        <li ><a href="#"><span class="glyphicon glyphicon-home dataset_name">&nbsp;BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</span></a></li>
+        <li ><a href="#"><span class="glyphicon glyphicon-home dataset_name">&nbsp;BY-COVID WP5 T5.2 Baseline Use Case</span></a></li>
     </ul>
 
   </nav>
 <div class="container">
 <div class="jumbotron">
 <h4 class="citation"></h3>
-<h3 class="item_name">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</h4>
+<h3 class="item_name">BY-COVID WP5 T5.2 Baseline Use Case</h4>
 
 
-<a href="./ro-crate-metadata.json">⬇️🏷️ Download all the metadata for <span class='name'>BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</span> in JSON-LD format</a>
+<a href="./ro-crate-metadata.json">⬇️🏷️ Download all the metadata for <span class='name'>BY-COVID WP5 T5.2 Baseline Use Case</span> in JSON-LD format</a>
 
 
 <div id="check"></div>
@@ -1197,7 +1625,7 @@ table.table {
 <div id="summary">
 <div class='all-meta'>
            <div>
-            <h3> BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</h3>
+            <h3> BY-COVID WP5 T5.2 Baseline Use Case</h3>
             
             
             
@@ -1210,13 +1638,13 @@ table.table {
             <td style='text-align:left'><span>./</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
-            <td style='text-align:left'><span>BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</span></td>
+            <td style='text-align:left'><span>BY-COVID WP5 T5.2 Baseline Use Case</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">@type</th>
             <td style='text-align:left'><span>Dataset</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
-            <td style='text-align:left'><span>This publication corresponds to the Common Data Model (CDM) specification of the Baseline Use Case proposed in T.5.2 (WP5) in the BY-COVID project on “COVID-19 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection.”</span></td>
+            <td style='text-align:left'><span>This publication corresponds to the Research Objects (RO) of the Baseline Use Case proposed in T.5.2 (WP5) in the BY-COVID project on “COVID-19 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection”.</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">funder<span>&nbsp;</span><a href="http://schema.org/funder">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//ror.org/00k4n6c32">European Commission</a></td>
@@ -1245,9 +1673,15 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccine_effectiveness_causal_model/">Causal model</a></li>
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_causal_model/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</a></li>
                         
                         <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
                         
                         <li><a href="#vaccine_effectiveness_synthetic_dataset/">Common data model specification</a></li>
                         
@@ -1259,13 +1693,17 @@ table.table {
             </tr><tr>
             <th style="text-align:left;" class="prop">isBasedOn<span>&nbsp;</span><a href="http://schema.org/isBasedOn">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="https://doi.org/10.5281/zenodo.7572373">https://doi.org/10.5281/zenodo.7572373</a></li>
-                        
                         <li><a href="https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/releases/tag/1.0.1">https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/releases/tag/1.0.1</a></li>
+                        
+                        <li><a href="https://doi.org/10.5281/zenodo.6913045">https://doi.org/10.5281/zenodo.6913045</a></li>
+                        
+                        <li><a href="https://doi.org/10.5281/zenodo.7551181">https://doi.org/10.5281/zenodo.7551181</a></li>
+                        
+                        <li><a href="https://doi.org/10.5281/zenodo.7625783">https://doi.org/10.5281/zenodo.7625783</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">keywords<span>&nbsp;</span><a href="http://schema.org/keywords">[?]</a></th>
-            <td style='text-align:left'><span>COVID-19, vaccines, comparative effective ness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data</span></td>
+            <td style='text-align:left'><span>COVID-19, vaccines, comparative effectiveness, causal inference, international comparison, SARS-CoV-2, common data model, directed acyclic graph, synthetic data</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">license<span>&nbsp;</span><a href="http://schema.org/license">[?]</a></th>
             <td style='text-align:left'><a href="#https%3A//spdx.org/licenses/CC-BY-4.0">Creative Commons Attribution 4.0 International</a></td>
@@ -1295,23 +1733,23 @@ table.table {
             <td style='text-align:left'><a href="https://by-covid.github.io/BY-COVID_WP5_T5.2_baseline-use-case/">https://by-covid.github.io/BY-COVID_WP5_T5.2_baseline-use-case/</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">version<span>&nbsp;</span><a href="http://schema.org/version">[?]</a></th>
-            <td style='text-align:left'><span>1.1.0</span></td>
+            <td style='text-align:left'><span>1.2.0</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">assesses<span>&nbsp;</span><a href="http://schema.org/assesses">[?]</a></th>
             <td style='text-align:left'><span>Research Question: How effective have the SARS-CoV-2 vaccination programmes been in preventing SARS-CoV-2 infections?</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">material<span>&nbsp;</span><a href="http://schema.org/material">[?]</a></th>
-            <td style='text-align:left'><span>Cohort definition: All people, eligible to be vaccinated (from 5 to 115 years old, included) or with, at least, one dose of a SARS-CoV-2 vaccine (any of the available brands) having or not a previous SARS-CoV-2 infection.</span></td>
+            <td style='text-align:left'><span>Cohort definition: All individuals (from 5 to 115 years old, included) vaccinated with at least one dose of the SARS-CoV-2 vaccine (any of the available brands) and all individuals eligible to be vaccinated with a documented positive diagnosis (irrespective of the type of test) for a SARS-CoV-2 infection during the data extraction period.</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">materialExtent<span>&nbsp;</span><a href="http://schema.org/materialExtent">[?]</a></th>
             <td style='text-align:left'><span>Inclusion criteria: 
- All people vaccinated with at least one dose of the COVID-19 vaccine (any of the available brands) in an area of residence. Any person eligible to be vaccinated (from 5 to 115 years old, included) with a positive diagnosis (irrespective of the type of test) for SARS-CoV-2 infection (COVID-19) during the period of study.  
+ All people vaccinated with at least one dose of the COVID-19 vaccine (any of the available brands) in an area of residence. Any person eligible to be vaccinated (from 5 to 115 years old, included) with a positive diagnosis (irrespective of the type of test) for SARS-CoV-2 infection (COVID-19) during the period of data extraction.  
 
  Exclusion criteria: 
  People not eligible for the vaccine (from 0 to 4 years old, included)</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">publishingPrinciples<span>&nbsp;</span><a href="http://schema.org/publishingPrinciples">[?]</a></th>
-            <td style='text-align:left'><span>Study Design: An observational retrospective longitudinal study to assess the effectiveness of the COVID-19 vaccine(s) in preventing SARS-CoV-2 infections using routinely collected social, health and care data from several countries.
+            <td style='text-align:left'><span>Study Design: An observational retrospective longitudinal study to assess the effectiveness of the SARS-CoV-2 vaccines in preventing SARS-CoV-2 infections using routinely collected social, health and care data from several countries.
 
 A causal model was established using Directed Acyclic Graphs (DAGs) to map domain knowledge, theories and assumptions about the causal relationship between exposure and outcome. </span></td>
             </tr><tr>
@@ -1319,7 +1757,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Study Period: From the date of the first documented SARS-CoV-2 infection in each country to the most recent date in which data is available at the time of analysis. Roughly from 01-03-2020 to 30-06-2022, depending on the country.</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">usageInfo<span>&nbsp;</span><a href="http://schema.org/usageInfo">[?]</a></th>
-            <td style='text-align:left'><span>The scripts (software) accompanying the data model specification are offered "as-is", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit.</span></td>
+            <td style='text-align:left'><span>The scripts (software) included in the publication are offered "as-is", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit.</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">releaseNotes<span>&nbsp;</span><a href="http://schema.org/releaseNotes">[?]</a></th>
             <td style='text-align:left'><span>- Updated Causal model to eliminate the consideration of 'vaccination_schedule_cd' as a mediator
@@ -1364,7 +1802,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">funder<span>&nbsp;</span><a href="http://schema.org/funder">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></li>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
                         
                         <li><a href="#https%3A//doi.org/10.3030/101046203">HORIZON-INFRA-2021-EMERGENCY-01 101046203</a></li>
                         </ul></td>
@@ -1400,10 +1838,22 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>festupinnan.iacs@aragon.es</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_causal_model/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -1436,10 +1886,24 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Nina.VanGoethem@sciensano.be</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
+                        
+                        <li><a href="#README.md">README.md</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_causal_model/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -1473,13 +1937,23 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></li>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
                         
                         <li><a href="#README.md">README.md</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_causal_model/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -1512,10 +1986,20 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>jgonzalezga.iacs@aragon.es</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_causal_model/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -1548,10 +2032,22 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>ebernal.iacs@aragon.es</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_causal_model/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -1581,7 +2077,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>0.1</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">conformsTo<span>&nbsp;</span><a href="http://purl.org/dc/terms/conformsTo">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1589,7 +2085,80 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
         </div>
         <hr/><br/><br/>
            <div>
-            <h3> Causal model</h3>
+            <h3> BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline</h3>
+            
+            
+            
+            
+        <div id="vaccine_effectiveness_analytical_pipeline/">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>vaccine_effectiveness_analytical_pipeline/</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>Dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>Reproducable analytical pipeline to apply causal inference techniques using distributed observational data</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2023-04-26</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/0000-0002-6285-8120">Francisco Estupiñán-Romero</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0001-7316-6990">Nina Van Goethem</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-8783-5478">Javier González-Galindo</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-0961-3298">Enrique Bernal-Delgado</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">version<span>&nbsp;</span><a href="http://schema.org/version">[?]</a></th>
+            <td style='text-align:left'><span>1.0.0</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">url<span>&nbsp;</span><a href="http://schema.org/url">[?]</a></th>
+            <td style='text-align:left'><a href="https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/tree/main/vaccine_effectiveness_analytical_pipeline">https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/tree/main/vaccine_effectiveness_analytical_pipeline</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li>vaccine_effectiveness_analytical_pipeline/docker/</li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/documentation/BY-COVID-WP5-BaselineUseCase-VE-documentation-analytical-pipeline.pdf">Documentation analytical pipeline (PDF)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/input/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv">Synthetic dataset with 10k entries (CSV)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/output/">Output analytical pipeline</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/scripts/">Scripts analytical pipeline</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/Dockerfile">Dockerfile</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/analytical-pipeline.Rproj">Analytical pipeline R project file (RPROJ)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/environment.yml">.yml file listing dependencies (YML)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_analytical_pipeline/install.R">Installation required R packages (R)</a></li>
+                        </ul></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3><a href="vaccine_effectiveness_causal_model/">⬇️ Download: </a> BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</h3>
             
             
             
@@ -1602,13 +2171,49 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>vaccine_effectiveness_causal_model/</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
-            <td style='text-align:left'><span>Causal model</span></td>
+            <td style='text-align:left'><span>BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">@type</th>
-            <td style='text-align:left'><span>Dataset</span></td>
+            <td style='text-align:left'><span>File</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
-            <td style='text-align:left'><span>responding to the research question</span></td>
+            <td style='text-align:left'><span>Causal model responding to the research question, using a Directed Acyclic Graph</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2023-01-26</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">version<span>&nbsp;</span><a href="http://schema.org/version">[?]</a></th>
+            <td style='text-align:left'><span>1.1.0</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">identifier<span>&nbsp;</span><a href="http://schema.org/identifier">[?]</a></th>
+            <td style='text-align:left'><a href="https://doi.org/10.5281/zenodo.6913045">https://doi.org/10.5281/zenodo.6913045</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">url<span>&nbsp;</span><a href="http://schema.org/url">[?]</a></th>
+            <td style='text-align:left'><a href="https://zenodo.org/record/7572373">https://zenodo.org/record/7572373</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/0000-0002-6285-8120">Francisco Estupiñán-Romero</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0001-7316-6990">Nina Van Goethem</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-8783-5478">Javier González-Galindo</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-0961-3298">Enrique Bernal-Delgado</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">contributor<span>&nbsp;</span><a href="http://schema.org/contributor">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/0000-0002-1145-7829">Simon Saldner</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-7873-6152">Lorenz Dolanski-Aghamanoukjan</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-0493-4711">Alexander Degelsegger-Marquez</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-9586-7955">Martínez-Lizaga, Natalia</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><ul>
@@ -1618,7 +2223,13 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
                         </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -1648,7 +2259,29 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
-            <td style='text-align:left'><span>2022-07-27</span></td>
+            <td style='text-align:left'><span>2023-01-26</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">version<span>&nbsp;</span><a href="http://schema.org/version">[?]</a></th>
+            <td style='text-align:left'><span>1.1.0</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">identifier<span>&nbsp;</span><a href="http://schema.org/identifier">[?]</a></th>
+            <td style='text-align:left'><a href="https://doi.org/10.5281/zenodo.6913045">https://doi.org/10.5281/zenodo.6913045</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">url<span>&nbsp;</span><a href="http://schema.org/url">[?]</a></th>
+            <td style='text-align:left'><a href="https://zenodo.org/record/7572373">https://zenodo.org/record/7572373</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/0000-0002-6285-8120">Francisco Estupiñán-Romero</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0001-7316-6990">Nina Van Goethem</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-8783-5478">Javier González-Galindo</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-0961-3298">Enrique Bernal-Delgado</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">contributor<span>&nbsp;</span><a href="http://schema.org/contributor">[?]</a></th>
             <td style='text-align:left'><ul>
@@ -1659,19 +2292,6 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
                         <li><a href="#https%3A//orcid.org/0000-0002-0493-4711">Alexander Degelsegger-Marquez</a></li>
                         
                         <li><a href="#https%3A//orcid.org/0000-0002-9586-7955">Martínez-Lizaga, Natalia</a></li>
-                        </ul></td>
-            </tr><tr>
-            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
-            <td style='text-align:left'><ul>
-                        <li><a href="#https%3A//orcid.org/0000-0001-7316-6990">Nina Van Goethem</a></li>
-                        
-                        <li><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></li>
-                        
-                        <li><a href="#https%3A//orcid.org/0000-0002-0961-3298">Enrique Bernal-Delgado</a></li>
-                        
-                        <li><a href="#https%3A//orcid.org/0000-0002-6285-8120">Francisco Estupiñán-Romero</a></li>
-                        
-                        <li><a href="#https%3A//orcid.org/0000-0002-8783-5478">Javier González-Galindo</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">distribution<span>&nbsp;</span><a href="http://schema.org/distribution">[?]</a></th>
@@ -1685,7 +2305,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
                         
                         <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
                         
-                        <li><a href="#vaccine_effectiveness_common_data_model_specification/vaccine_effectiveness_data_model_specification_v.1.1.0.xlsx">vaccine effectiveness data model specification (XLXS)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/vaccine_effectiveness_data_model_specification_v.1.1.0.xlsx">vaccine effectiveness data model specification (XLXS)</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">keywords<span>&nbsp;</span><a href="http://schema.org/keywords">[?]</a></th>
@@ -1801,7 +2421,13 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
                         </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
             <td style='text-align:left'><ul>
@@ -1809,11 +2435,155 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
                         
                         <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/">Documentation for Common data model specification</a></li>
                         
-                        <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
                         </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">mainEntity<span>&nbsp;</span><a href="http://schema.org/mainEntity">[?]</a></th>
-            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></td>
+            <td style='text-align:left'><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</h3>
+            
+            
+            
+            
+        <div id="vaccine_effectiveness_data_management_plan/">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>vaccine_effectiveness_data_management_plan/</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>Dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>Data management plan</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2023-02-09</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">version<span>&nbsp;</span><a href="http://schema.org/version">[?]</a></th>
+            <td style='text-align:left'><span>0.0.1</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">identifier<span>&nbsp;</span><a href="http://schema.org/identifier">[?]</a></th>
+            <td style='text-align:left'><a href="https://doi.org/10.5281/zenodo.7625783">https://doi.org/10.5281/zenodo.7625783</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">url<span>&nbsp;</span><a href="http://schema.org/url">[?]</a></th>
+            <td style='text-align:left'><a href="https://zenodo.org/record/7625784">https://zenodo.org/record/7625784</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/0000-0002-9586-7955">Martínez-Lizaga, Natalia</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-6285-8120">Francisco Estupiñán-Romero</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0001-7316-6990">Nina Van Goethem</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-0961-3298">Enrique Bernal-Delgado</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccine_effectiveness_data_management_plan/DMPBeyond_COVID0.json">Data management plan v.0.0.1 (JSON)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_data_management_plan/DMP_Beyond%20COVID_0.pdf">Data management plan v.0.0.1 (PDF)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/">Common data model specification</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_causal_model/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        </ul></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
+            </tr></tbody>
+            </table>
+        </div>
+
+        </div>
+        <hr/><br/><br/>
+           <div>
+            <h3> BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</h3>
+            
+            
+            
+            
+        <div id="vaccine_effectiveness_study_protocol/">
+            
+            <table class="table metadata table-striped" >
+                <tbody><tr>
+            <th style="text-align:left;" class="prop">@id</th>
+            <td style='text-align:left'><span>vaccine_effectiveness_study_protocol/</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">name<span>&nbsp;</span><a href="http://schema.org/name">[?]</a></th>
+            <td style='text-align:left'><span>BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">@type</th>
+            <td style='text-align:left'><span>Dataset</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
+            <td style='text-align:left'><span>Study protocol</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2023-04-13</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">version<span>&nbsp;</span><a href="http://schema.org/version">[?]</a></th>
+            <td style='text-align:left'><span>1.0.3</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">identifier<span>&nbsp;</span><a href="http://schema.org/identifier">[?]</a></th>
+            <td style='text-align:left'><a href="https://doi.org/10.5281/zenodo.7551181">https://doi.org/10.5281/zenodo.7551181</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">url<span>&nbsp;</span><a href="http://schema.org/url">[?]</a></th>
+            <td style='text-align:left'><a href="https://zenodo.org/record/7825979">https://zenodo.org/record/7825979</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">creator<span>&nbsp;</span><a href="http://schema.org/creator">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0001-7316-6990">Nina Van Goethem</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-6285-8120">Francisco Estupiñán-Romero</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-8783-5478">Javier González-Galindo</a></li>
+                        
+                        <li><a href="https://orcid.org/0000-0002-0048-4370">https://orcid.org/0000-0002-0048-4370</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-9586-7955">Martínez-Lizaga, Natalia</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-0961-3298">Enrique Bernal-Delgado</a></li>
+                        </ul></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#vaccine_effectiveness_study_protocol/BY-COVID_WP5.2_baseline-use-case_study-protocol.pdf">Study protocol v.1.0.3 (PDF)</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_synthetic_dataset/">Common data model specification</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_causal_model/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/">COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)</a></li>
+                        </ul></td>
+            </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
+            <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -1842,6 +2612,18 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <th style="text-align:left;" class="prop">description<span>&nbsp;</span><a href="http://schema.org/description">[?]</a></th>
             <td style='text-align:left'><span>following the causal model</span></td>
             </tr><tr>
+            <th style="text-align:left;" class="prop">datePublished<span>&nbsp;</span><a href="http://schema.org/datePublished">[?]</a></th>
+            <td style='text-align:left'><span>2023-01-26</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">version<span>&nbsp;</span><a href="http://schema.org/version">[?]</a></th>
+            <td style='text-align:left'><span>1.1.0</span></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">identifier<span>&nbsp;</span><a href="http://schema.org/identifier">[?]</a></th>
+            <td style='text-align:left'><a href="https://doi.org/10.5281/zenodo.6913045">https://doi.org/10.5281/zenodo.6913045</a></td>
+            </tr><tr>
+            <th style="text-align:left;" class="prop">url<span>&nbsp;</span><a href="http://schema.org/url">[?]</a></th>
+            <td style='text-align:left'><a href="https://zenodo.org/record/7572373">https://zenodo.org/record/7572373</a></td>
+            </tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
             <td style='text-align:left'><ul>
                         <li>./vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb</li>
@@ -1854,7 +2636,13 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
                         </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_data_management_plan/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan</a></li>
+                        
+                        <li><a href="#vaccine_effectiveness_study_protocol/">BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol</a></li>
+                        </ul></td>
             </tr></tbody>
             </table>
         </div>
@@ -1878,16 +2666,20 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>File</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">author<span>&nbsp;</span><a href="http://schema.org/author">[?]</a></th>
-            <td style='text-align:left'><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></td>
+            <td style='text-align:left'><ul>
+                        <li><a href="#https%3A//orcid.org/0000-0001-7316-6990">Nina Van Goethem</a></li>
+                        
+                        <li><a href="#https%3A//orcid.org/0000-0002-4409-0664">Marjan Meurisse</a></li>
+                        </ul></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">encodingFormat<span>&nbsp;</span><a href="http://schema.org/encodingFormat">[?]</a></th>
             <td style='text-align:left'><span>text/markdown</span></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">about<span>&nbsp;</span><a href="http://schema.org/about">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">hasPart<span>&nbsp;</span><a href="http://schema.org/hasPart">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
             <td style='text-align:left'><a href="#%23metadata-creation">RO-Crate metadata created based on README and dataspice JSON-LD</a></td>
@@ -1896,7 +2688,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
         </div>
 
         </div>
-        <hr/><br/><br/><hr/><br/><br/><hr/><br/><br/>
+        <hr/><br/><br/><hr/><br/><br/><hr/><br/><br/><hr/><br/><br/><hr/><br/><br/>
            <div>
             <h3><a href="https://spdx.org/licenses/CC-BY-4.0">Go to: </a> Creative Commons Attribution 4.0 International</h3>
             
@@ -1923,7 +2715,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">license<span>&nbsp;</span><a href="http://schema.org/license">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1959,7 +2751,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#https%3A//doi.org/10.3030/101046203">HORIZON-INFRA-2021-EMERGENCY-01 101046203</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">publisher<span>&nbsp;</span><a href="http://schema.org/publisher">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -1993,7 +2785,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">funding<span>&nbsp;</span><a href="http://schema.org/funding">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></li>
+                        <li><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></li>
                         
                         <li><a href="#https%3A//by-covid.eu/">BY-COVID</a></li>
                         </ul></td>
@@ -2035,7 +2827,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html">COVID-19 vaccine effectiveness causal model v.1.1.0 (HTML)</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -2085,7 +2877,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><span>2022-05-27T09:52:29.847284</span></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -2132,13 +2924,13 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">result<span>&nbsp;</span><a href="http://schema.org/result">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
                         
-                        <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/docs/vaccine_effectiveness_synthetic_dataset_spice.html">COVID-19 vaccine effectiveness data model specification dataspice (HTML)</a></li>
                         </ul></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -2177,7 +2969,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv">Synthetic dataset with 650k entries</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -2213,7 +3005,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'>vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_pop_10k_v.1.1.0.csv</td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
@@ -2250,7 +3042,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             </tr><tr>
             <th style="text-align:left;" class="prop">object<span>&nbsp;</span><a href="http://schema.org/object">[?]</a></th>
             <td style='text-align:left'><ul>
-                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
+                        <li><a href="#vaccine_effectiveness_common_data_model_specification/data/metadata/dataspice.json">COVID-19 vaccine effectiveness data model specification dataspice (JSON)</a></li>
                         
                         <li><a href="#README.md">README.md</a></li>
                         </ul></td>
@@ -2259,7 +3051,7 @@ A causal model was established using Directed Acyclic Graphs (DAGs) to map dom
             <td style='text-align:left'><a href="#ro-crate-metadata.json">ro-crate-metadata.json</a></td>
             </tr><tr><th colspan="2" style="text-align:center">Items that reference this one</th><tr><tr>
             <th style="text-align:left;" class="prop">mentions<span>&nbsp;</span><a href="http://schema.org/mentions">[?]</a></th>
-            <td style='text-align:left'><a href="#./">BY-COVID - WP5 - Baseline Use Case: COVID-19 vaccine effectiveness assessment - Common Data Model Specification</a></td>
+            <td style='text-align:left'><a href="#./">BY-COVID WP5 T5.2 Baseline Use Case</a></td>
             </tr></tbody>
             </table>
         </div>
