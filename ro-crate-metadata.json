@@ -71,7 +71,7 @@
       ],
       "identifier": "https://doi.org/10.5281/zenodo.6913045",
       "isBasedOn": [
-        { "@id": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/releases/tag/1.0.1" }
+        { "@id": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/releases/tag/1.0.1" },
         { "@id": "https://doi.org/10.5281/zenodo.6913045" },
         { "@id": "https://doi.org/10.5281/zenodo.7551181" },
         { "@id": "https://doi.org/10.5281/zenodo.7625783" }
@@ -127,14 +127,172 @@
         "@id": "./"
       },
       "encodingFormat": "text/markdown",
-      "author": {
-        "@id": "https://orcid.org/0000-0002-4409-0664"
-      }
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        }
+      ]
+    },
+    {
+      "@id": "vaccine_effectiveness_data_management_plan/",
+      "@type": "Dataset",
+      "description": "Data management plan",
+      "version": "0.0.1",
+      "datePublished": "2023-02-09",
+      "identifier": "https://doi.org/10.5281/zenodo.7625783",
+      "url":"https://zenodo.org/record/7625784",
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-9586-7955"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_data_management_plan/DMPBeyond_COVID0.json"
+        },
+        {
+          "@id": "vaccine_effectiveness_data_management_plan/DMP_Beyond COVID_0.pdf"
+        },
+        {
+          "@id": "vaccine_effectiveness_synthetic_dataset/"
+        },
+        {
+          "@id": "vaccine_effectiveness_causal_model/"
+        },
+        {
+          "@id": "vaccine_effectiveness_common_data_model_specification/"
+        },
+        {
+          "@id": "vaccine_effectiveness_study_protocol/"
+        }
+      ],
+      "name": "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Data Management Plan"
+    },
+    {
+      "@id": "vaccine_effectiveness_data_management_plan/DMPBeyond_COVID0.json",
+      "@type": "File",
+      "description": "SARS-CoV-2 vaccine effectiveness assessment data management plan (machine-readable)",
+      "encodingFormat": "text/json",
+      "name": "Data management plan v.0.0.1 (JSON)"
+    },
+    {
+      "@id": "vaccine_effectiveness_data_management_plan/DMP_Beyond COVID_0.pdf",
+      "@type": "File",
+      "description": "SARS-CoV-2 vaccine effectiveness assessment data management plan (human-readable)",
+      "encodingFormat": "text/pdf",
+      "name": "Data management plan v.0.0.1 (PDF)"
+    },
+    {
+      "@id": "vaccine_effectiveness_study_protocol/",
+      "@type": "Dataset",
+      "description": "Study protocol",
+      "version": "1.0.3",
+      "datePublished": "2023-04-13",
+      "identifier": "https://doi.org/10.5281/zenodo.7551181",
+      "url":"https://zenodo.org/record/7825979",
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0048-4370"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-9586-7955"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_study_protocol/BY-COVID_WP5.2_baseline-use-case_study-protocol.pdf"
+        },
+        {
+          "@id": "vaccine_effectiveness_synthetic_dataset/"
+        },
+        {
+          "@id": "vaccine_effectiveness_causal_model/"
+        },
+        {
+          "@id": "vaccine_effectiveness_common_data_model_specification/"
+        },
+        {
+          "@id": "vaccine_effectiveness_common_data_model_specification/"
+        }
+      ],
+      "name": "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Study protocol"
+    },
+    {
+      "@id": "vaccine_effectiveness_study_protocol/BY-COVID_WP5.2_baseline-use-case_study-protocol.pdf",
+      "@type": "File",
+      "description": "SARS-CoV-2 vaccine effectiveness assessment study protocol",
+      "encodingFormat": "text/pdf",
+      "name": "Study protocol v.1.0.3 (PDF)"
     },
     {
       "@id": "vaccine_effectiveness_causal_model/",
-      "@type": "Dataset",
-      "description": "Causal model responding to the research question, using Directed Acyclic Graphs",
+      "@type": "File",
+      "description": "Causal model responding to the research question, using a Directed Acyclic Graph",
+      "version": "1.1.0",
+      "datePublished": "2023-01-26",
+      "identifier": "https://doi.org/10.5281/zenodo.6913045",
+      "url": "https://zenodo.org/record/7572373",
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
+      "contributor": [
+        {
+          "@id": "https://orcid.org/0000-0002-1145-7829"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-7873-6152"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0493-4711"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-9586-7955"
+        }
+      ],
       "hasPart": [
         {
           "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html"
@@ -143,32 +301,7 @@
           "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd"
         }
       ],
-      "name": "Causal model"
-    },
-    {
-      "@id": "vaccine_effectiveness_data_management_plan/",
-      "@type": "File",
-      "description": "Data management plan",
-      "hasPart": [
-        {
-          "@id": "vaccine_effectiveness_causal_model/DMPBeyond_COVID0.json"
-        },
-        {
-          "@id": "vaccine_effectiveness_causal_model/DMP_Beyond COVID_0.pdf"
-        }
-      ],
-      "name": "Data management plan"
-    },
-    {
-      "@id": "vaccine_effectiveness_study_protocol/",
-      "@type": "File",
-      "description": "Study protocol",
-      "hasPart": [
-        {
-          "@id": "BY-COVID_WP5.2_baseline-use-case_study-protocol.pdf"
-        }
-      ],
-      "name": "Study protocol"
+      "name": "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Causal Model"
     },
     {
       "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.html",
@@ -192,6 +325,27 @@
     {
       "@id": "vaccine_effectiveness_common_data_model_specification/",
       "@type": "Dataset",
+      "version": "1.1.0",
+      "datePublished": "2023-01-26",
+      "identifier": "https://doi.org/10.5281/zenodo.6913045",
+      "url": "https://zenodo.org/record/7572373",
+      "creator": [
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
       "contributor": [
         {
           "@id": "https://orcid.org/0000-0002-1145-7829"
@@ -206,24 +360,6 @@
           "@id": "https://orcid.org/0000-0002-9586-7955"
         }
       ],
-      "creator": [
-        {
-          "@id": "https://orcid.org/0000-0001-7316-6990"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-4409-0664"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-0961-3298"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-6285-8120"
-        },
-        {
-          "@id": "https://orcid.org/0000-0002-8783-5478"
-        }
-      ],
-      "datePublished": "2022-07-27",
       "description": "Synthetic data set to test the causal model proposed by the baseline use case in BY-COVID WP5 assessing the effectiveness of the COVID-19 vaccine(s)",
       "distribution": {
         "@id": "vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
@@ -452,7 +588,7 @@
       "mainEntity": {
         "@id": "vaccine_effectiveness_common_data_model_specification/"
       },
-      "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)"
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (JSON)"
     },
     {
       "@id": "vaccine_effectiveness_common_data_model_specification/data/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv",
@@ -487,18 +623,22 @@
       },
       "description": "Human-readable version (interactive report)",
       "encodingFormat": "text/html",
-      "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)"
+      "name": "COVID-19 vaccine effectiveness data model specification dataspice (HTML)"
     },
     {
       "@id": "vaccine_effectiveness_common_data_model_specification/vaccine_effectiveness_data_model_specification_v.1.1.0.xlsx",
       "@type": "File",
       "description": "Human-readable version (Excel)",
       "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "name": "vaccine effectiveness data model specification (XLXS)"
+      "name": "vaccine effectiveness data model specification (XLXS)"
     },
     {
       "@id": "vaccine_effectiveness_synthetic_dataset/",
       "@type": "Dataset",
+      "version": "1.1.0",
+      "datePublished": "2023-01-26",
+      "identifier": "https://doi.org/10.5281/zenodo.6913045",
+      "url": "https://zenodo.org/record/7572373",
       "description": "following the causal model",
       "hasPart": [
         {
@@ -567,7 +707,263 @@
       "encodingFormat": "text/csv",
       "name": "Synthetic dataset with 650k entries"
     },
-    
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/",
+      "@type": "Dataset",
+      "version": "1.0.0",
+      "datePublished": "2023-04-26",
+      "url": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/tree/main/vaccine_effectiveness_analytical_pipeline",
+      "description": "Reproducable analytical pipeline to apply causal inference techniques using distributed observational data",
+      "author": [
+        {
+          "@id": "https://orcid.org/0000-0002-6285-8120"
+        },
+        {
+          "@id": "https://orcid.org/0000-0001-7316-6990"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-4409-0664"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-8783-5478"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-0961-3298"
+        }
+      ],
+      "hasPart": [
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/docker/"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/documentation/BY-COVID-WP5-BaselineUseCase-VE-documentation-analytical-pipeline.pdf"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/input/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/Dockerfile"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/analytical-pipeline.Rproj"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/environment.yml"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/install.R"
+        }
+      ],
+      "name": "BY-COVID - WP5 - Baseline Use Case: SARS-CoV-2 vaccine effectiveness assessment - Analytical pipeline"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/Dockerfile",
+      "@type": "File",
+      "encodingFormat": "",
+      "name": "Dockerfile"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/analytical-pipeline.Rproj",
+      "@type": "File",
+      "encodingFormat": "text/rproj",
+      "name": "Analytical pipeline R project file (RPROJ)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/environment.yml",
+      "@type": "File",
+      "encodingFormat": "text/yml",
+      "name": ".yml file listing dependencies (YML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/install.R",
+      "@type": "File",
+      "encodingFormat": "text/r",
+      "name": "Installation required R packages (R)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/install.R",
+      "@type": "File",
+      "encodingFormat": "text/r",
+      "name": "Installation required R packages (R)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/documentation/BY-COVID-WP5-BaselineUseCase-VE-documentation-analytical-pipeline.pdf",
+      "@type": "File",
+      "encodingFormat": "text/pdf",
+      "name": "Documentation analytical pipeline (PDF)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/input/vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv",
+      "@type": "File",
+      "encodingFormat": "text/csv",
+      "name": "Synthetic dataset with 10k entries (CSV)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/",
+      "@type": "Dataset",
+      "description": "Analytical pipeline output using synthetic data with 10k entries",
+      "name": "Output analytical pipeline",
+      "hasPart":[
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/1_DQA.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/2_validation.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/3_imputation.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/4_matching.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/5_descriptive.html"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/6_survival-analysis.html"
+        }
+      ]
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/1_DQA.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report with dataset statistics, missing data profiles, potential alerts, and detailed per-variable information (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/2_validation.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report summarizing compliance with the logic validation rules (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/3_imputation.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report summarizing used imputation methods and number of imputed values (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/4_matching.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report to assess matching balance in the obtained study population (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/5_descriptive.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report including the results of survival analysis in the unmatched study population, a table with baseline characteristics of the matched study population and CONSORT diagram (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/6_survival-analysis.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Interactive report including the analytic results for the meta-analysis (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/scripts/",
+      "@type": "Dataset",
+      "description": "Consecutive scripts of the analytical pipeline",
+      "name": "Scripts analytical pipeline",
+      "hasPart":[
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/0_global.R"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/1_DQA.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/2_validation.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/3_imputation.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/4_matching.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/4_matching.R"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/5_descriptives.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/6_survival-analysis.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD"
+        },
+        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.html"
+        }
+      ]
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/0_global.R",
+      "@type": "File",
+      "encodingFormat": "text/r",
+      "name": "Upload the csv file and create a DuckDB database file (R)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/1_DQA.QMD.R",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Exploration and Data Quality Assessment (DQA) of the original data mapped at each Data Hub (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/2_validation.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Validation (applying logic validation rules) of the original data mapped at each Data Hub (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/3_imputation.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Imputation of missing values in the original data mapped at each Data Hub (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/4_matching.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Iterative matching of the exposed and unexposed, and assessing covariate balance in matched population (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/4_matching.R.R",
+      "@type": "File",
+      "encodingFormat": "text/r",
+      "name": "Iterative matching of the exposed and unexposed (R)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/5_descriptives.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Descriptive analysis of the matched and unmatched study population (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/6_survival-analysis.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Survival analysis of the matched study population (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/analytical-pipeline.QMD",
+      "@type": "File",
+      "encodingFormat": "text/qmd",
+      "name": "Quarto script sourcing consecutive scripts of the analytical pipeline (QMD)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/analytical-pipeline.html",
+      "@type": "File",
+      "encodingFormat": "text/html",
+      "name": "Quarto document providing a log of the individual code block executions (HTML)"
+    },
     {
       "@id": "http://edamontology.org/format_3752",
       "@type": "DefinedTerm",
@@ -910,7 +1306,7 @@
     {
       "@id": "_:b29",
       "@type": "PropertyValue",
-      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ",
+      "description": "Does the person included in the cohort suffer from obesity (at  the time of entering the cohort)? ",
       "name": "obesity_bl"
     },
     {
@@ -1166,3 +1562,5 @@
     }
   ]
 }
+
+    
