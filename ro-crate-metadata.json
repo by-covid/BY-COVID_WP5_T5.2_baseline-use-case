@@ -642,7 +642,7 @@
       "description": "following the causal model",
       "hasPart": [
         {
-          "@id": "./vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb"
+          "@id": "vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb"
         },
         {
           "@id": "vaccine_effectiveness_synthetic_dataset/vaccine_effectiveness_synthetic_dataset_eda_v.1.1.0.html"
