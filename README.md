@@ -237,7 +237,7 @@ The development environment included several R packages (from base R or CRAN) an
 -   finalfit (finalfit_1.0.6)
 -   dbplyr (dbplyr_2.3.3)
 
-To run the analytical pipeline with the required dependencies, different methods can be adopted: installing R packages manually, using the renv reproducible environment, running the docker image, or using Conda/Mamba.
+To run the analytical pipeline with the required dependencies, different methods can be adopted: (1) installing R packages manually, (2) using the renv reproducible environment, (3) running the docker image, or (4) using Conda/Mamba.
 
 ### 1. Installing R packages manually
 
