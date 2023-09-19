@@ -239,7 +239,7 @@ The development environment included several R packages (from base R or CRAN) an
 
 To run the analytical pipeline with the required dependencies, different methods can be adopted: installing R packages manually, using the renv reproducible environment, running the docker image, or using Conda/Mamba.
 
-### Installing R packages manually
+### 1. Installing R packages manually
 
 #### Obtain source code
 
@@ -260,7 +260,7 @@ Input data, compliant with the [Common Data Model specification](https://doi.org
 
 The file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports, xlsx file with aggregated output) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
 
-### Using the renv reproducible environment
+### 2. Using the renv reproducible environment
 
 #### Obtain source code
 
@@ -286,7 +286,7 @@ Input data, compliant with the [Common Data Model specification](https://doi.org
 
 The file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports, xlsx file with aggregated output) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
 
-### Using Docker
+### 3. Using Docker
 
 It is possible to run the analytical pipeline as an isolated application using [Docker](https://www.docker.com/).
 
@@ -299,7 +299,7 @@ You may skip the `docker build` command to download the [latest container](https
 
 Note that when using Docker in this way, file permission on your `output` folder may not match up with the container's permissions when writing outputs. (tip: `chmod -R 777 output`)
 
-### Using Conda/Mamba
+### 4. Using Conda/Mamba
 
 Instead of using containers it can be more convenient during development to use a [Conda](https://conda.io/) environment. The below assumes [Miniconda](https://docs.conda.io/en/latest/miniconda.html) have been installed and activated. To install the R packages listed in `environment.yml`, use:
 
