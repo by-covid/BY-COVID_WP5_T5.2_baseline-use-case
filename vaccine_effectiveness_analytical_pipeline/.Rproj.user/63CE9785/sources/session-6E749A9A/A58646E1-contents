@@ -327,7 +327,7 @@ This should populate `output/` content as a series of HTML files.
 
 -   v.1.0.1: Minor adjustments
 
--   v.1.02:
+-   v.1.0.2:
 
     -   A log file (logfile.txt) is created in the ./logs folder (system settings, timing, errors)
 
