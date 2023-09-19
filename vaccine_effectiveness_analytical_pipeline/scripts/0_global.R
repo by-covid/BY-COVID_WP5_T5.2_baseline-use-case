@@ -3,13 +3,13 @@
 ################
 
 # DATE LAST MODIFIED:
-# 20/04/2023
+# 19/09/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - general settings and loading of data'
   author     <- list('Marjan Meurisse','Javier González-Galindo','Francisco Estupiñán-Romero','Santiago Royo-Sierra','Nina Van Goethem','Enrique Bernal-Delgado')
-  version    <- '1.0.0'
+  version    <- '1.0.2'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
   input      <- list('csv upload')
@@ -24,28 +24,78 @@ if(FALSE) {
 x <- c("dplyr","arrow","validate","DataExplorer","DT","purrr","dlookr","survminer",
        "quarto","ggplot2","plotly","scales","formattable","naniar","duckdb","DBI","here",
        "grDevices","visdat","mice","tidyr","shiny","consort","parallel","MatchIt",
-       "survival","table1","tab","forestmodel","gtsummary","survRM2") 
+       "survival","table1","tab","forestmodel","gtsummary","survRM2","knitr","log4r","xlsx","finalfit","dbplyr") 
 lapply(x, require, character.only = TRUE)
 
 ### Description: directories
 input_data_path <- here('input')
 output_data_path <- here('output')
-auxilary_database_name <- 'BY-COVID-WP5-BaselineUseCase-VE.duckdb'
-auxilary_database_path <- file.path(input_data_path, auxilary_database_name)
+auxiliary_database_name <- 'BY-COVID-WP5-BaselineUseCase-VE.duckdb'
+auxiliary_database_path <- file.path(input_data_path, auxiliary_database_name)
+log_path <- here('logs')
+log_file_name <- 'logfile.txt'
+log_file_path <- file.path(log_path, log_file_name)
+logger <- logger("DEBUG", appenders = file_appender(log_file_path, append=TRUE, layout=default_log_layout()))
+logger_simple <- logger("DEBUG", appenders = file_appender(log_file_path, append=TRUE, layout=simple_log_layout()))
 
 ### Description: function f_load_data
 f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
   
   if(create_db_tables) {
     
+    ### Create header log file ###
+    
+    basePkgs <- paste(sessionInfo()$basePkgs, collapse = " ")
+    otherPkgs <- c()
+    for (i in 1:length(sessionInfo()$otherPkgs)) {otherPkgs <- c(otherPkgs,paste0(sessionInfo()$otherPkgs[[i]][["Package"]],"_",sessionInfo()$otherPkgs[[i]][["Version"]]))}
+    otherPkgs <- paste(otherPkgs, collapse = " ")
+    loadedOnly <- c()
+    for (i in 1:length(sessionInfo()$loadedOnly)) {loadedOnly <- c(loadedOnly,paste0(sessionInfo()$loadedOnly[[i]][["Package"]],"_",sessionInfo()$loadedOnly[[i]][["Version"]]))}
+    loadedOnly <- paste(loadedOnly, collapse = " ")
+    info(logger, 
+     paste0("
+========================================================================================
+",
+"Log Path: ", log_file_path, "
+", 
+"Working Directory: ", getwd(), "
+",
+"R version: ", R.version$version.string, "
+",
+"Machine: ", Sys.info()[["nodename"]], " ", Sys.info()[["machine"]],"
+",
+"Operating System: ", sessionInfo()$running, "
+",
+"Base Packages Attached: ", basePkgs, "
+",
+"Other Packages Attached: ", otherPkgs, "
+",
+"Packages loaded via a namespace (and not attached): ", otherPkgs, "
+",
+"========================================================================================
+     "))
+
+    ### Log of 0_global.R ###
+    
+    info(logger, 
+    paste0("
+========================================================================================
+",
+"0_global.R","
+",
+"========================================================================================
+    "))
+    
     ### Create necessary auxiliary tables ###
+    
+    info(logger_simple, "CREATING NECESSARY AUXILIARY TABLES...")
     
     createDB <- function() {
       
       tryCatch(
         {
           ## get database connection
-          con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+          con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
           
           ## drop tables if the script has been executed previously
           dbExecute(con, "DROP TABLE IF EXISTS cohort_data;")
@@ -54,7 +104,7 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
           dbExecute(con, "CREATE OR REPLACE TABLE cohort_data (
                   	person_id VARCHAR,
                   	age_nm TINYINT,
-                  	sex_cd TINYINT,
+                  	sex_cd VARCHAR,
                   	socecon_lvl_cd VARCHAR,
                   	residence_area_cd VARCHAR,
                   	country_cd VARCHAR,
@@ -97,6 +147,21 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
                   	flag_violating_val BOOLEAN DEFAULT FALSE,
                   	flag_listwise_del BOOLEAN DEFAULT FALSE
           )")
+          
+          ## Log info
+          info(logger_simple,paste0("Database path: ",auxiliary_database_path))
+          tables <- dbGetQuery(con, "SHOW tables")
+          info(logger_simple, paste0("Database tables: ", paste(tables[,'name'], collapse = " ")))
+          if("cohort_data" %in% tables[,'name']) {
+            info(logger_simple, "Table cohort_data created")
+          }
+          
+        },
+        error=function(cond) {
+          ## Log info
+          warn(logger, paste0("MY ERROR: 
+                              ", cond))
+          return(stop(cond))
         },
         finally={
           ## disconnect from database
@@ -113,12 +178,17 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
     
     ### Insert data into 'cohort_data' table ###
     
+    info(logger_simple, "INSERT DATA INTO 'COHORT_DATA' TABLE...")
+    
     read_large_dataset <- function() {
       
       tryCatch(
         {
           ## get database connection
-          con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+          con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
+          
+          ## Log info
+          info(logger_simple,paste0("Number of rows in table cohort_data before: ", dbGetQuery(con,"SELECT COUNT() FROM cohort_data ;")[[1]]))
           
           ## open/read dataset 
           
@@ -126,7 +196,7 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
           schema <- arrow::schema(
             field("person_id",string(),nullable=TRUE),
             field("age_nm",int64(),nullable=TRUE),
-            field("sex_cd",int64(),nullable=TRUE),
+            field("sex_cd",string(),nullable=TRUE),
             field("socecon_lvl_cd",string(),nullable=TRUE),
             field("residence_area_cd",string(),nullable=TRUE),
             field("country_cd",string(),nullable=TRUE),
@@ -163,10 +233,9 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
             field("blood_cancer_bl",bool(),nullable=TRUE), 
             field("transplanted_bl",bool(),nullable=TRUE), 
             field("hiv_infection_bl",bool(),nullable=TRUE), 
-            field("primary_immunodeficiency_bl",bool(),nullable=TRUE), 
-            field("immunosuppression_bl",bool(),nullable=TRUE), 
+            field("primary_immunodeficiency_bl",bool(),nullable=TRUE),
+            field("immunosuppression_bl",bool(),nullable=TRUE),
             field("pregnancy_bl",bool(),nullable=TRUE)
-            
           )
           
           data_file <- list.files(paste0(input_data_path,"/"),pattern=".csv")
@@ -176,7 +245,7 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
                                                       false_values = c("False","false","FALSE"),
                                                       null_values=c("","NA","None"),
                                                       strings_can_be_null=TRUE) 
-          ddf <- arrow::read_csv_arrow(file,schema = schema,skip = 1L ,parse_options = parse_options, convert_options = convert_options , as_data_frame = FALSE )
+          ddf <- arrow::read_csv_arrow(file, schema = schema, skip = 1L, parse_options = parse_options, convert_options = convert_options, as_data_frame = FALSE)
           ddf <- ddf %>%
             mutate(flag_violating_val=FALSE,
                    flag_listwise_del=FALSE)
@@ -185,15 +254,18 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
           duckdb_register_arrow(conn = con, name = "cohort_view", ddf)
 
           ## insert data into 'cohort_data' table
-          # If error -> print error end exit knit
-          tryCatch({
-            dbExecute(con, "INSERT INTO cohort_data SELECT * FROM cohort_view")
-          }, error = function(err) {
-            print(paste("MY ERROR:  ",err))
-            print("Please check your input data")
-            knit_exit()
-          })
+          dbExecute(con, "INSERT INTO cohort_data SELECT * FROM cohort_view")
+
+          ## Log info
+          info(logger_simple,paste0("Number of rows in table cohort_data after: ", dbGetQuery(con,"SELECT COUNT() FROM cohort_data ;")[[1]],"
+                                    "))
           
+        },
+        error=function(cond) {
+          ## Log info
+          warn(logger, paste0("MY ERROR: 
+                              ", cond))
+          return(stop(cond))
         },
         finally={
           ## disconnect from database

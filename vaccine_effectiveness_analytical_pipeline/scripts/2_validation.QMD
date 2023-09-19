@@ -18,13 +18,13 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 20/04/2023
+# 19/09/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - validation'
   author     <- list('Marjan Meurisse','Javier González-Galindo','Francisco Estupiñán-Romero','Santiago Royo-Sierra','Nina Van Goethem','Enrique Bernal-Delgado')
-  version    <- '1.0.0'
+  version    <- '1.0.2'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
   input      <- list('cohort_data (database table in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
@@ -51,18 +51,40 @@ source("./0_global.R")
 
 ```
 
+```{r, logging, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Log of 2_validation.QMD
+    
+info(logger, paste0("
+========================================================================================
+",
+"2_validation.QMD","
+",
+"========================================================================================
+ "))
+
+```
+
 ```{r, load data, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
 ## Description: load the data into memory
 
+info(logger_simple, "LOADING THE DATA INTO MEMORY...")
+
 tryCatch(
   {
-    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
     df <- dbGetQuery(con,
     "CREATE TEMPORARY TABLE Temp AS SELECT * FROM cohort_data;
     ALTER TABLE Temp DROP COLUMN flag_violating_val;
     ALTER TABLE Temp DROP COLUMN flag_listwise_del;
     SELECT * FROM Temp")
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
   },
   finally={
     dbDisconnect(con, shutdown=TRUE)
@@ -81,12 +103,14 @@ To comply with the data model, the dataset must pass a number of validation rule
 
 ## Description: specification of validation rules and confrontation of the data with these validation rules
 
+info(logger_simple, "CHECKING DATA AGAINST A SET OF VALIDATION RULES...")
+
 validation <- function(data) {
   
   ## specify validation rules
   rules <- validator(
     is.na(age_nm) | age_nm >= 5 & age_nm <=115,
-    is.na(sex_cd) | sex_cd %in% c(0,1,2,9),
+    is.na(sex_cd) | sex_cd %in% c("0","1","2","9"),
     is.na(dose_1_brand_cd) | dose_1_brand_cd %in% c("BP","MD","JJ","AZ","NV"),
     is.na(dose_2_brand_cd) | dose_2_brand_cd %in% c("BP","MD","JJ","AZ","NV"),
     is.na(doses_nm) | doses_nm >= 0 & doses_nm <= 10,
@@ -94,7 +118,7 @@ validation <- function(data) {
       fully_vaccinated_bl==TRUE & !is.na(vaccination_schedule_cd),
     is.na(test_type_cd) | test_type_cd %in% c("PCR","AG","other"),
     is.na(variant_cd) | variant_cd %in% c("alpha","beta", "gamma", "delta", "omicron","epsilon", "zeta", "eta", "theta", "iota", "kappa", "lambda", "mu"),
-    is.na(pregnancy_bl) | pregnancy_bl==FALSE | (pregnancy_bl==TRUE & sex_cd==2 & age_nm>=12 & age_nm<=55),
+    is.na(pregnancy_bl) | pregnancy_bl==FALSE | (pregnancy_bl==TRUE & sex_cd=="2" & age_nm>=12 & age_nm<=55),
     is.na(essential_worker_bl) | essential_worker_bl==FALSE | (essential_worker_bl==TRUE & age_nm>=16 & age_nm<=70),
     
     (is.na(dose_1_dt) & is.na(dose_2_dt)) | is.na(dose_2_dt) |
@@ -137,8 +161,17 @@ validation <- function(data) {
   return(out)
 }
 
-out <- validation(df)
-summary_validation_tmp <- summary(out)
+tryCatch(
+  {
+    out <- validation(df)
+    summary_validation_tmp <- summary(out)
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
@@ -147,38 +180,50 @@ summary_validation_tmp <- summary(out)
 ```{r, validation table, message=FALSE, warning=FALSE, error=FALSE}
 
 ## Description: create a table with a summary of the validation results
-summary_validation <- summary_validation_tmp
-summary_validation$perc_fails <- paste0(round(100*summary_validation$fails/summary_validation$items,2),'%')
-summary_validation$perc_missing <- paste0(round(100*summary_validation$nNA/summary_validation$items,2),'%')
-summary_validation$perc_missing_num <- 100*summary_validation$nNA/summary_validation$items
-summary_validation <- summary_validation[,c("expression","name", "items","passes","fails","perc_fails","nNA","perc_missing", "error","warning","perc_missing_num")]
-colnames(summary_validation) <- c("Validation rule","Name rule","Items","Passes","Fails","Percentage of fails","Number of NAs","Percentage of NAs","Error","Warning","perc_missing_num")
-formattable(summary_validation,
-            align = c("l","c","c","c","c","c","c","c","c","c","c"),
-            list(
-              perc_missing_num = FALSE,
-              Error = formatter("Error",
-                style = ~style(display = "block", 
-                                padding = "0 4px", 
-                                `border-radius` = "4px", 
-                                `background-color` = case_when(Error==TRUE ~"#F4A460"))),
-              Warning = formatter("Warning",
-                style = ~style(display = "block", 
-                                padding = "0 4px", 
-                                `border-radius` = "4px", 
-                                `background-color` = case_when(Warning==TRUE ~"#F4A460"))),
-              `Percentage of NAs` = formatter("Percentage of NAs",
-                style = ~style(display = "block", 
-                                padding = "0 4px", 
-                                `border-radius` = "4px", 
-                                `background-color` = 
-                                case_when(perc_missing_num > 2.5 ~ "#F4A460"))),
-              Fails = formatter("Fails",
-                style = ~style(display = "block", 
-                                padding = "0 4px", 
-                                `border-radius` = "4px", 
-                                `background-color` = case_when(Fails > 0 ~ "#F4A460")))
-))
+
+info(logger_simple, "CREATE TABLE WITH SUMMARY OF VALIDATION RESULTS...")
+
+tryCatch(
+  {
+    summary_validation <- summary_validation_tmp
+    summary_validation$perc_fails <- paste0(round(100*summary_validation$fails/summary_validation$items,2),'%')
+    summary_validation$perc_missing <- paste0(round(100*summary_validation$nNA/summary_validation$items,2),'%')
+    summary_validation$perc_missing_num <- 100*summary_validation$nNA/summary_validation$items
+    summary_validation <- summary_validation[,c("expression","name", "items","passes","fails","perc_fails","nNA","perc_missing", "error","warning","perc_missing_num")]
+    colnames(summary_validation) <- c("Validation rule","Name rule","Items","Passes","Fails","Percentage of fails","Number of NAs","Percentage of NAs","Error","Warning","perc_missing_num")
+    formattable(summary_validation,
+                align = c("l","c","c","c","c","c","c","c","c","c","c"),
+                list(
+                  perc_missing_num = FALSE,
+                  Error = formatter("Error",
+                    style = ~style(display = "block", 
+                                    padding = "0 4px", 
+                                    `border-radius` = "4px", 
+                                    `background-color` = case_when(Error==TRUE ~"#F4A460"))),
+                  Warning = formatter("Warning",
+                    style = ~style(display = "block", 
+                                    padding = "0 4px", 
+                                    `border-radius` = "4px", 
+                                    `background-color` = case_when(Warning==TRUE ~"#F4A460"))),
+                  `Percentage of NAs` = formatter("Percentage of NAs",
+                    style = ~style(display = "block", 
+                                    padding = "0 4px", 
+                                    `border-radius` = "4px", 
+                                    `background-color` = 
+                                    case_when(perc_missing_num > 2.5 ~ "#F4A460"))),
+                  Fails = formatter("Fails",
+                    style = ~style(display = "block", 
+                                    padding = "0 4px", 
+                                    `border-radius` = "4px", 
+                                    `background-color` = case_when(Fails > 0 ~ "#F4A460")))
+    ))
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
@@ -190,39 +235,67 @@ The vertical bars in the validation plot indicate the percentage of records 'Pas
 
 ## Description: create interactive validation plot
 
-pl <- summary_validation %>%
-  mutate(perc_fails=Fails/Items) %>%
-  mutate(perc_passes=Passes/Items) %>%
-  mutate(perc_missing=`Number of NAs`/Items) %>%
-  select(c(`Name rule`,perc_fails,perc_passes,perc_missing)) %>%
-  gather(name, value, perc_fails:perc_missing) %>%
-  mutate(name=case_when(
-    name=="perc_fails" ~ "Fails",
-    name=="perc_passes" ~ "Passes",
-    name=="perc_missing" ~ "Missing"
-  )) %>%
-  mutate(name=factor(name,levels=c("Fails","Passes","Missing"))) %>%
-  ggplot(aes(x=`Name rule`,y=value,fill=name,order=name)) +
-    geom_col(position = position_stack(reverse = TRUE)) +
-    scale_y_continuous(labels=scales::percent) +
-    theme_minimal() +
-    theme(axis.title.x =element_blank(),
-          axis.title.y = element_blank(),
-          axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-          legend.title = element_blank()) +
-    scale_fill_manual(
-      name ="",
-      values = c("Fails" = "red",
-              "Passes" = "#4C9900",
-              "Missing" = "grey"),
-      breaks=c("Fails","Passes","Missing")) 
-ply <- ggplotly(pl)
+info(logger_simple, "CREATE VALIDATION PLOT...")
+
+tryCatch(
+  {
+    ## Create plot
+    pl <- summary_validation %>%
+      mutate(perc_fails=Fails/Items) %>%
+      mutate(perc_passes=Passes/Items) %>%
+      mutate(perc_missing=`Number of NAs`/Items) %>%
+      select(c(`Name rule`,`Validation rule`,perc_fails,perc_passes,perc_missing)) %>%
+      gather(name, value, perc_fails:perc_missing) %>%
+      mutate(name=case_when(
+        name=="perc_fails" ~ "Fails",
+        name=="perc_passes" ~ "Passes",
+        name=="perc_missing" ~ "Missing"
+      )) %>%
+      mutate(name=factor(name,levels=c("Fails","Passes","Missing"))) %>%
+      ggplot(aes(x=`Name rule`,y=value,fill=name,order=name)) +
+        geom_col(position = position_stack(reverse = TRUE)) +
+        scale_y_continuous(labels=scales::percent) +
+        theme_minimal() +
+        theme(axis.title.x =element_blank(),
+              axis.title.y = element_blank(),
+              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+              legend.title = element_blank()) +
+        scale_fill_manual(
+          name ="",
+          values = c("Fails" = "red",
+                  "Passes" = "#4C9900",
+                  "Missing" = "grey"),
+          breaks=c("Fails","Passes","Missing")) 
+    
+    ## Convert to plotly
+    ply <- ggplotly(pl)
+    
+    ## Adjust hover text
+    for (i in 1:length(ply$x$data)) {
+      ply$x$data[[i]]$text <- paste0(gsub("<.*$", "", ply$x$data[[i]]$text), "<br />", "Value: ", ply$x$data[[i]]$y, "<br />", ply$x$data[[i]]$name)
+    }
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
 ```{r, validation plot 2, message=FALSE, warning=FALSE, error=FALSE}
 
-ply
+tryCatch(
+  {
+    ply
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 :::
@@ -233,9 +306,20 @@ The set of validation rules are considered 'essential' not to be violated to be 
 
 ```{r, violating essential rules, message=FALSE, warning=FALSE, error=FALSE}
 
-## Description: select patient ids of records violating at least one of the 'essential' validation rules
+## Description: select patient ids of records violating at least one of the validation rules
 
-tmp_viol <- data.frame(person_id=violating(df,out)[,"person_id"])
+info(logger_simple, "SELECTING PATIENT IDS OF RECORDS VIOLATING AT LEAST ONE OF THE VALIDATION RULES...")
+
+tryCatch(
+  {
+    tmp_viol <- data.frame(person_id=violating(df,out)[,"person_id"])
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
@@ -243,15 +327,23 @@ tmp_viol <- data.frame(person_id=violating(df,out)[,"person_id"])
 
 ## Description: flag_violating_val to TRUE when at least one of the rules is violated
 
+info(logger_simple, "SET FLAG_VIOLATING_VAL TO TRUE WHEN AT LEAST ONE OF THE RULES IS VIOLATED...")
+
 tryCatch(
   {
-    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
     duckdb_register(con, name='table_violating_ids', df=tmp_viol, overwrite = TRUE, experimental = FALSE)
     qry <- 
       "update cohort_data set
         flag_violating_val = TRUE WHERE cohort_data.person_id IN (select person_id from table_violating_ids);"
     dbExecute(con, qry)
     duckdb_unregister(con, name='table_violating_ids')
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
   },
   finally={
     dbDisconnect(con, shutdown=TRUE)
@@ -261,17 +353,25 @@ tryCatch(
 
 ```{r, print violating rules, message=FALSE, warning=FALSE, error=FALSE}
 
-## Description: select patient ids of records violating at least one of the validation rules
+## Description: count patients with flag_violating_val TRUE versus FALSE
+
+info(logger_simple, "COUNT PATIENTS WITH FLAG_VIOLATING_VAL TRUE VERSUS FALSE...
+     ")
 
 tryCatch(
   {
-    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE) 
     count_viol_true <- dbGetQuery(conn = con, "SELECT COUNT(*) FROM cohort_data WHERE flag_violating_val==TRUE")
     count_viol_false <- dbGetQuery(conn = con, "SELECT COUNT(*) FROM cohort_data WHERE flag_violating_val==FALSE")
     count_viol <- data.frame(matrix(ncol = 2, nrow = 0))
     count_viol <- rbind(count_viol,c(count_viol_true,count_viol_false))
     colnames(count_viol) <- c("flag_violating_val==TRUE","flag_violating_val==FALSE")
-
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
   },
   finally={
     dbDisconnect(con, shutdown=TRUE)

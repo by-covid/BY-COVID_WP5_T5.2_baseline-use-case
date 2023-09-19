@@ -19,16 +19,16 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 20/04/2023
+# 19/09/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - imputation of missing values'
   author     <- list('Marjan Meurisse','Javier González-Galindo','Francisco Estupiñán-Romero','Santiago Royo-Sierra','Nina Van Goethem','Enrique Bernal-Delgado')
-  version    <- '1.0.0'
+  version    <- '1.0.2'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
-  input      <- list('cohort_data and cohort_data_imputed (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
+  input      <- list('cohort_data, cohort_data_imputed and imputation_methods (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
   output     <- list('4_matching.html (report)','group_similarity, result_matching_alg, matched_data (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
 }
 
@@ -41,55 +41,29 @@ source("./0_global.R")
 
 ```
 
-```{r, matching, message=FALSE, warning=FALSE, error=FALSE}
+```{r, logging, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
-## Description: execute matching
-source("./4_matching.R")
+## Description: Log of 4_matching.QMD
+    
+info(logger, paste0("
+========================================================================================
+",
+"4_matching.QDM","
+",
+"========================================================================================
+ "))
 
 ```
 
-```{r, load data, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+```{r, matching, message=FALSE, warning=FALSE, error=FALSE}
 
-## Description: Load the data into memory
+## Description: execute matching
+
+info(logger_simple, "EXECUTING MATCHING...")
 
 tryCatch(
   {
-    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
-    df_nonmatched <- dbGetQuery(con,"SELECT
-                            a.person_id,
-                            a.fully_vaccinated_dt,
-                            a.fully_vaccinated_bl,
-                            a.confirmed_case_dt,
-                            a.exitus_dt,
-                            COALESCE(a.sex_cd, b.sex_cd) AS sex_cd,
-                            COALESCE(a.age_cd,b.age_cd) AS age_cd,
-                            COALESCE(a.residence_area_cd,b.residence_area_cd) AS residence_area_cd,
-                            COALESCE(a.pregnancy_bl,b.pregnancy_bl) AS pregnancy_bl,
-                            COALESCE(a.essential_worker_bl,b.essential_worker_bl) AS essential_worker_bl,
-                            COALESCE(a.institutionalized_bl,b.institutionalized_bl) AS institutionalized_bl,
-                            COALESCE(a.foreign_bl,b.foreign_bl) AS foreign_bl, 
-                            a.comorbidities_bl,
-                            a.immunestatus_bl
-                    FROM cohort_view a 
-                    LEFT JOIN cohort_data_imputed b on a.person_id = b.person_id")
-    # TODO: FROM cohort_data or cohort_view (excluding records with flag_inclusion_record==FALSE)?
-    
-    df_matched <- dbGetQuery(con,
-      "SELECT * FROM matched_data a
-      LEFT JOIN (
-        SELECT c.person_id,
-               COALESCE(c.sex_cd, d.sex_cd) AS sex_cd,
-               COALESCE(c.age_cd,d.age_cd) AS age_cd,
-               COALESCE(c.residence_area_cd,d.residence_area_cd) AS residence_area_cd,
-               COALESCE(c.pregnancy_bl,d.pregnancy_bl) AS pregnancy_bl,
-               COALESCE(c.essential_worker_bl,d.essential_worker_bl) AS essential_worker_bl,
-               COALESCE(c.institutionalized_bl,d.institutionalized_bl) AS institutionalized_bl,
-               COALESCE(c.foreign_bl,d.foreign_bl) AS foreign_bl, 
-               c.comorbidities_bl,
-               c.immunestatus_bl
-        FROM cohort_data c
-        LEFT JOIN cohort_data_imputed d on c.person_id = d.person_id
-      ) b on a.person_id = b.person_id") %>% select(-c("person_id"))
+    source("./4_matching.R")
   },
   finally={
     dbDisconnect(con, shutdown=TRUE)
@@ -97,35 +71,126 @@ tryCatch(
 
 ```
 
-Covariate balance is the extent to which the distribution of covariates is similar across the intervention groups.
+```{r, load data, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Load the data into memory
+
+info(logger_simple, "LOADING THE DATA INTO MEMORY...")
+
+tryCatch(
+  {
+    ## Description: get database connection
+    con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
+    
+    ## Non-matched data
+    df_nonmatched <- dbGetQuery(con,paste0("SELECT
+                            a.person_id,
+                            a.fully_vaccinated_dt,
+                            a.fully_vaccinated_bl,
+                            a.confirmed_case_dt,
+                            a.exitus_dt, ",
+                            ifelse("sex_cd" %in% v_matching_incl,"COALESCE(a.sex_cd,b.sex_cd) as sex_cd, ",""),
+                            ifelse("age_cd" %in% v_matching_incl,"COALESCE(a.age_cd,b.age_cd) as age_cd, ",""),
+                            ifelse("residence_area_cd" %in% v_matching_incl,"COALESCE(a.residence_area_cd,b.residence_area_cd) as residence_area_cd, ",""),
+                            ifelse("pregnancy_bl" %in% v_matching_incl,"COALESCE(a.pregnancy_bl,b.pregnancy_bl) as pregnancy_bl, ",""),
+                            ifelse("essential_worker_bl" %in% v_matching_incl,"COALESCE(a.essential_worker_bl,b.essential_worker_bl) AS essential_worker_bl ",""),
+                            ifelse("institutionalized_bl" %in% v_matching_incl,"COALESCE(a.institutionalized_bl,b.institutionalized_bl) as institutionalized_bl, ",""),
+                            ifelse("foreign_bl" %in% v_matching_incl,"COALESCE(a.foreign_bl,b.foreign_bl) as foreign_bl, ",""),
+                            ifelse("socecon_lvl_cd" %in% v_matching_incl,"COALESCE(a.socecon_lvl_cd,b.socecon_lvl_cd) as socecon_lvl_cd, ",""),
+                            ifelse("comorbidities_bl" %in% v_matching_incl,"a.comorbidities_bl, ",""),
+                            ifelse("immunestatus_bl" %in% v_matching_incl,"a.immunestatus_bl, ",""),
+                    "FROM cohort_view a 
+                    LEFT JOIN cohort_data_imputed b on a.person_id = b.person_id"))
+    
+    ## Matched data
+    df_matched <- dbGetQuery(con,
+      paste0("SELECT * FROM matched_data a
+      LEFT JOIN (
+        SELECT c.person_id, ",
+               ifelse("sex_cd" %in% v_matching_incl, "COALESCE(c.sex_cd,d.sex_cd) AS sex_cd, ",""),
+               ifelse("age_cd" %in% v_matching_incl, "COALESCE(c.age_cd,d.age_cd) AS age_cd, ",""),
+               ifelse("residence_area_cd" %in% v_matching_incl, "COALESCE(c.residence_area_cd,d.residence_area_cd) AS residence_area_cd, ",""),
+               ifelse("pregnancy_bl" %in% v_matching_incl, "COALESCE(c.pregnancy_bl,d.pregnancy_bl) AS pregnancy_bl, ",""),
+               ifelse("essential_worker_bl" %in% v_matching_incl, "COALESCE(c.essential_worker_bl,d.essential_worker_bl) AS essential_worker_bl, ",""),
+               ifelse("institutionalized_bl" %in% v_matching_incl, "COALESCE(c.institutionalized_bl,d.institutionalized_bl) AS institutionalized_bl, ",""),
+               ifelse("foreign_bl" %in% v_matching_incl, "COALESCE(c.foreign_bl,d.foreign_bl) AS foreign_bl, ",""),
+               ifelse("socecon_lvl_cd" %in% v_matching_incl, "COALESCE(c.socecon_lvl_cd,d.socecon_lvl_cd) AS socecon_lvl_cd, ",""),
+               ifelse("comorbidities_bl" %in% v_matching_incl, "c.comorbidities_bl, ",""),
+               ifelse("immunestatus_bl" %in% v_matching_incl, "c.immunestatus_bl ",""),
+        " FROM cohort_data c
+        LEFT JOIN cohort_data_imputed d on c.person_id = d.person_id
+      ) b on a.person_id = b.person_id"
+      )) %>% select(-c("person_id"))
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  },
+  finally={
+    dbDisconnect(con, shutdown=TRUE)
+  })
+
+```
+
+A sequence of nested (daily) trials are emulated with increasing time (t1, t2, ..., tn), iterating over the days in the enrollment period. At each eligible time during the enrollment period, the vaccination status of eligible individuals is assessed and every individual who has completed a primary vaccination schedule at that time (coded here as initiation of the intervention strategy when emulating a nested target trial) is matched to an individual who has not (yet) completed the primary vaccination schedule (coded here as the control strategy when emulating a nested target trial). Newly vaccinated individuals (completing a primary vaccination schedule) are eligible for inclusion in the study, even if they had previously been selected in the "no (or partial) vaccine group". Vaccinations have been administered in the context of national public health programs, without interference/manipulation of the research subjects.
+
+We assess the covariate balance, which is the extent to which the distribution of covariates is similar across the intervention groups.
 
 ```{r, matchit prior, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
 ## Balance prior to matching
-df_nonmatched$residence_area_cd <- as.factor(df_nonmatched$residence_area_cd)
-m.out0 <- matchit(fully_vaccinated_bl ~ age_cd + sex_cd + residence_area_cd + 
-                    institutionalized_bl + foreign_bl + pregnancy_bl + 
-                    essential_worker_bl + comorbidities_bl + immunestatus_bl, 
-                  data = df_nonmatched,
-                 method = NULL, distance = "glm")
-rm(df_nonmatched)
+
+info(logger_simple, "ASSESSING BALANCE PRIOR TO MATCHING...")
+
+tryCatch(
+  {
+    if("residence_area_cd" %in% v_matching_incl) {df_nonmatched$residence_area_cd <- as.factor(df_nonmatched$residence_area_cd)}
+    if("sex_cd" %in% v_matching_incl) {df_nonmatched$sex_cd <- as.factor(df_nonmatched$sex_cd)}
+    if("age_cd" %in% v_matching_incl) {df_nonmatched$age_cd <- as.factor(df_nonmatched$age_cd)}
+    if("socecon_lvl_cd" %in% v_matching_incl) {df_nonmatched$socecon_lvl_cd <- as.factor(df_nonmatched$socecon_lvl_cd)}
+    m.out0 <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl, sep="' '", collapse=" + "))), 
+                      data = df_nonmatched,
+                     method = NULL, distance = "glm")
+    rm(df_nonmatched)
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
 ```{r, matchit after, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
 ## Balance after matching
-df_matched$residence_area_cd <- as.factor(df_matched$residence_area_cd)
-m.out1 <- matchit(fully_vaccinated_bl ~ age_cd + sex_cd + residence_area_cd + 
-                    institutionalized_bl + foreign_bl + pregnancy_bl + 
-                    essential_worker_bl + comorbidities_bl + immunestatus_bl, 
-                  data = df_matched,
-                 method = NULL, distance = "glm")
-rm(df_matched)
+
+info(logger_simple, "ASSESSING BALANCE AFTER MATCHING...")
+
+tryCatch(
+  {
+    if("residence_area_cd" %in% v_matching_incl) {df_matched$residence_area_cd <- as.factor(df_matched$residence_area_cd)}
+    if("sex_cd" %in% v_matching_incl) {df_matched$sex_cd <- as.factor(df_matched$sex_cd)}
+    if("age_cd" %in% v_matching_incl) {df_matched$age_cd <- as.factor(df_matched$age_cd)}
+    if("socecon_lvl_cd" %in% v_matching_incl) {df_matched$socecon_lvl_cd <- as.factor(df_matched$socecon_lvl_cd)}
+    m.out1 <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl, sep="' '", collapse=" + "))), 
+                      data = df_matched,
+                     method = NULL, distance = "glm")
+    rm(df_matched)
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
-## Standardized mean differences {.tabset}
+## Standardized Mean Differences {.tabset}
 
 The Standardized Mean Difference (SMD) represents a standardized difference in mean between contrasted intervention groups for each covariate.
 
@@ -134,36 +199,58 @@ The Standardized Mean Difference (SMD) represents a standardized difference in m
 
 ```{r, SMD prior matching, message=FALSE, warning=FALSE, error=FALSE}
 
-## Balance prior to matching
+## Standardized mean difference prior to matching
 
-smd_prior <- as.data.frame(summary(m.out0)$sum.all) %>% rename(`Means intervention group`=`Means Treated`,`Means control group`=`Means Control`, Std_Mean_Diff=`Std. Mean Diff.`)
-smd_prior <- cbind("Covariate" = rownames(smd_prior), smd_prior)
-formattable(
-  smd_prior[,c("Means intervention group","Means control group","Std_Mean_Diff")],
-  align = c("l","c","c","c"),
-  list(
-    Std_Mean_Diff = formatter("Std_Mean_Diff",
-      style = ~style(display = "block", 
-      padding = "0 4px", 
-      `border-radius` = "4px", 
-      `background-color` = case_when(
-           Std_Mean_Diff > 0.01 ~"#F4A460"
-    )))) 
-  ) %>%  rename("Standardized mean difference" = Std_Mean_Diff)
+info(logger_simple, "ASSESSING STANDARDIZED MEAN DIFFERENCE PRIOR TO MATCHING...")
 
+tryCatch(
+  {
+    smd_prior <- as.data.frame(summary(m.out0)$sum.all) %>% rename(`Means intervention group`=`Means Treated`,`Means control group`=`Means Control`, Std_Mean_Diff=`Std. Mean Diff.`)
+    smd_prior <- cbind("Covariate" = rownames(smd_prior), smd_prior)
+    formattable(
+      smd_prior[,c("Means intervention group","Means control group","Std_Mean_Diff")],
+      align = c("l","c","c","c"),
+      list(
+        Std_Mean_Diff = formatter("Std_Mean_Diff",
+          style = ~style(display = "block", 
+          padding = "0 4px", 
+          `border-radius` = "4px", 
+          `background-color` = case_when(
+               Std_Mean_Diff > 0.01 ~"#F4A460"
+        )))) 
+      ) %>%  rename("Standardized mean difference" = Std_Mean_Diff)
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+    
 ```
 
 ```{r, SMD prior matching plot, results='hide', message=FALSE, warning=FALSE, error=FALSE}
  
-## Balance prior to matching
+## Standardized mean difference plot prior to matching
 
-pl_prior <- ggplot(data = smd_prior %>% rename(`Std. Mean Diff.`=Std_Mean_Diff), mapping = aes(`Std. Mean Diff.`,Covariate)) +
-  geom_point() +
-  geom_vline(xintercept = 0.05, linetype="dashed", color = "#868181") +
-  geom_vline(xintercept = -0.05, linetype="dashed", color = "#868181") +
-  theme_minimal() +
-  theme(axis.title.y = element_blank())
-ply_prior <- ggplotly(pl_prior)
+info(logger_simple, "PLOTTING STANDARDIZED MEAN DIFFERENCE PRIOR TO MATCHING...")
+
+tryCatch(
+  {
+    pl_prior <- ggplot(data = smd_prior %>% rename(`Std. Mean Diff.`=Std_Mean_Diff), mapping = aes(`Std. Mean Diff.`,Covariate)) +
+      geom_point() +
+      geom_vline(xintercept = 0.05, linetype="dashed", color = "#868181") +
+      geom_vline(xintercept = -0.05, linetype="dashed", color = "#868181") +
+      theme_minimal() +
+      theme(axis.title.y = element_blank())
+    ply_prior <- ggplotly(pl_prior)
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
@@ -171,7 +258,16 @@ ply_prior <- ggplotly(pl_prior)
 
 ## Balance prior to matching
 
-ply_prior
+tryCatch(
+  {
+    ply_prior
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
@@ -179,76 +275,75 @@ ply_prior
 
 ```{r, SMD after matching, message=FALSE, warning=FALSE, error=FALSE}
 
-## Balance after matching
-smd_after <- as.data.frame(summary(m.out1)$sum.all) %>% rename(`Means intervention group`=`Means Treated`,`Means control group`=`Means Control`,Std_Mean_Diff=`Std. Mean Diff.`)
-smd_after <- cbind("Covariate" = rownames(smd_after), smd_after)
-formattable(
-  smd_after[,c("Means intervention group","Means control group","Std_Mean_Diff")],
-  align = c("l","c","c","c"),
-  list(
-    Std_Mean_Diff = formatter("Std_Mean_Diff",
-      style = ~style(display = "block", 
-      padding = "0 4px", 
-      `border-radius` = "4px", 
-      `background-color` = case_when(
-           Std_Mean_Diff > 0.01 ~"#F4A460"
-    )))) 
-  ) %>%  rename("Standardized mean difference" = Std_Mean_Diff)
+## Standardized mean difference after matching
+
+info(logger_simple, "ASSESSING STANDARDIZED MEAN DIFFERENCE AFTER MATCHING...")
+
+tryCatch(
+  {
+    smd_after <- as.data.frame(summary(m.out1)$sum.all) %>% rename(`Means intervention group`=`Means Treated`,`Means control group`=`Means Control`,Std_Mean_Diff=`Std. Mean Diff.`)
+    smd_after <- cbind("Covariate" = rownames(smd_after), smd_after)
+    formattable(
+      smd_after[,c("Means intervention group","Means control group","Std_Mean_Diff")],
+      align = c("l","c","c","c"),
+      list(
+        Std_Mean_Diff = formatter("Std_Mean_Diff",
+          style = ~style(display = "block", 
+          padding = "0 4px", 
+          `border-radius` = "4px", 
+          `background-color` = case_when(
+               Std_Mean_Diff > 0.01 ~"#F4A460"
+        )))) 
+      ) %>%  rename("Standardized mean difference" = Std_Mean_Diff)
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
 ```{r, SMD after matching plot, results='hide', message=FALSE, warning=FALSE, error=FALSE}
  
-## Balance prior to matching
+## Standardized mean difference plot after matching
 
-pl_after <- ggplot(data = smd_after %>% rename(`Std. Mean Diff.`=Std_Mean_Diff), mapping = aes(`Std. Mean Diff.`,Covariate)) +
-  geom_point() +
-  geom_vline(xintercept = 0.05, linetype="dashed", color = "#868181") +
-  geom_vline(xintercept = -0.05, linetype="dashed", color = "#868181") +
-  theme_minimal() +
-  theme(axis.title.y = element_blank()) 
-ply_after <- ggplotly(pl_after)
+info(logger_simple, "PLOTTING STANDARDIZED MEAN DIFFERENCE AFTER MATCHING...")
+
+tryCatch(
+  {
+    pl_after <- ggplot(data = smd_after %>% rename(`Std. Mean Diff.`=Std_Mean_Diff), mapping = aes(`Std. Mean Diff.`,Covariate)) +
+      geom_point() +
+      geom_vline(xintercept = 0.05, linetype="dashed", color = "#868181") +
+      geom_vline(xintercept = -0.05, linetype="dashed", color = "#868181") +
+      theme_minimal() +
+      theme(axis.title.y = element_blank()) 
+    ply_after <- ggplotly(pl_after)
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 
 ```{r, SMD after matching plot 2, message=FALSE, warning=FALSE, error=FALSE}
 
-## Balance prior to matching
+## Standardized mean difference plot after matching
 
-ply_after
-
-```
-:::
-
-## Variance ratios {.tabset}
-
-The variance ratio (VR) represents the ratio of the variance in the contracted intervention groups for each covariate. A VR close to 1, implies that variances are similar in the compared groups and as such indicates good covariate balance.
-
-::: panel-tabset
-##### Prior to matching
-
-```{r, VR prior matching, message=FALSE, warning=FALSE, error=FALSE}
-
-vr_prior <- as.data.frame(summary(m.out0)$sum.all)
-vr_prior <- cbind("Covariate" = rownames(vr_prior), vr_prior)
-formattable(
-  vr_prior[,c("Var. Ratio"),drop=FALSE],
-  align = "c"
-  )
-
-```
-
-##### After matching
-
-```{r, VR after matching, message=FALSE, warning=FALSE, error=FALSE}
-
-vr_after <- as.data.frame(summary(m.out1)$sum.all)
-vr_after <- cbind("Covariate" = rownames(vr_after), vr_after)
-formattable(
-  vr_after[,c("Var. Ratio"),drop=FALSE],
-  align = "c"
-  )
-
+tryCatch(
+  {
+    ply_after
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
 
 ```
 :::
@@ -260,13 +355,33 @@ formattable(
 
 ```{r, plot ps before, message=FALSE, warning=FALSE, error=FALSE}
 
-pl_ps_prior <- ggplot(data.frame(ps=m.out0$distance,Intervention=as.factor(ifelse(m.out0$treat==0,"No","Yes"))), 
-                      aes(x = ps, group=Intervention, colour=Intervention,fill=Intervention)) +
-              geom_density(alpha = 0.4) +
-              theme_minimal() +
-              xlab("Propensity score") +
-              theme(axis.title.y=element_blank())
-ggplotly(pl_ps_prior)
+## Propensity score distribution prior to matching
+
+info(logger_simple, "ASSISSING PROPENSITY SCORE DISTRIBUTION PRIOR TO MATCHING...")
+
+tryCatch(
+  {
+    pl_ps_prior <- ggplot(data.frame(ps=m.out0$distance,Intervention=as.factor(ifelse(m.out0$treat==0,"No","Yes"))), 
+                          aes(x = ps, group=Intervention, colour=Intervention,fill=Intervention)) +
+                  geom_density(alpha = 0.4) +
+                  theme_minimal() +
+                  xlab("Propensity score") +
+                  theme(axis.title.y=element_blank())
+    ply <- ggplotly(pl_ps_prior)
+    ply$x$data[[1]]$text <- paste0("Density: ", round(as.numeric(gsub('.*density: ','',gsub("<br.*$","",ply$x$data[[1]]$text))),3), "<br />",
+                                   "Propensity score: ", round(ply$x$data[[1]]$x,3), "<br />",
+                                   ifelse(ply$x$data[[1]]$legendgroup=="Yes","Yes","No"))
+    ply$x$data[[2]]$text <- paste0("Density: ", round(as.numeric(gsub('.*density: ','',gsub("<br.*$","",ply$x$data[[2]]$text))),3), "<br />",
+                                   "Propensity score: ", round(ply$x$data[[2]]$x,3), "<br />",
+                                   ifelse(ply$x$data[[2]]$legendgroup=="Yes","Yes","No"))
+    ply
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })  
 
 ```
 
@@ -274,13 +389,34 @@ ggplotly(pl_ps_prior)
 
 ```{r, plot ps after, message=FALSE, warning=FALSE, error=FALSE}
 
-pl_ps_after <- ggplot(data.frame(ps=m.out1$distance,Intervention=as.factor(ifelse(m.out1$treat==0,"No","Yes"))), 
-                      aes(x = ps, group=Intervention, colour=Intervention,fill=Intervention)) +
-              geom_density(alpha = 0.4) +
-              theme_minimal() +
-              xlab("Propensity score") +
-              theme(axis.title.y=element_blank())
-ggplotly(pl_ps_after)
+## Propensity score distribution after matching
 
+info(logger_simple, "ASSISSING PROPENSITY SCORE DISTRIBUTION AFTER MATCHING...
+     ")
+
+tryCatch(
+  {
+    pl_ps_after <- ggplot(data.frame(ps=m.out1$distance,Intervention=as.factor(ifelse(m.out1$treat==0,"No","Yes"))), 
+                          aes(x = ps, group=Intervention, colour=Intervention,fill=Intervention)) +
+                  geom_density(alpha = 0.4) +
+                  theme_minimal() +
+                  xlab("Propensity score") +
+                  theme(axis.title.y=element_blank())
+    ply <- ggplotly(pl_ps_after)
+    ply$x$data[[1]]$text <- paste0("Density: ", round(as.numeric(gsub('.*density: ','',gsub("<br.*$","",ply$x$data[[1]]$text))),3), "<br />",
+                                   "Propensity score: ", round(ply$x$data[[1]]$x,3), "<br />",
+                                   "Intervention: ",ifelse(ply$x$data[[1]]$legendgroup=="Yes","Yes","No"))
+    ply$x$data[[2]]$text <- paste0("Density: ", round(as.numeric(gsub('.*density: ','',gsub("<br.*$","",ply$x$data[[2]]$text))),3), "<br />",
+                                   "Propensity score: ", round(ply$x$data[[2]]$x,3), "<br />",
+                                   "Intervention: ",ifelse(ply$x$data[[2]]$legendgroup=="Yes","Yes","No"))
+    ply
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+    
 ```
 :::
