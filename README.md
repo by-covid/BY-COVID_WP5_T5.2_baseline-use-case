@@ -57,6 +57,7 @@ The current repository contains the following pieces:
         -   Descriptive analysis of the matched and unmatched study population (QMD)
         -   Survival analysis of the matched study population (QMD)
     -   Input for the analytical pipeline (CSV)
+    -   Log file created when running the analytical pipeline (TXT)
     -   Ouput of the analytical pipeline [^readme-1]
         -   Interactive report with dataset statistics, missing data profiles, potential alerts, and detailed per-variable information (HTML)
         -   Interactive report summarizing compliance with the logic validation rules (HTML)
@@ -99,11 +100,11 @@ The next set of digital objects are the consecutive scripts of the analytical pi
 **Script**: `0_global.R`
 
 -   **Input**:
-    -   `vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv`
+    -   `vaccine_effectiveness_synthetic_pop_10k_v.1.1.1.csv`
 -   **Output**:
     -   `cohort_data`
 
-A DuckDB database file is created (`BY-COVID-WP5-BaselineUseCase-VE.duckdb`). Data are imported from a csv file (e.g. `vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv`) using the R package `Arrow` and inserted into the `cohort_data` database table within the `BY-COVID-WP5-BaselineUseCase-VE.duckdb`. Data types are manually specified according to the [Common Data Model Specification](https://zenodo.org/record/7572373#.ZC0ad_ZByUk) when reading the data using a schema.
+A DuckDB database file is created (`BY-COVID-WP5-BaselineUseCase-VE.duckdb`). Data are imported from a csv file (e.g. `vaccine_effectiveness_synthetic_pop_10k_v.1.1.1.csv`) using the R package `Arrow` and inserted into the `cohort_data` database table within the `BY-COVID-WP5-BaselineUseCase-VE.duckdb`. Data types are manually specified according to the [Common Data Model Specification](https://zenodo.org/record/7572373#.ZC0ad_ZByUk) when reading the data using a schema.
 
 #### Data quality assessment
 
@@ -207,7 +208,6 @@ The development environment included several R packages (from base R or CRAN) an
 -   DT (DT_0.27)
 -   purrr (purrr_1.0.1)
 -   dlookr (dlookr_0.6.1)
--   ggplot2_3.4.0
 -   ggpubr (ggpubr_0.5.0)
 -   survminer (survminer_0.4.9)
 -   quarto (quarto_1.2)
@@ -237,9 +237,60 @@ The development environment included several R packages (from base R or CRAN) an
 -   finalfit (finalfit_1.0.6)
 -   dbplyr (dbplyr_2.3.3)
 
+To run the analytical pipeline with the required dependencies, different methods can be adopted: installing R packages manually, using the renv reproducible environment, or running the docker image.
+
+### Installing R packages manually
+
+#### Obtain source code
+
+Download the ZIP file of the repository using the following link: <https://github.com/MarjanMeurisse/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip>
+
+Extract all from the ZIP file and open the R project file contained within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline` in RStudio.
+
+#### Environment
+
+Install the required R packages. To install a specific version of an R package from source, the following R command can be used (example for the R package dplyr, version 1.1.2):
+
+    packageurl <- "https://cran.r-project.org/src/contrib/Archive/dplyr/dplyr_1.1.2.tar.gz"
+    install.packages(packageurl, repos=NULL, type="source")
+
+#### Execute the analytical pipeline
+
+Input data, compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045) should be provided as the only file within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/input`. You can test the analytical pipeline with the synthetic data which are already provided within this folder (`vaccine_effectiveness_synthetic_pop_10k_v.1.1.1.csv`) or replace this file with your own real-world data.
+
+The file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports, xlsx file with aggregated output) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
+
+### Using the renv reproducible environment
+
+#### Obtain source code
+
+Download the ZIP file of the repository using the following link: <https://github.com/MarjanMeurisse/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip>
+
+Extract all from the ZIP file and open the R project file contained within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline` in RStudio.
+
+#### Environment
+
+The R project uses renv. The following R command to check which packages are recorded in the lockfile but which are not installed:
+
+    renv::status()
+
+Reproduce the testing environment by running the following R command:
+
+    renv::restore() 
+
+The metadata from the lockfile are used to install exactly the same version of every package.
+
+#### Execute the analytical pipeline
+
+Input data, compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045) should be provided as the only file within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/input`. You can test the analytical pipeline with the synthetic data which are already provided within this folder (`vaccine_effectiveness_synthetic_pop_10k_v.1.1.1.csv`) or replace this file with your own real-world data.
+
+The file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports, xlsx file with aggregated output) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
+
 ### Using Docker
 
-It is possible to install the required dependencies for the pipeline using [Docker](https://www.docker.com/). You may skip the `docker build` command to download the [latest container](https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/pkgs/container/vaccine_effectiveness_analytical_pipeline) from GitHub.
+It is possible to run the analytical pipeline as an isolated application using [Docker](https://www.docker.com/).
+
+You may skip the `docker build` command to download the [latest container](https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/pkgs/container/vaccine_effectiveness_analytical_pipeline) from GitHub.
 
     cd vaccine_effectiveness_analytical_pipeline 
     # Enable below if you have modified scripts dependencies
@@ -270,20 +321,29 @@ This should populate `output/` content as a series of HTML files.
 
 **Note**: The `environment.yml` is also used by the `Dockerfile` to install its dependencies, and may have R packages in newer version than listed above
 
-### Installing R packages manually
-
-To install a specific version of an R package from source, the following R command can be used (example for the R package dplyr, version 1.0.10):
-
-    packageurl <- "https://cran.r-project.org/src/contrib/Archive/dplyr/dplyr_1.0.10.tar.gz"
-    install.packages(packageurl, repos=NULL, type="source")
-
-To execute the analytical pipeline using the synthetic data as input data, download the ZIP file of the repository using the following link: <https://github.com/MarjanMeurisse/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip>
-
-Extract all from the ZIP file and open the R project file contained within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline` in RStudio.
-
-Input data, compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045) should be provided as the only file within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/input`. Next, the file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
-
 ## Version history
+
+-   v.1.0.0: Initial iteration of the analytical pipeline scripts
+
+-   v.1.0.1: Minor adjustments
+
+-   v.1.02:
+
+    -   A log file (logfile.txt) is created in the ./logs folder (system settings, timing, errors)
+
+    -   Sex and age group are no longer handled as continuous variables
+
+    -   Implement handling large proportions of missing data in core variables
+
+    -   Add aggregated output for meta-analysis
+
+    -   Matching based on individual-level SES when available
+
+    -   Adjusted hover in plotly graphs
+
+    -   Additional analysis implemented: survival in subgroups determined by vaccination schedule
+
+    -   Adjusted documentation
 
 ## Authors
 
