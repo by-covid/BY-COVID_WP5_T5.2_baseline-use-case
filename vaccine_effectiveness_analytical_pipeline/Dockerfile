@@ -26,7 +26,7 @@ USER $MAMBA_USER
 #COPY --chown=$MAMBA_USER:$MAMBA_USER analytical-pipeline.Rproj /home/mambauser/pipeline/
 COPY --chown=$MAMBA_USER:$MAMBA_USER scripts /home/mambauser/scripts/
 COPY --chown=$MAMBA_USER:$MAMBA_USER app/app.R /home/mambauser/app/
-COPY --chown=$MAMBA_USER:$MAMBA_USER app/www/analytical-pipeline.png /home/mambauser/app/www/
+# COPY --chown=$MAMBA_USER:$MAMBA_USER app/www/analytical-pipeline.png /home/mambauser/app/www/
 
 # USER root
 #RUN chown -R $MAMBA_USER /pipeline
