@@ -33,5 +33,5 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/${{ env.IMAGE_NAME }}:${{env.TAG_NAME}},ghcr.io/${{ env.IMAGE_NAME }}:latest
+          tags: ghcr.io/marjanmeurisse/by-covid_wp5_baseline-use-case:${{env.TAG_NAME}},ghcr.io/marjanmeurisse/by-covid_wp5_baseline-use-case:latest
           file: ./vaccine_effectiveness_analytical_pipeline/Dockerfile
