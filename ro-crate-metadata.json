@@ -69,7 +69,13 @@
           "@id": "README.md"
         }
       ],
+      "distribution": {
+        "@id": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip"
+      },
       "identifier": "https://doi.org/10.5281/zenodo.6913045",
+      "cite-as": {
+        "@id": "https://w3id.org/ro/doi/10.5281/zenodo.6913045"
+      },      
       "isBasedOn": [
         { "@id": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/releases/tag/1.0.1" },
         { "@id": "https://doi.org/10.5281/zenodo.6913045" },
@@ -81,6 +87,7 @@
         "@id": "https://spdx.org/licenses/CC-BY-4.0"
       },
       "datePublished": "2023-04-19",
+      "dateModified": "2023-10-05",
       "publisher": {"@id": "https://by-covid.eu/"},
       "funding": {
         "@id": "https://doi.org/10.3030/101046203"
@@ -119,6 +126,13 @@
       "temporalCoverage": "Study Period: From the date of the first documented SARS-CoV-2 infection in each country to the most recent date in which data is available at the time of analysis. Roughly from 01-03-2020 to 30-06-2022, depending on the country.",
       "usageInfo": "The scripts (software) included in the publication are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit.",
       "releaseNotes": "- Updated Causal model to eliminate the consideration of 'vaccination_schedule_cd' as a mediator\n- Adjusted the study period to be consistent with the Study Protocol\n- Updated 'sex_cd' as a required variable\n- Added 'chronic_liver_disease_bl' as a comorbidity at the individual level\n- Updated 'socecon_lvl_cd' at the area level as a recommended variable\n -Added crosswalks for the definition of 'chronic_liver_disease_bl' in a separate sheet\n -Updated the 'vaccination_schedule_cd' reference to the 'Vaccine' node in the updated DAG\n -Updated the description of the 'confirmed_case_dt' and 'previous_infection_dt' variables to clarify the definition and the need for a single registry per person"
+    },
+    {
+      "@id": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip",
+      "@type": "DataDownload",
+      "encodingFormat": "application/zip",
+      "contentSize": "10978259",
+      "url": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip"
     },
     {
       "@id": "README.md",
