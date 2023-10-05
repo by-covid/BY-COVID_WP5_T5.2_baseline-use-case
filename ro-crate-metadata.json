@@ -132,7 +132,7 @@
       "@type": "DataDownload",
       "encodingFormat": "application/zip",
       "contentSize": "10978259",
-      "url": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip"
+      "contentUrl": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip"
     },
     {
       "@id": "README.md",
