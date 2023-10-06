@@ -179,16 +179,17 @@ tryCatch(
       mutate(Missing_values = ifelse(num_missing==0,FALSE,TRUE)) %>%
       mutate(Perc_miss_lt = ifelse(pct_missing>0.025,FALSE,TRUE)) %>%
       mutate(Perc_miss_lt5 = ifelse(pct_missing>0.05,FALSE,TRUE)) %>%
-      mutate(Perc_miss_lt15 = ifelse(pct_missing>0.15,FALSE,TRUE)) %>%
-      mutate(Perc_miss_lt50 = ifelse(pct_missing>0.50,FALSE,TRUE))
+      mutate(Perc_miss_lt15 = ifelse(pct_missing>0.15,FALSE,TRUE)) # %>%
+      # mutate(Perc_miss_lt50 = ifelse(pct_missing>0.50,FALSE,TRUE))
     df_var_imputation_method <- df_var_imputation_method %>% 
       mutate(Core = ifelse(Variable_name %in% core_v,TRUE,FALSE),
              Comorbidity = ifelse(Variable_name %in% comorb_v,TRUE,FALSE),
              Immunestatus = ifelse(Variable_name %in% imm_v,TRUE,FALSE))
     
-    ## Description: check whether at least 3 'Comorbidities' variables less than 50% of values missing
-    df_var_imputation_method$comorb_incl <- sum(df_var_imputation_method[which(df_var_imputation_method$Variable_name %in% comorb_v),"Perc_miss_lt50"])>=3
-    df_var_imputation_method$imm_incl <- sum(df_var_imputation_method[which(df_var_imputation_method$Variable_name %in% imm_v),"Perc_miss_lt50"])>=3
+    ## Description: check whether at least 3 'Comorbidity' variables less than 15% of values missing
+    df_var_imputation_method$comorb_incl <- sum(df_var_imputation_method[which(df_var_imputation_method$Variable_name %in% comorb_v),"Perc_miss_lt15"])>=3
+    ## Description: check whether at least 3 'Immune status' variables less than 15% of values missing
+    df_var_imputation_method$imm_incl <- sum(df_var_imputation_method[which(df_var_imputation_method$Variable_name %in% imm_v),"Perc_miss_lt15"])>=3
   },
   error=function(cond) {
     ## Log info
@@ -211,7 +212,7 @@ tryCatch(
     v_excl <- c()
     for(i in c(core_v, comorb_v, imm_v)) {
       if(length(unique(df_not_viol[[i]]))==1 |
-         (df_var_imputation_method %>% filter(Variable_name==i) %>% select(Perc_miss_lt50))[[1]]==FALSE) {
+         (df_var_imputation_method %>% filter(Variable_name==i) %>% select(Perc_miss_lt15))[[1]]==FALSE) {
         v_excl <- c(v_excl,i)
       }
     }
@@ -230,12 +231,11 @@ tryCatch(
         Missing_values==TRUE & Immunestatus==TRUE & imm_incl==TRUE ~ "Allow missing values and don't impute missing values (immune status)",
         Missing_values==TRUE & Immunestatus==TRUE & imm_incl==FALSE ~ "Exclude immunestatus_bl as matching variable (immune status)",
         Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==FALSE ~ "Allow missing values and don't impute missing values (no core variable)",
-        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt50==FALSE ~ "Exclude core variable as matching variable (more than 50% missing values)",
-        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt50==TRUE & cond_mcar==TRUE & Perc_miss_lt==TRUE ~ "Listwise deletion where core variable has missing values (MCAR reasonable)",
-        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt50==TRUE & cond_mcar==TRUE & Perc_miss_lt==FALSE ~ "Imputation of missing values (MCAR reasonable)",
-        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt50==TRUE & cond_mcar==FALSE & Perc_miss_lt5==TRUE ~ "Imputation of missing values (not MCAR)",
-        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt50==TRUE & cond_mcar==FALSE & Perc_miss_lt5==FALSE & Perc_miss_lt15==TRUE ~ "Imputation of missing values (not MCAR, need for sensitivity analysis)",
-        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt50==TRUE & cond_mcar==FALSE & Perc_miss_lt5==FALSE & Perc_miss_lt15==FALSE ~ "Imputation of missing values (not MCAR, limit causal interpretation)"
+        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt15==FALSE ~ "Exclude core variable as matching variable (more than 15% missing values)",
+        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt15==TRUE & cond_mcar==TRUE & Perc_miss_lt==TRUE ~ "Listwise deletion where core variable has missing values (MCAR reasonable)",
+        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt15==TRUE & cond_mcar==TRUE & Perc_miss_lt==FALSE ~ "Imputation of missing values (MCAR reasonable)",
+        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt15==TRUE & cond_mcar==FALSE & Perc_miss_lt5==TRUE ~ "Imputation of missing values (not MCAR)",
+        Missing_values==TRUE & Comorbidity==FALSE & Immunestatus==FALSE & Core==TRUE & Perc_miss_lt15==TRUE & cond_mcar==FALSE & Perc_miss_lt5==FALSE ~ "Imputation of missing values Imputation of missing values (not MCAR, limit causal interpretation)"
       )) 
   },
   error=function(cond) {
@@ -325,7 +325,7 @@ info(logger_simple, "IMPUTING MISSING VALUES...")
 tryCatch(
   {
     ## Description: select variables that require imputation
-    v_imp <- as.character(df_var_imputation_method[which(df_var_imputation_method$imputation_method %in% c("Imputation of missing values (MCAR reasonable)","Imputation of missing values (not MCAR)","Imputation of missing values (not MCAR, need for sensitivity analysis)","Imputation of missing values (not MCAR, limit causal interpretation)")),"Variable_name"])
+    v_imp <- as.character(df_var_imputation_method[which(df_var_imputation_method$imputation_method %in% c("Imputation of missing values (MCAR reasonable)","Imputation of missing values (not MCAR)","Imputation of missing values (not MCAR, limit causal interpretation)")),"Variable_name"])
     
     ## Description: function for variables that require imputation
     method_imputation <- function(df_imp, v) {
@@ -425,7 +425,7 @@ tryCatch(
     }
     df_var_imputation_method <- df_var_imputation_method %>% select(-c(num_missing,pct_missing))
     
-    df_var_imputation_method <- df_var_imputation_method[, c("Variable_name","imputation_method","Nr_imputed","Missing_values","Comorbidity","comorb_incl","Immunestatus","imm_incl","Core","MCAR","Perc_miss_lt","Perc_miss_lt5","Perc_miss_lt15","Perc_miss_lt50")]
+    df_var_imputation_method <- df_var_imputation_method[, c("Variable_name","imputation_method","Nr_imputed","Missing_values","Comorbidity","comorb_incl","Immunestatus","imm_incl","Core","MCAR","Perc_miss_lt","Perc_miss_lt5","Perc_miss_lt15")]
     
     df_var_imputation_method <- df_var_imputation_method %>% arrange(factor(Variable_name,levels = colnames(df_not_viol)))
     
@@ -443,12 +443,11 @@ tryCatch(
                                                                    `Method`=="Allow missing values and don't impute missing values (no core variable)" ~ "#E0E0E0",
                                                                    `Method`=="Imputation of missing values (MCAR reasonable)" ~"#F4A460",
                                                                    `Method`=="Imputation of missing values (not MCAR)" ~"#F4A460",
-                                                                   `Method`=="Imputation of missing values (not MCAR, need for sensitivity analysis)" ~"#F4A460",
                                                                    `Method`=="Imputation of missing values (not MCAR, limit causal interpretation)" ~"#F4A460",
                                                                    `Method`=="Listwise deletion where core variable has missing values (MCAR reasonable)" ~ "#CCE5FF",
                                                                    `Method`=="Exclude comorbidities_bl as matching variable (comorbidity)" ~ "#cdccff",
                                                                    `Method`=="Exclude immunestatus_bl as matching variable (immune status)" ~ "#cdccff",
-                                                                   `Method`=="Exclude core variable as matching variable (more than 50% missing values)" ~ "#cdccff"
+                                                                   `Method`=="Exclude core variable as matching variable (more than 15% missing values)" ~ "#cdccff"
                                                                    ))),
                   `Number of imputed values` = formatter("Nr_imputed",
                     style = ~style(display = "block", 

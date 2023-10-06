@@ -885,6 +885,26 @@ tryCatch(
     write.xlsx(
       df_rmst_contrast_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE_vacschedule"), append=TRUE, row.names = FALSE)
     
+    # # Main analysis
+    # write.xlsx(
+    #   surv_summary(surv_fit), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary"), row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10)) 
+    # write.xlsx(
+    #   df_sum_cph, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9)) 
+    # write.xlsx(
+    #   df_rmst_result, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
+    # write.xlsx(
+    #   df_rmst_contrast, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,5))
+    # 
+    # # Subgroup analysis - vaccination schedule
+    # write.xlsx(
+    #   surv_summary(surv_fit_vacschedule), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary_vacschedule"),  append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10))
+    # write.xlsx(
+    #   df_sum_cph_subg_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR_vacschedule"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9)) 
+    # write.xlsx(
+    #   df_rmst_result_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL_vacschedule"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,7))
+    # write.xlsx(
+    #   df_rmst_contrast_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE_vacschedule"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
+    
   },
   error=function(cond) {
     ## Log info

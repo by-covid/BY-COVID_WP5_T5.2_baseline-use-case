@@ -29,7 +29,7 @@ tryCatch(
     df_imputation_methods <- dbGetQuery(con,"SELECT * FROM imputation_methods")
     
     ## Description: obtain variables to exclude as matching variable
-    v_matching_excl <- as.character(df_imputation_methods[which(df_imputation_methods$imputation_method=="Exclude core variable as matching variable (more than 50% missing values)"),"Variable_name"])
+    v_matching_excl <- as.character(df_imputation_methods[which(df_imputation_methods$imputation_method=="Exclude core variable as matching variable (more than 15% missing values)"),"Variable_name"])
     if("Exclude comorbidities_bl as matching variable (comorbidity)" %in% df_imputation_methods$imputation_method) {
       v_matching_excl <- append(v_matching_excl,"comorbidities_bl")
     }
