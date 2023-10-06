@@ -5,20 +5,34 @@ on:
     tags:
       - "*.*.*"
   workflow_dispatch:
-env:
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
 jobs:
   compile:
     name: Build and push the image
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vaccine_effectiveness_analytical_pipeline
     permissions:
         contents: read
         packages: write
         id-token: write # needed for signing the images with GitHub OIDC Token
     steps:
+      - uses: actions/checkout@v4
+        with:
+            sparse-checkout: |
+              vaccine_effectiveness_analytical_pipeline
+      - name: Set lower case owner name
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
       - name: Get tag name from GITHUB_REF
         run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Set IMAGE_NAME
+        run: |
+          echo "IMAGE_NAME=${{ env.OWNER_LC }}/vaccine_effectiveness_analytical_pipeline_gui" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -33,5 +47,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/marjanmeurisse/by-covid_wp5_baseline-use-case:${{env.TAG_NAME}},ghcr.io/marjanmeurisse/by-covid_wp5_baseline-use-case:latest
-          file: ./vaccine_effectiveness_analytical_pipeline/Dockerfile
+          path: vaccine_effectiveness_analytical_pipeline
+          file: vaccine_effectiveness_analytical_pipeline/Dockerfile
+          context: vaccine_effectiveness_analytical_pipeline
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:latest
