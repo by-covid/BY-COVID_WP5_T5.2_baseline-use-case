@@ -50,4 +50,5 @@ jobs:
           path: vaccine_effectiveness_analytical_pipeline
           file: vaccine_effectiveness_analytical_pipeline/Dockerfile
           context: vaccine_effectiveness_analytical_pipeline
-          tags: ghcr.io/${{ env.IMAGE_NAME }}:latest
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:latest,ghcr.io/${{ env.IMAGE_NAME }}:${{ env.TAG_NAME }} 
+
