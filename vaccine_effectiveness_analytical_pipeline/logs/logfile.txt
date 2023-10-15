@@ -1,29 +1,29 @@
-INFO  [2023-09-18 17:50:09] 
+INFO  [2023-10-15 18:27:25] 
 ========================================================================================
-Log Path: <path>/logs/logfile.txt
-Working Directory: <path>/scripts
-R version: R version 4.2.1 (2022-06-23 ucrt)
-Machine: LT200067 x86-64
-Operating System: Windows 10 x64 (build 19045)
+Log Path: C:/Users/marja/Desktop/BY-COVID_WP5_T5.2_baseline-use-case/vaccine_effectiveness_analytical_pipeline/logs/logfile.txt
+Working Directory: C:/Users/marja/Desktop/BY-COVID_WP5_T5.2_baseline-use-case/vaccine_effectiveness_analytical_pipeline/scripts
+R version: R version 4.3.1 (2023-06-16 ucrt)
+Machine: DESKTOP-MHKJDLH x86-64
+Operating System: Windows 11 x64 (build 22000)
 Base Packages Attached: parallel stats graphics grDevices utils datasets methods base
-Other Packages Attached: dbplyr_2.3.3 finalfit_1.0.6 xlsx_0.6.5 log4r_0.4.3 survRM2_1.0-4 gtsummary_1.7.2 forestmodel_0.6.2 tab_5.1.1 knitr_1.41 table1_1.4.3 survival_3.5-0 MatchIt_4.5.0 consort_1.2.0 shiny_1.7.4 tidyr_1.3.0 mice_3.15.0 visdat_0.6.0 here_1.0.1 duckdb_0.6.2 DBI_1.1.3 naniar_0.6.1 formattable_0.2.1 scales_1.2.1 plotly_4.10.2 quarto_1.2 survminer_0.4.9 ggpubr_0.5.0 ggplot2_3.4.0 dlookr_0.6.1 purrr_1.0.1 DT_0.27 DataExplorer_0.8.2 validate_1.1.3 arrow_10.0.1 dplyr_1.1.2
-Packages loaded via a namespace (and not attached): dbplyr_2.3.3 finalfit_1.0.6 xlsx_0.6.5 log4r_0.4.3 survRM2_1.0-4 gtsummary_1.7.2 forestmodel_0.6.2 tab_5.1.1 knitr_1.41 table1_1.4.3 survival_3.5-0 MatchIt_4.5.0 consort_1.2.0 shiny_1.7.4 tidyr_1.3.0 mice_3.15.0 visdat_0.6.0 here_1.0.1 duckdb_0.6.2 DBI_1.1.3 naniar_0.6.1 formattable_0.2.1 scales_1.2.1 plotly_4.10.2 quarto_1.2 survminer_0.4.9 ggpubr_0.5.0 ggplot2_3.4.0 dlookr_0.6.1 purrr_1.0.1 DT_0.27 DataExplorer_0.8.2 validate_1.1.3 arrow_10.0.1 dplyr_1.1.2
+Other Packages Attached: dbplyr_2.3.4 finalfit_1.0.6 xlsx_0.6.5 log4r_0.4.3 survRM2_1.0-4 gtsummary_1.7.2 forestmodel_0.6.2 tab_5.1.1 knitr_1.41 table1_1.4.3 survival_3.5-0 logger_0.2.2 MatchIt_4.5.0 consort_1.2.1 shiny_1.7.4 tidyr_1.3.0 mice_3.15.0 visdat_0.6.0 here_1.0.1 duckdb_0.6.2 DBI_1.1.3 naniar_0.6.1 formattable_0.2.1 scales_1.2.1 plotly_4.10.2 quarto_1.2 survminer_0.4.9 ggpubr_0.5.0 ggplot2_3.4.0 dlookr_0.6.1 purrr_1.0.1 DT_0.27 DataExplorer_0.8.2 validate_1.1.3 arrow_10.0.1 dplyr_1.1.2
+Packages loaded via a namespace (and not attached): dbplyr_2.3.4 finalfit_1.0.6 xlsx_0.6.5 log4r_0.4.3 survRM2_1.0-4 gtsummary_1.7.2 forestmodel_0.6.2 tab_5.1.1 knitr_1.41 table1_1.4.3 survival_3.5-0 logger_0.2.2 MatchIt_4.5.0 consort_1.2.1 shiny_1.7.4 tidyr_1.3.0 mice_3.15.0 visdat_0.6.0 here_1.0.1 duckdb_0.6.2 DBI_1.1.3 naniar_0.6.1 formattable_0.2.1 scales_1.2.1 plotly_4.10.2 quarto_1.2 survminer_0.4.9 ggpubr_0.5.0 ggplot2_3.4.0 dlookr_0.6.1 purrr_1.0.1 DT_0.27 DataExplorer_0.8.2 validate_1.1.3 arrow_10.0.1 dplyr_1.1.2
 ========================================================================================
      
-INFO  [2023-09-18 17:50:09] 
+INFO  [2023-10-15 18:27:25] 
 ========================================================================================
 0_global.R
 ========================================================================================
     
 INFO  - CREATING NECESSARY AUXILIARY TABLES...
-INFO  - Database path: C:/Users/MaMe1698/Desktop/R-code/analytical-pipeline/input/BY-COVID-WP5-BaselineUseCase-VE.duckdb
+INFO  - Database path: C:/Users/marja/Desktop/BY-COVID_WP5_T5.2_baseline-use-case/vaccine_effectiveness_analytical_pipeline/input/BY-COVID-WP5-BaselineUseCase-VE.duckdb
 INFO  - Database tables: cohort_data
 INFO  - Table cohort_data created
 INFO  - INSERT DATA INTO 'COHORT_DATA' TABLE...
 INFO  - Number of rows in table cohort_data before: 0
 INFO  - Number of rows in table cohort_data after: 10000
                                     
-INFO  [2023-09-18 17:50:23] 
+INFO  [2023-10-15 18:27:40] 
 ========================================================================================
 1_DQA.QMD
 ========================================================================================
@@ -39,7 +39,7 @@ INFO  - CREATING TABLE WITH ALERTS...
 INFO  - CREATING TABLE WITH INFORMATION ON DUPLICATES...
 INFO  - ITERATING OVER INDIVIDUAL VARIABLES...
      
-INFO  [2023-09-18 17:50:48] 
+INFO  [2023-10-15 18:28:22] 
 ========================================================================================
 2_validation.QMD
 ========================================================================================
@@ -52,7 +52,7 @@ INFO  - SELECTING PATIENT IDS OF RECORDS VIOLATING AT LEAST ONE OF THE VALIDATIO
 INFO  - SET FLAG_VIOLATING_VAL TO TRUE WHEN AT LEAST ONE OF THE RULES IS VIOLATED...
 INFO  - COUNT PATIENTS WITH FLAG_VIOLATING_VAL TRUE VERSUS FALSE...
      
-INFO  [2023-09-18 17:51:06] 
+INFO  [2023-10-15 18:28:44] 
 ========================================================================================
 3_imputation.QDM
 ========================================================================================
@@ -70,7 +70,7 @@ INFO  - CREATING A TABLE WITH INFORMATION ON THE IMPUTATION PROCESS...
 INFO  - PLOT THE DISTRIBUTION OF IMPUTED DATA...
 INFO  - ADJUSTING FLAG VARIABLE (FLAG_LISTWISE_DEL)...
      
-INFO  [2023-09-18 17:51:51] 
+INFO  [2023-10-15 18:29:44] 
 ========================================================================================
 4_matching.QDM
 ========================================================================================
@@ -86,7 +86,7 @@ INFO  - PLOTTING STANDARDIZED MEAN DIFFERENCE AFTER MATCHING...
 INFO  - ASSISSING PROPENSITY SCORE DISTRIBUTION PRIOR TO MATCHING...
 INFO  - ASSISSING PROPENSITY SCORE DISTRIBUTION AFTER MATCHING...
      
-INFO  [2023-09-18 17:56:14] 
+INFO  [2023-10-15 18:35:45] 
 ========================================================================================
 5_descriptives
 ========================================================================================
@@ -96,6 +96,8 @@ INFO  - EXTRACTING ENROLLMENT AND STUDY PERIOD...
 INFO  - CREATING CONSORT GRAPH...
 INFO  - GENERATING A DESCRIPTION OF THE STUDY POPULATION: POPULATION ELIGIBLE FOR MATCHING...
 INFO  - GENERATING A DESCRIPTION OF THE STUDY POPULATION: MATCHED POPULATION...
+INFO  - PLOTTING NUMBER OF INDIVIDUALS COMPLETING A PRIMARY VACCINATION SCHEDULE OVER TIME...
+INFO  - PLOTTING NUMBER OF INDIVIDUALS COMPLETING A PRIMARY VACCINATION SCHEDULE OVER TIME...
 INFO  - GENERATING TWO-BY-TWO TABLES...
 INFO  - GENERATING TWO-BY-TWO TABLE: ORIGINAL INPUT DATA...
 INFO  - GENERATING TWO-BY-TWO TABLE: POPULATION ELIGIBLE FOR MATCHING...
@@ -110,7 +112,7 @@ INFO  - EXECUTING A SURVIVAL ANALYSIS IN THE UN-MATCHED POPULATION (COMPLEX MODE
 INFO  - GENERATING A SUMMARY OF SURVIVAL IN THE UN-MATCHED POPULATION (COMPLEX MODEL)...
 INFO  - PLOT THE HR'S IN THE UN-MATCHED POPULATION (COMPLEX MODEL)...
      
-INFO  [2023-09-18 17:56:38] 
+INFO  [2023-10-15 18:36:15] 
 ========================================================================================
 6_survival-analysis.QMD
 ========================================================================================
@@ -135,18 +137,26 @@ INFO  - ASSESSING THE FIT OF THE COX PROPORTIONAL HAZARD MODEL STRATIFIED BY VAC
 INFO  - CALCULATING THE RMST AND RMTL BY VACCINATION SCHEDULE...
 INFO  - CREATING A TABLE WITH THE RMST AND RMTL BY VACCINATION SCHEDULE...
 INFO  - CALCULATING THE AVERAGE TREATMENT EFFECT BASED ON THE RMST AND RMTL...
+INFO  - PLOTTING THE PROBABILITY OF SURVIVAL OVER TIME BY RESIDENCE AREA...
+INFO  - PLOTTING CUMULATIVE INCIDENCE OVER TIME BY RESIDENCE AREA...
+INFO  - BUILDING A COX PROPORTIONAL HAZARDS MODEL STRATIFIED BY RESIDENCE AREA...
+INFO  - ASSESSING THE HAZARD RATIO BY RESIDENCE AREA...
+INFO  - ASSESSING THE FIT OF THE COX PROPORTIONAL HAZARD MODEL STRATIFIED BY RESIDENCE AREA
+INFO  - CALCULATING THE RMST AND RMTL BY RESIDENCE AREA...
+INFO  - CREATING A TABLE WITH THE RMST AND RMTL BY RESIDENCE AREA...
+INFO  - CALCULATING THE AVERAGE TREATMENT EFFECT BASED ON THE RMST AND RMTL...
 INFO  - SAVING RESULTS FOR META-ANALYSIS...
      
-INFO  [2023-09-18 17:56:59] 
+INFO  [2023-10-15 18:36:53] 
 ========================================================================================
 Runtime
 ========================================================================================
   
-INFO  - Overall runtime: 7.36 mins
-INFO  - Runtime 0_global.R: 32.4 secs
-INFO  - Runtime 1_DQA.QMD: 25.31 secs
-INFO  - Runtime 2_validation.QMD: 16.65 secs
-INFO  - Runtime 3_imputation.QMD: 46.02 secs
-INFO  - Runtime 4_matching.QMD: 4.39 mins
-INFO  - Runtime 5_descriptives.QMD: 23.62 secs
-INFO  - Runtime 6_survival-analysis.QMD: 34.04 secs
+INFO  - Overall runtime: 9.93 mins
+INFO  - Runtime 0_global.R: 29.14 secs
+INFO  - Runtime 1_DQA.QMD: 42.25 secs
+INFO  - Runtime 2_validation.QMD: 19.83 secs
+INFO  - Runtime 3_imputation.QMD: 1.04 mins
+INFO  - Runtime 4_matching.QMD: 5.94 mins
+INFO  - Runtime 5_descriptives.QMD: 33.73 secs
+INFO  - Runtime 6_survival-analysis.QMD: 52.27 secs

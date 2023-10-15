@@ -23,7 +23,7 @@ if(FALSE) {
 ### Description: load required packages
 x <- c("dplyr","arrow","validate","DataExplorer","DT","purrr","dlookr","survminer",
        "quarto","ggplot2","plotly","scales","formattable","naniar","duckdb","DBI","here",
-       "grDevices","visdat","mice","tidyr","shiny","consort","parallel","MatchIt",
+       "grDevices","visdat","mice","tidyr","shiny","consort","parallel","MatchIt","logger",
        "survival","table1","tab","forestmodel","gtsummary","survRM2","knitr","log4r","xlsx","finalfit","dbplyr") 
 lapply(x, require, character.only = TRUE)
 
@@ -35,8 +35,8 @@ auxiliary_database_path <- file.path(input_data_path, auxiliary_database_name)
 log_path <- here('logs')
 log_file_name <- 'logfile.txt'
 log_file_path <- file.path(log_path, log_file_name)
-logger <- logger("DEBUG", appenders = file_appender(log_file_path, append=TRUE, layout=default_log_layout()))
-logger_simple <- logger("DEBUG", appenders = file_appender(log_file_path, append=TRUE, layout=simple_log_layout()))
+logger <- logger("DEBUG", appender = file_appender(log_file_path, append=TRUE, layout=default_log_layout()))
+logger_simple <- logger("DEBUG", appender = file_appender(log_file_path, append=TRUE, layout=simple_log_layout()))
 
 ### Description: function f_load_data
 f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {

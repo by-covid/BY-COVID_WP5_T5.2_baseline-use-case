@@ -68,7 +68,7 @@ tryCatch(
     country <- unique(dbGetQuery(con, "select country_cd from cohort_data"))$country_cd[which(!is.na(unique(dbGetQuery(con, "select country_cd from cohort_data"))$country_cd))]
     
     ## Load matched data 
-    dbExecute(con, "CREATE TEMP TABLE cohort_data_sub AS SELECT person_id, vaccination_schedule_cd FROM cohort_data")
+    dbExecute(con, "CREATE TEMP TABLE cohort_data_sub AS SELECT person_id, vaccination_schedule_cd, residence_area_cd FROM cohort_data")
     dbExecute(con, "CREATE TEMP TABLE matched_data_sub AS SELECT person_id, fully_vaccinated_bl, subclass, CAST(status as INTEGER) as status, futime from matched_data")
     dbExecute(con,"CREATE TEMP TABLE matched_data_ext AS
                 SELECT * FROM matched_data_sub A 
@@ -81,6 +81,7 @@ tryCatch(
                 arrange(subclass, fully_vaccinated_bl) %>%
                 tidyr::fill(vaccination_schedule_cd, .direction = 'up'))
     vaccination_schedules <- na.exclude(unique(dbGetQuery(con, "select vaccination_schedule_cd from cohort_data"))$vaccination_schedule_cd)
+    residence_areas <- na.exclude(unique(dbGetQuery(con, "select residence_area_cd from cohort_data"))$residence_area_cd)
     
   },
   error=function(cond) {
@@ -145,6 +146,7 @@ tryCatch(
                break.x.by=100,
                conf.int = TRUE,
                pval = TRUE,
+               censor = FALSE,
                # main="Survival Estimates",
                legend.title="",
                legend.labs = c("Control group (fully_vaccinated_bl==FALSE)", "Intervention group (fully_vaccinated_bl==TRUE)"),
@@ -161,12 +163,8 @@ tryCatch(
     }
     
     ## Adjust hover text
-    plot_surv.pl$x$data[[1]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[1]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[1]]$y,3),"<br>","Intervention: ",plot_surv.pl$x$data[[1]]$name))
-    plot_surv.pl$x$data[[2]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[2]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[2]]$y,3),"<br>","Intervention: ",plot_surv.pl$x$data[[2]]$name))
-    plot_surv.pl$x$data[[6]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[6]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[6]]$y,3),"<br>","Intervention: ",plot_surv.pl$x$data[[6]]$name))
-    plot_surv.pl$x$data[[7]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[7]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[7]]$y,3),"<br>","Intervention: ",plot_surv.pl$x$data[[7]]$name))
-    plot_surv.pl$x$data[[8]]$hovertext = NULL
-    
+    plot_surv.pl$x$data[[1]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[1]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[1]]$y,3),"<br>",plot_surv.pl$x$data[[1]]$name))
+    plot_surv.pl$x$data[[2]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[2]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[2]]$y,3),"<br>",plot_surv.pl$x$data[[2]]$name))
   },
   error=function(cond) {
     ## Log info
@@ -212,6 +210,7 @@ tryCatch(
                 risk.table = FALSE,
                 cumevents = FALSE,
                 cumcensor = FALSE,
+                censor = FALSE,
                 fun = "event",
                 legend.title="",
                 legend.labs = c("Control group (fully_vaccinated_bl==FALSE)", "Intervention group (fully_vaccinated_bl==TRUE)")
@@ -228,12 +227,8 @@ tryCatch(
     }
     
     ## Adjust hover text
-    plot_cumev.pl$x$data[[1]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[1]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[1]]$y,3),"<br>","Intervention: ",plot_surv.pl$x$data[[1]]$name))
-    plot_cumev.pl$x$data[[2]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[2]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[2]]$y,3),"<br>","Intervention: ",plot_cumev.pl$x$data[[2]]$name))
-    plot_cumev.pl$x$data[[6]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[6]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[6]]$y,3),"<br>","Intervention: ",plot_cumev.pl$x$data[[6]]$name))
-    plot_cumev.pl$x$data[[7]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[7]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[7]]$y,3),"<br>","Intervention: ",plot_cumev.pl$x$data[[7]]$name))
-    plot_cumev.pl$x$data[[8]]$hovertext = NULL
-    
+    plot_cumev.pl$x$data[[1]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[1]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[1]]$y,3),"<br>",plot_surv.pl$x$data[[1]]$name))
+    plot_cumev.pl$x$data[[2]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[2]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[2]]$y,3),"<br>",plot_cumev.pl$x$data[[2]]$name))
   },
   error=function(cond) {
     ## Log info
@@ -511,7 +506,7 @@ tryCatch(
   {
     
     df_matched$vaccination_schedule_cd <- as.factor(df_matched$vaccination_schedule_cd)
-    surv_fit_vacschedule <- survfit(Surv(time=futime,event=status) ~ fully_vaccinated_bl,  data=df_matched)
+    surv_fit_vacschedule <- survfit(Surv(time=futime,event=status) ~ fully_vaccinated_bl + vaccination_schedule_cd,  data=df_matched)
     
     ## Create plot
     ggsurv.facet.vacschedule <- ggsurvplot_facet(surv_fit_vacschedule, 
@@ -521,23 +516,25 @@ tryCatch(
                                        ylab="Survival probability",
                                        surv.median.line = "hv",
                                        pval.coord = c(100,0.15),
-                                       ylim=c(0,1),
                                        xlim=c(0,700),
                                        break.x.by=100,
                                        conf.int = TRUE,
                                        pval = TRUE,
+                                       censor = FALSE,
                                        legend.title="",
                                        main="Product-Limit Survival Estimates",
                                        legend.labs = c("Control group (fully_vaccinated_bl==FALSE)", "Intervention group (fully_vaccinated_bl==TRUE)"),
                                        # theme(legend.position = "top"),
-                                       risk.table = FALSE)
+                                       risk.table = FALSE) +
+      theme(axis.text.x = element_text(angle = 20)) +
+      scale_y_continuous(limits = c(-0.1,1.1), breaks=c(0,0.25,0.50,0.75,1.0))
     
     ## Convert to plotly
     ggsurv.facet.vacschedule.ply <- ggplotly(ggsurv.facet.vacschedule)
     
     ## Adjust legend label
     # Count number of different vaccination schedules
-    n_facet <- length(ggsurv.facet.vacschedule.ply$x$data)/8
+    n_facet <- length(vaccination_schedules)
     # Show the legend only for the first layer of the group
     ggsurv.facet.vacschedule.ply$x$data[[1]]$showlegend <- TRUE 
     ggsurv.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[1]]$name))
@@ -554,10 +551,6 @@ tryCatch(
     for (i in 1:(2*n_facet)) {
       ggsurv.facet.vacschedule.ply$x$data[[i]]$text = paste0("Time: ",ggsurv.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Survival probability: ", round(ggsurv.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[i]]$name))
     }  
-    for (i in ((2*n_facet+n_facet+1)+(2*n_facet)):((2*n_facet+n_facet+1)+(4*n_facet)-1)) {
-      ggsurv.facet.vacschedule.ply$x$data[[i]]$text = paste0("Time: ",ggsurv.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Survival probability: ", round(ggsurv.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[i]]$name))
-    }  
-    
   },
   error=function(cond) {
     ## Log info
@@ -601,31 +594,35 @@ tryCatch(
                                        facet.by = c("vaccination_schedule_cd"),
                                        pval.coord = c(100,0.80),
                                        pval = TRUE,
-                                       ylim=c(0,1),
                                        xlim=c(0,700),
                                        break.x.by=100,
                                        conf.int = TRUE,
+                                       censor = FALSE,
                                        cumevents = FALSE,
                                        cumcensor = FALSE,
                                        fun = "event",
+                                       xlab="Days of follow-up",
+                                       ylab="Cumulative events",
                                        legend.title="",
                                        legend.labs = c("Control group (fully_vaccinated_bl==FALSE)", "Intervention group (fully_vaccinated_bl==TRUE)"),
-                                       risk.table = FALSE)
+                                       risk.table = FALSE) +
+      theme(axis.text.x = element_text(angle = 20)) +
+      scale_y_continuous(limits = c(-0.1,1.1), breaks=c(0,0.25,0.50,0.75,1.0))
     
     ## Convert to plotly
     ggcumev.facet.vacschedule.ply <- ggplotly(ggcumev.facet.vacschedule)
     
     ## Adjust legend label
     # Count number of different vaccination schedules
-    n_facet <- length(ggcumev.facet.vacschedule.ply$x$data)/8
+    n_facet <- length(vaccination_schedules)
     # Show the legend only for the first layer of the group
     ggcumev.facet.vacschedule.ply$x$data[[1]]$showlegend <- TRUE 
-    ggcumev.facet.vacschedule.ply$x$data[[1]]$name = paste0("fully_vaccinated_bl=",gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[1]]$name))
+    ggcumev.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[1]]$name))
     for (i in 2:n_facet) {
       ggcumev.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
     }
     ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$showlegend <- TRUE 
-    ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name = paste0("fully_vaccinated_bl=",gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name))
+    ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name))
     for (i in (n_facet+2):(2*n_facet)) {
       ggcumev.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
     }
@@ -634,10 +631,6 @@ tryCatch(
     for (i in 1:(2*n_facet)) {
       ggcumev.facet.vacschedule.ply$x$data[[i]]$text = paste0(paste("Time: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Cumulative incidence: ", round(ggcumev.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$name))
     }  
-    for (i in ((2*n_facet+n_facet+1)+(2*n_facet)):((2*n_facet+n_facet+1)+(4*n_facet)-1)) {
-      ggcumev.facet.vacschedule.ply$x$data[[i]]$text = paste0(paste("Time: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Cumulative incidence: ", round(ggcumev.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$name))
-    }  
-    
   },
   error=function(cond) {
     ## Log info
@@ -856,6 +849,369 @@ tryCatch(
   })
 
 ```
+
+## Additional analysis - subgroups by NUTS3 residence area
+
+##### Survival plot
+
+We estimate the survival function using the Kaplan-Meier estimator and represent this function visually using a Kaplan-Meier curve, showing the probability of not getting infected by SARS-CoV-2 at a certain time after onset of follow-up. The survival function is estimated for the control and intervention group, within subsets defined by the NUTS3 residence area.
+
+```{r, survival plot by residence area, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Plot survival probability by vaccination schedule
+
+info(logger_simple, "PLOTTING THE PROBABILITY OF SURVIVAL OVER TIME BY RESIDENCE AREA...")
+
+tryCatch(
+  {
+    
+    df_matched$residence_area_cd <- as.factor(df_matched$residence_area_cd)
+    surv_fit_area <- survfit(Surv(time=futime,event=status) ~ fully_vaccinated_bl + residence_area_cd,  data=df_matched)
+    
+    ## Create plot
+    ggsurv.facet.area <- ggsurvplot_facet(surv_fit_area, 
+                                       df_matched, 
+                                       facet.by = c("residence_area_cd"),
+                                       xlab="Days of follow-up",
+                                       ylab="Survival probability",
+                                       surv.median.line = "hv",
+                                       pval.coord = c(100,0.15),
+                                       xlim=c(0,700),
+                                       break.x.by=100,
+                                       conf.int = TRUE,
+                                       pval = TRUE,
+                                       ncol = 2,
+                                       censor = FALSE,
+                                       legend.title="",
+                                       main="Product-Limit Survival Estimates",
+                                       legend.labs = c("Control group (fully_vaccinated_bl==FALSE)", "Intervention group (fully_vaccinated_bl==TRUE)"),
+                                       risk.table = FALSE) +
+      theme(axis.text.x = element_text(angle = 20)) +
+      scale_y_continuous(limits = c(-0.1,1.1), breaks=c(0,0.25,0.50,0.75,1.0))
+    
+    ## Convert to plotly
+    ggsurv.facet.area.ply <- ggplotly(ggsurv.facet.area)
+    
+    ## Adjust legend label
+    # Count number of different NUTS3 levels
+    n_facet <- length(residence_areas)
+    # Show the legend only for the first layer of the group
+    ggsurv.facet.area.ply$x$data[[1]]$showlegend <- TRUE 
+    ggsurv.facet.area.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.area.ply$x$data[[1]]$name))
+    for (i in 2:n_facet) {
+      ggsurv.facet.area.ply$x$data[[i]]$showlegend <- FALSE
+    }
+    ggsurv.facet.area.ply$x$data[[n_facet+1]]$showlegend <- TRUE 
+    ggsurv.facet.area.ply$x$data[[n_facet+1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.area.ply$x$data[[n_facet+1]]$name))
+    for (i in (n_facet+2):(2*n_facet)) {
+      ggsurv.facet.area.ply$x$data[[i]]$showlegend <- FALSE
+    }
+    
+    ggsurv.facet.area.ply
+    
+    ## Adjust hover text
+    for (i in 1:(2*n_facet)) {
+      ggsurv.facet.area.ply$x$data[[i]]$text = paste0("Time: ",ggsurv.facet.area.ply$x$data[[i]]$x,"<br>","Survival probability: ", round(ggsurv.facet.area.ply$x$data[[i]]$y,3),"<br>","Intervention: ",gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.area.ply$x$data[[i]]$name))
+    }  
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR:
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+```{r, survival plot by residence area 2, message=FALSE, warning=FALSE, error=FALSE}
+
+tryCatch(
+  {
+    ggsurv.facet.area.ply %>% layout(legend = list(orientation = "h", y=1.4, x= 0.1))
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+<br>
+
+The cumulative incidence of the event (SARS-CoV-2 infection) was additionally plotted within subsets defined by the NUTS3 residence area.
+
+```{r, cumulative incidence by residence area, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Plot cumulative incidence by residence area
+
+info(logger_simple, "PLOTTING CUMULATIVE INCIDENCE OVER TIME BY RESIDENCE AREA...")
+
+tryCatch(
+  {
+    ## Create plot
+    ggcumev.facet.area <- ggsurvplot_facet(surv_fit_area, 
+                                       df_matched, 
+                                       facet.by = c("residence_area_cd"),
+                                       pval.coord = c(100,0.80),
+                                       pval = TRUE,
+                                       xlim=c(0,700),
+                                       break.x.by=100,
+                                       conf.int = FALSE,
+                                       censor = FALSE,
+                                       cumevents = FALSE,
+                                       cumcensor = FALSE,
+                                       xlab="Days of follow-up",
+                                       ylab="Cumulative events",
+                                       fun = "event",
+                                       legend.title="",
+                                       ncol = 2,
+                                       legend.labs = c("Control group (fully_vaccinated_bl==FALSE)", "Intervention group (fully_vaccinated_bl==TRUE)"),
+                                       risk.table = FALSE) +
+      theme(axis.text.x = element_text(angle = 20)) +
+      scale_y_continuous(limits = c(-0.1,1.1), breaks=c(0,0.25,0.50,0.75,1.0))
+    
+    ## Convert to plotly
+    ggcumev.facet.area.ply <- ggplotly(ggcumev.facet.area)
+    
+    ## Adjust legend label
+    # Count number of different residence areas
+    n_facet <- length(residence_areas)
+    # Show the legend only for the first layer of the group
+    ggcumev.facet.area.ply$x$data[[1]]$showlegend <- TRUE 
+    ggcumev.facet.area.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.area.ply$x$data[[1]]$name))
+    for (i in 2:n_facet) {
+      ggcumev.facet.area.ply$x$data[[i]]$showlegend <- FALSE
+    }
+    ggcumev.facet.area.ply$x$data[[n_facet+1]]$showlegend <- TRUE 
+    ggcumev.facet.area.ply$x$data[[n_facet+1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.area.ply$x$data[[n_facet+1]]$name))
+    for (i in (n_facet+2):(2*n_facet)) {
+      ggcumev.facet.area.ply$x$data[[i]]$showlegend <- FALSE
+    }
+    
+    ## Adjust hover text
+    for (i in 1:(2*n_facet)) {
+      ggcumev.facet.area.ply$x$data[[i]]$text = paste0(paste("Time: ",ggcumev.facet.area.ply$x$data[[i]]$x,"<br>","Cumulative incidence: ", round(ggcumev.facet.area.ply$x$data[[i]]$y,3),"<br>","Intervention: ",ggcumev.facet.area.ply$x$data[[i]]$name))
+    }  
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR:
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+```{r, cumulative incidence by residence area 2, message=FALSE, warning=FALSE, error=FALSE}
+
+tryCatch(
+  {
+    ggcumev.facet.area.ply %>% layout(legend = list(orientation = "h", y=1.4, x= 0.1))
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+<br>
+
+##### Cox regression and estimation of the average treatment effect
+
+A Cox regression model was built to examine the relationship between the distribution of the probability of not obtaining a SARS-CoV-2 infection (survival distribution) and completing a primary vaccination schedule (covariate), and whether this differs according to the area of residence (NUTS3 level). A stratified Cox proportional hazards regression model was fitted with 'fully_vaccinated_bl' as a covariate, 'residence_area_cd' as a stratification factor, and accounting for clustering within individuals (as one individual can be re-sampled as control).
+
+```{r, coxph HR by residence area, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Build Cox proportional hazards model stratified by residence area
+
+info(logger_simple, "BUILDING A COX PROPORTIONAL HAZARDS MODEL STRATIFIED BY RESIDENCE AREA...")
+
+tryCatch(
+  {
+    df_matched$fully_vaccinated_bl <- factor(df_matched$fully_vaccinated_bl,levels = c(FALSE,TRUE))
+    cph_fit_subg_area <- coxph(Surv(futime, status) ~ fully_vaccinated_bl*strata(residence_area_cd) + cluster(person_id), data = df_matched)
+    # cph_fit %>% tbl_regression(exp=TRUE, intercept=TRUE) # conf.level=0.001
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+```{r, hazard ratio by residence area, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Calculating the hazard ratio by residence area
+
+info(logger_simple, "ASSESSING THE HAZARD RATIO BY RESIDENCE AREA...")
+
+tryCatch(
+  {
+    df_sum_cph_subg_area <- data.frame(coefficients=NA, exp_coefficients=NA, se_coefficients=NA, robust_se=NA, z=NA, p_value=NA)
+    df_sum_cph_subg_area[1:nrow(summary(cph_fit_subg_area)[["coefficients"]]),] <- summary(cph_fit_subg_area)[["coefficients"]]
+    rownames(df_sum_cph_subg_area) <- rownames(summary(cph_fit_subg_area)[["coefficients"]])
+    se_exp_coef <- df_sum_cph_subg_area$robust_se*df_sum_cph_subg_area$exp_coefficients # se(sex)*exp(sex) or us svycontrast() in the survey package
+    upper_limit <- df_sum_cph_subg_area$exp_coefficients+1.96*se_exp_coef # Adjust critical value? 95% CI?
+    lower_limit <- df_sum_cph_subg_area$exp_coefficients-1.96*se_exp_coef # Adjust critical value? 95% CI?
+    df_sum_cph_subg_area_rounded <- round(df_sum_cph_subg_area,3)
+    
+    # # Table for export
+    df_sum_cph_subg_area$se_exp_coefficients <- se_exp_coef
+    df_sum_cph_subg_area$exp_coefficients_lower <- lower_limit
+    df_sum_cph_subg_area$exp_coefficients_upper <- upper_limit
+    df_sum_cph_subg_area <- df_sum_cph_subg_area %>% rename(robust_se_coefficients=robust_se)
+    
+    # Print table
+    df_sum_cph_subg_area_rounded$hr_ci <- paste0(df_sum_cph_subg_area_rounded$exp_coefficients," (",round(lower_limit,3),", ",round(upper_limit,3),")")
+    formattable(df_sum_cph_subg_area_rounded) %>% select(c(coefficients,se_coefficients,robust_se,p_value,hr_ci)) %>% rename("Parameter estimate" = coefficients, "SE coefficient" = se_coefficients, "Robust SE coefficient" = robust_se, "P-value" = p_value, "Hazard Ratio (HR)\n(95% CI for HR)" = hr_ci) # 95% CI?
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+    
+```
+
+<br>
+
+The overall significance of the model is tested.
+
+```{r, coxph model by residence area fit, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: Assessing the fit of the coxph model stratified by residence area
+
+info(logger_simple, "ASSESSING THE FIT OF THE COX PROPORTIONAL HAZARD MODEL STRATIFIED BY RESIDENCE AREA")
+
+tryCatch(
+  {
+    stat_sign_model_area <- as.data.frame(rbind(summary(cph_fit_subg_area)[["logtest"]],summary(cph_fit_subg_area)[["waldtest"]],summary(cph_fit_subg_area)[["sctest"]],summary(cph_fit_subg_area)[["robscore"]]))
+    rownames(stat_sign_model_area) <- c("Likelihood ratio test","Wald test","Score (logrank) test","Robust score test")
+    formattable(stat_sign_model_area, align='c') %>% rename("Test statistic" = test, "Df" = df, "P-value" = pvalue) 
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+Proportional hazards during the study period might be unlikely. As such, the RMST and RMTL ratios are additionally calculated, providing an alternative estimate for the the Average Treatment Effect (ATE), without requiring the proportional hazards assumption to be met.
+
+```{r, rmst2 by residence area, message=FALSE, warning=FALSE, error=FALSE}
+
+info(logger_simple, "CALCULATING THE RMST AND RMTL BY RESIDENCE AREA...")
+
+tryCatch(
+  {
+    df_rmst_area <- df_matched
+    df_rmst_area$fully_vaccinated_bl <- as.numeric(ifelse(df_rmst_area$fully_vaccinated_bl==TRUE,1,0))
+    for (i in residence_areas) {
+      assign(paste0("df_rmst_area_",i),df_rmst_area %>% filter(residence_area_cd==i))
+      assign(paste0("df_rmst_area_",i),
+             rmst2(time = get(paste0("df_rmst_area_",i))[["futime"]], 
+                                 status = get(paste0("df_rmst_area_",i))[["status"]], 
+                                 arm = get(paste0("df_rmst_area_",i))[["fully_vaccinated_bl"]], 
+                                 tau = 365, alpha = 0.05))
+    }
+ },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+```{r, RMST and RMTL by residence area, message=FALSE, warning=FALSE, error=FALSE}
+
+info(logger_simple, "CREATING A TABLE WITH THE RMST AND RMTL BY RESIDENCE AREA...")
+
+tryCatch(
+  {
+    df_rmst_result_area <- data.frame(Residence_area=NA,Arm=NA,Measure=NA,Estimate=NA,SE=NA,CI.lower=NA,CI.upper=NA)
+    for (i in 1:length(residence_areas)) {
+      df_rmst_result_area[(i-1)*4+1,] <- c(residence_areas[i],'Arm 0', 
+                                                  rownames(get(paste0('df_rmst_area_',residence_areas[i]))[["RMST.arm0"]][["result"]])[1],
+                                                  get(paste0('df_rmst_area_',residence_areas[i]))[["RMST.arm0"]][["result"]][1,])
+      df_rmst_result_area[(i-1)*4+2,] <- c(residence_areas[i],'Arm 1',
+                                                  rownames(get(paste0('df_rmst_area_',residence_areas[i]))[["RMST.arm1"]][["result"]])[1],
+                                                  get(paste0('df_rmst_area_',residence_areas[i]))[["RMST.arm1"]][["result"]][1,])
+      df_rmst_result_area[(i-1)*4+3,] <- c(residence_areas[i],'Arm 0',
+                                                  rownames(get(paste0('df_rmst_area_',residence_areas[i]))[["RMST.arm0"]][["result"]])[2],
+                                                  get(paste0('df_rmst_area_',residence_areas[i]))[["RMST.arm0"]][["result"]][2,])
+      df_rmst_result_area[(i-1)*4+4,] <- c(residence_areas[i],'Arm 1',
+                                                  rownames(get(paste0('df_rmst_area_',residence_areas[i]))[["RMST.arm1"]][["result"]])[2],
+                                                  get(paste0('df_rmst_area_',residence_areas[i]))[["RMST.arm1"]][["result"]][2,])
+    }
+
+    df_rmst_result_area <- df_rmst_result_area %>% mutate(
+      Arm = ifelse(Arm=="Arm 0","fully_vaccinated_bl==FALSE","fully_vaccinated_bl==TRUE"))
+    df_rmst_result_area_rounded <- df_rmst_result_area %>% mutate(
+      Estimate = round(as.numeric(Estimate),3),
+      SE = round(as.numeric(SE),3),
+      CI.lower = round(as.numeric(CI.lower),3),
+      CI.upper = round(as.numeric(CI.upper),3))
+    formattable(df_rmst_result_area_rounded, align = c("l"))  
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+```{r, average treatment effect by residence area, message=FALSE, warning=FALSE, error=FALSE}
+
+info(logger_simple, "CALCULATING THE AVERAGE TREATMENT EFFECT BASED ON THE RMST AND RMTL...")
+
+tryCatch(
+  {
+    df_rmst_contrast_area <- data.frame(Residence_area=NA,Measure=NA,Estimate=NA,CI.lower=NA,CI.upper=NA, p_value=NA)
+    for (i in 1:length(residence_areas)) {
+      df_rmst_contrast_area[(i-1)*3+1,] <- c(residence_areas[i],
+                                                    rownames(get(paste0('df_rmst_area_',residence_areas[i]))[["unadjusted.result"]])[1],
+                                                    get(paste0('df_rmst_area_',residence_areas[i]))[["unadjusted.result"]][1,])
+      df_rmst_contrast_area[(i-1)*3+2,] <- c(residence_areas[i],
+                                                    rownames(get(paste0('df_rmst_area_',residence_areas[i]))[["unadjusted.result"]])[2],
+                                                    get(paste0('df_rmst_area_',residence_areas[i]))[["unadjusted.result"]][2,])
+      df_rmst_contrast_area[(i-1)*3+3,] <- c(residence_areas[i],
+                                                    rownames(get(paste0('df_rmst_area_',residence_areas[i]))[["unadjusted.result"]])[3],
+                                                    get(paste0('df_rmst_area_',residence_areas[i]))[["unadjusted.result"]][3,])
+    }
+    df_rmst_contrast_area <- df_rmst_contrast_area %>% mutate(
+      Measure = case_when(
+        Measure=="RMST (arm=1)-(arm=0)" ~ "RMST (fully_vaccinated_bl==TRUE)-(fully_vaccinated_bl==FALSE)",
+        Measure=="RMST (arm=1)/(arm=0)" ~ "RMST (fully_vaccinated_bl==TRUE)/(fully_vaccinated_bl==FALSE)",
+        Measure=="RMTL (arm=1)/(arm=0)" ~ "RMTL (fully_vaccinated_bl==TRUE)/(fully_vaccinated_bl==FALSE)"))
+    df_rmst_contrast_area_rounded <- df_rmst_contrast_area %>% mutate(
+      Estimate = round(as.numeric(Estimate),3),
+      CI.lower = round(as.numeric(CI.lower),3),
+      CI.upper = round(as.numeric(CI.upper),3),
+      p_value = round(as.numeric(p_value),3))
+    formattable(df_rmst_contrast_area_rounded, align = c("l"))
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
 :::
 
 ```{r, saving results for meta-analysis, message=FALSE, warning=FALSE, error=FALSE}
@@ -866,44 +1222,34 @@ info(logger_simple, "SAVING RESULTS FOR META-ANALYSIS...
 tryCatch(
   {
     # Main analysis
-    write.xlsx(
-      surv_summary(surv_fit), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary"), row.names = FALSE) 
-    write.xlsx(
-      df_sum_cph, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR"), append=TRUE, row.names = TRUE) 
-    write.xlsx(
-      df_rmst_result, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL"), append=TRUE, row.names = FALSE)
-    write.xlsx(
-      df_rmst_contrast, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE"), append=TRUE, row.names = FALSE)
-    
+    write.xlsx2(
+      surv_summary(surv_fit), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary"), row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10))
+    write.xlsx2(
+      df_sum_cph, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9))
+    write.xlsx2(
+      df_rmst_result, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
+    write.xlsx2(
+      df_rmst_contrast, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,5))
+
     # Subgroup analysis - vaccination schedule
-    write.xlsx(
-      surv_summary(surv_fit_vacschedule), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary_vacschedule"),  append=TRUE, row.names = FALSE)
-    write.xlsx(
-      df_sum_cph_subg_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR_vacschedule"), append=TRUE, row.names = TRUE) 
-    write.xlsx(
-      df_rmst_result_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL_vacschedule"), append=TRUE, row.names = FALSE)
-    write.xlsx(
-      df_rmst_contrast_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE_vacschedule"), append=TRUE, row.names = FALSE)
+    write.xlsx2(
+      surv_summary(surv_fit_vacschedule), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary_vacschedule"),  append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10))
+    write.xlsx2(
+      df_sum_cph_subg_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR_vacschedule"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9))
+    write.xlsx2(
+      df_rmst_result_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL_vacschedule"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,7))
+    write.xlsx2(
+      df_rmst_contrast_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE_vacschedule"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
     
-    # # Main analysis
-    # write.xlsx(
-    #   surv_summary(surv_fit), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary"), row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10)) 
-    # write.xlsx(
-    #   df_sum_cph, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9)) 
-    # write.xlsx(
-    #   df_rmst_result, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
-    # write.xlsx(
-    #   df_rmst_contrast, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,5))
-    # 
-    # # Subgroup analysis - vaccination schedule
-    # write.xlsx(
-    #   surv_summary(surv_fit_vacschedule), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary_vacschedule"),  append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10))
-    # write.xlsx(
-    #   df_sum_cph_subg_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR_vacschedule"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9)) 
-    # write.xlsx(
-    #   df_rmst_result_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL_vacschedule"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,7))
-    # write.xlsx(
-    #   df_rmst_contrast_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE_vacschedule"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
+    # Subgroup analysis - residence area
+    write.xlsx2(
+      surv_summary(surv_fit_area), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary_area"),  append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10))
+    write.xlsx2(
+      df_sum_cph_subg_area, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR_area"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9)) 
+    write.xlsx2(
+      df_rmst_result_area, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL_area"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,7))
+    write.xlsx2(
+      df_rmst_contrast_area, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE_area"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
     
   },
   error=function(cond) {

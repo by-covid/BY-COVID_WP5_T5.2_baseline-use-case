@@ -76,8 +76,16 @@ tryCatch(
     v_matching_incl <- setdiff(c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl"),v_matching_excl)
 
     ## Matched data
+    dbExecute(con, "CREATE TEMP TABLE cohort_data_sub AS SELECT person_id, vaccination_schedule_cd FROM cohort_data")
+    # dbExecute(con, "CREATE TEMP TABLE matched_data_sub AS SELECT person_id, fully_vaccinated_dt, fully_vaccinated_bl, confirmed_case_dt, exitus_dt, boost_dt, date_onset, censoring_dt, subclass, CAST(status as INTEGER) as status, futime from matched_data")
+    dbExecute(con,"CREATE TEMP TABLE matched_data_ext AS
+                SELECT * FROM matched_data A 
+                LEFT JOIN cohort_data_sub B
+                on A.person_id=B.person_id")
+    dbExecute(con,"UPDATE matched_data_ext SET vaccination_schedule_cd=NULL WHERE fully_vaccinated_bl=FALSE")
+    
     df_matched <- dbGetQuery(con,
-      paste0("SELECT * FROM matched_data a
+      paste0("SELECT * FROM matched_data_ext a
       LEFT JOIN (
         SELECT c.person_id, ",
                ifelse("sex_cd" %in% v_matching_incl, "COALESCE(c.sex_cd,d.sex_cd) AS sex_cd, ",""),
@@ -92,12 +100,15 @@ tryCatch(
                ifelse("immunestatus_bl" %in% v_matching_incl, "c.immunestatus_bl ",""),
         " FROM cohort_data c
         LEFT JOIN cohort_data_imputed d on c.person_id = d.person_id
-      ) b on a.person_id = b.person_id")) %>% select(-c("person_id"))
+      ) b on a.person_id = b.person_id")) %>% select(-c(person_id, `person_id:1`))
     
     ## Un-matched data
     df_notmatched <- dbGetQuery(con,"SELECT person_id,fully_vaccinated_bl,fully_vaccinated_dt,age_cd,sex_cd,residence_area_cd,essential_worker_bl,
 		institutionalized_bl,foreign_bl,socecon_lvl_cd,comorbidities_bl,immunestatus_bl,pregnancy_bl
 		FROM cohort_view")
+    
+    ## Vaccination schedules
+    vaccination_schedules <- na.exclude(unique(dbGetQuery(con, "select vaccination_schedule_cd from cohort_data"))$vaccination_schedule_cd)
     
   },
   error=function(cond) {
@@ -249,7 +260,7 @@ tryCatch(
       geom_rect(xmin = 58, xmax=98, ymin=82, ymax=96, color='black',
                 fill='#EEEAEA', size=0.25) +
       annotate('text', x= 78.5, y=89,
-               label= paste0(n_excluded, ' patients excluded \n\n', 
+               label= paste0(n_excluded, ' individuals excluded \n\n', 
                              n_excluded_validation, ' did not comply with all validation rules \n', 
                              n_excluded_ld, ' were listwise deleted due to missing data\n', 
                              n_excluded_prev_inf, ' experienced a previous infection'), 
@@ -458,6 +469,124 @@ tryCatch(
 ```
 :::
 
+## Vaccination over time
+
+The cumulative frequency of individuals completing a primary vaccination schedule during the enrollment period is plotted over time, as well as the cumulative frequency of individuals completing a primary vaccination schedule with a specific vaccination schedule.
+
+```{r, plot vaccination over time, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table 1 matched population
+
+info(logger_simple, "PLOTTING NUMBER OF INDIVIDUALS COMPLETING A PRIMARY VACCINATION SCHEDULE OVER TIME...")
+
+tryCatch(
+  {
+    df_plot_time <- as.data.frame(seq(min_enrollp[[1]], max_enrollp[[1]],by="day")) 
+    colnames(df_plot_time) <- "Time_day"
+    df_aggr_vacc <- df_matched %>% 
+        filter(fully_vaccinated_bl=="Intervention group") %>%
+        group_by(fully_vaccinated_dt) %>% 
+        summarise(frequency = n()) %>%
+        arrange(fully_vaccinated_dt) %>%
+        mutate(cumsum = cumsum(frequency))
+    df_plot_time <- merge(x=df_plot_time,y=df_aggr_vacc, 
+      by.x=c("Time_day"), 
+      by.y=c("fully_vaccinated_dt"),
+      all.x=TRUE) %>%
+      tidyr::fill(cumsum, .direction = "down")
+    max_cumsum <- max(df_plot_time$cumsum)
+    
+    pl_vacc_time <- df_plot_time %>% ggplot() + geom_line(aes(x = Time_day, y = cumsum))  +
+      labs(x = NULL, y = "Cumulative frequency") +
+      theme_minimal() +
+      scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y") +
+      theme(axis.text.x=element_text(angle=40, hjust=1)) +
+      ylim(0,max_cumsum+50)
+    ply_vacc_time <- ggplotly(pl_vacc_time)
+    ply_vacc_time$x$data[[1]]$text <- paste0("Date: ", as.Date(ply_vacc_time$x$data[[1]]$x, origin="1970-01-01"),
+                                             "<br />", "Cumulative frequency: ", ply_vacc_time$x$data[[1]]$y)
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+```{r, plot vaccination over time by vaccination schedule, message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: create table 1 matched population
+
+info(logger_simple, "PLOTTING NUMBER OF INDIVIDUALS COMPLETING A PRIMARY VACCINATION SCHEDULE OVER TIME...")
+
+tryCatch(
+  {
+    n <- length(vaccination_schedules)
+    df_plot_time <- do.call("rbind", replicate(n,as.data.frame(seq(min_enrollp[[1]], max_enrollp[[1]],by="day")),simplify=FALSE))
+    colnames(df_plot_time) <- "Time_day"
+    v <- c()
+    for(i in vaccination_schedules) {
+      v <- c(v, rep(i, nrow(df_plot_time)/n))
+    }
+    df_plot_time$vaccination_schedule_cd <- v
+    
+    df_aggr_vacc_sch <- df_matched %>% 
+        filter(fully_vaccinated_bl=="Intervention group") %>%
+        group_by(fully_vaccinated_dt, vaccination_schedule_cd) %>% 
+        summarise(frequency = n()) %>%
+        group_by(vaccination_schedule_cd) %>%
+        arrange(vaccination_schedule_cd, fully_vaccinated_dt) %>%
+        mutate(cumsum = cumsum(frequency))
+    
+    df_plot_time <- merge(x=df_plot_time,y=df_aggr_vacc_sch, 
+      by.x=c("Time_day","vaccination_schedule_cd"), 
+      by.y=c("fully_vaccinated_dt","vaccination_schedule_cd"),
+      all.x=TRUE) %>%
+      arrange(vaccination_schedule_cd, Time_day) %>%
+      group_by(vaccination_schedule_cd) %>%
+      tidyr::fill(cumsum, .direction = "down")
+    
+    pl_vacc_time_schedule <- df_plot_time %>% ggplot() + geom_line(aes(x = Time_day, y = cumsum, colour = vaccination_schedule_cd))  +
+      labs(x = NULL, y = NULL, colour="Vaccination schedule") +
+      theme_minimal() +
+      scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y") +
+      theme(axis.text.x=element_text(angle=40, hjust=1)) +
+      ylim(0,max_cumsum+50)
+    ply_vacc_time_schedule <- ggplotly(pl_vacc_time_schedule)
+    
+    for (i in 1:length(vaccination_schedules)) {
+      ply_vacc_time_schedule$x$data[[i]]$text <- paste0("Date: ", as.Date(ply_vacc_time_schedule$x$data[[i]]$x, origin="1970-01-01"), "<br />", "Cumulative frequency: ", ply_vacc_time_schedule$x$data[[i]]$y, "<br />", "Vaccination schedule: ", ply_vacc_time_schedule$x$data[[i]]$legendgroup)
+    }
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
+```{r, plot vaccination over time by vaccination schedule 2, message=FALSE, warning=FALSE, error=FALSE}
+
+tryCatch(
+  {
+    t <- subplot(ply_vacc_time, ply_vacc_time_schedule, titleY = TRUE) #  %>% 
+      # layout(title = 'Cummulative frequency of individuals completing a primary vaccination schedule')
+    
+    t
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  })
+
+```
+
 ## Two-by-two tables {.tabset}
 
 ```{r, tables, message=FALSE, warning=FALSE, error=FALSE}
@@ -513,7 +642,7 @@ tryCatch(
 ::: panel-tabset
 ##### Original input data
 
-The individuals in the imported dataset are counted by whether they were fully vaccinated within the enrollment period and whether they experienced a known/confirmed infection (confirmed_case_bl, see CDM for definition).
+The imported dataset contains `r format(n_data_upload, digits = 2, big.mark = " ", decimal.mark = ",")` individual-level records. The individuals are counted by whether they were fully vaccinated within the enrollment period and whether they experienced a known/confirmed infection (confirmed_case_bl, see CDM for definition).
 
 ```{r, print table un-matched start population, message=FALSE, warning=FALSE, error=FALSE}
 
@@ -554,7 +683,7 @@ tryCatch(
 
 ##### Population eligible for matching
 
-The individuals eligible for analysis are counted by whether they were fully vaccinated within the enrollment period and whether they experienced a known/confirmed infection (confirmed_case_bl, see CDM for definition).
+From the individuals in the original input data, `r format(n_excluded, digits = 2, big.mark = " ", decimal.mark = ",")` individuals were excluded (experienced a previous infection, not complying with validation rules, listwise deletion), ending up with `r format(n_eligible, digits = 2, big.mark = " ", decimal.mark = ",")` individuals eligible for analysis. The individuals eligible for analysis are counted by whether they were fully vaccinated within the enrollment period and whether they experienced a known/confirmed infection (confirmed_case_bl, see CDM for definition).
 
 ```{r, print table un-matched eligible population, message=FALSE, warning=FALSE, error=FALSE}
 
@@ -595,6 +724,7 @@ tryCatch(
 
 ##### Matched population
 
+At each eligible time during the enrollment period, the vaccination status of eligible individuals is assessed and every individual who has completed a primary vaccination schedule at that time (treated/exposed) is matched to an individual who has not (yet) completed the primary vaccination schedule (control). `r format(n_eligible_vacc, digits = 2, big.mark = " ", decimal.mark = ",")` eligible individuals completed a primary vaccination schedule during the enrollment period. Newly vaccinated individuals (completing a primary vaccination schedule) are eligible for inclusion in the study, even if they had previously been selected in the "no (or partial) vaccine group". As such, individuals can occur more than once in the matched population (`r format(n_con_vacc_matched, digits = 2, big.mark = " ", decimal.mark = ",")` individuals completing a primary vaccination schedule during the enrollment period were previously matched once or more than once as control).
 The matched individuals are counted by intervention group and whether they experienced a known/confirmed infection (confirmed_case_bl, see CDM for definition).
 
 ```{r, print table matched population, message=FALSE, warning=FALSE, error=FALSE}
