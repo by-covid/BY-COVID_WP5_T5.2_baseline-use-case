@@ -16,17 +16,17 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 20/04/2023
+# 19/09/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline'
   authors     <- list('Marjan Meurisse','Javier González-Galindo','Santiago Royo-Sierra','Francisco Estupiñán-Romero','Nina Van Goethem','Enrique Bernal-Delgado')
-  version    <- '1.0.0'
+  version    <- '1.0.2'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
   input      <- list('csv upload')
-  output     <- list('1_DQA.html','2_validation.html','3_imputation.html','4_matching.html','5_descriptive.html','6_survival-analysis.html')
+  output     <- list('1_DQA.html','2_validation.html','3_imputation.html','4_matching.html','5_descriptive.html','6_survival-analysis.html','results-survival-analysis-<country>.xlsx')
 }
 
 ################
@@ -58,34 +58,64 @@ if(FALSE) {
 
 ```
 
-```{r, general settings and loading of data, message=FALSE, warning=FALSE, error=TRUE}
+
+```{r, general settings and loading of data, message=FALSE, warning=FALSE, error=FALSE}
 
 # 0. General settings and loading of data
 
+start_global_time <- Sys.time()
+
 source("./0_global.R")
-f_load_data(create_db_tables = TRUE,
+
+# Remove auxiliary database if it already exists
+if (file.exists(auxiliary_database_path)) {
+  file.remove(auxiliary_database_path)
+}
+
+# Remove log file if it already exists
+if (file.exists(log_file_path)) {
+  file.remove(log_file_path)
+}
+
+# Load data
+tryCatch({
+  f_load_data(create_db_tables = TRUE,
                load_data = TRUE)
+}, error = function(err) {
+  print(paste("MY ERROR:  ",err))
+  knitr::knit_exit()
+})
 
 ```
 
 ## Data Quality Assessment
 
-```{r, DQA, message=FALSE, warning=FALSE, error=TRUE}
+```{r, DQA, message=FALSE, warning=FALSE, error=FALSE}
 
 # 1. Data Quality Assessment (DQA)
 
+start_DQA_time <- Sys.time()
+
+# Remove the file (html report) if it already exists
 if (file.exists("../output/1_DQA.html")) {
   file.remove("../output/1_DQA.html")
 }
+
+# Render the quarto document
 tryCatch({
   quarto::quarto_render("./1_DQA.QMD", output_file = "1_DQA.html")
-  file.copy(from = "./1_DQA.html",
-                to = "../output/1_DQA.html")
-  file.remove("./1_DQA.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knitr::knit_exit()
 })
+
+# Copy the file (html report) the 'output' folder 
+# (exit the knit when the file is not successfully created)
+if(file.copy(from = "./1_DQA.html",
+                to = "../output/1_DQA.html") == TRUE) {
+  file.remove("./1_DQA.html")
+} else {
+  knitr::knit_exit()
+}
 
 ```
 
@@ -95,20 +125,28 @@ tryCatch({
 
 # 2. Validation
 
+start_validation_time <- Sys.time()
+
+# Remove the file (html report) if it already exists
 if (file.exists("../output/2_validation.html")) {
   file.remove("../output/2_validation.html")
 }
 
+# Render the quarto document
 tryCatch({
-  quarto::quarto_render("./2_validation.QMD",
-                      output_file = "2_validation.html")
-  file.copy(from = "./2_validation.html",
-                 to = "../output/2_validation.html")
-  file.remove("./2_validation.html")
+  quarto::quarto_render("./2_validation.QMD", output_file = "2_validation.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  quarto::knit_exit()
 })
+
+# Copy the file (html report) the 'output' folder 
+# (exit the knit when the file is not successfully created)
+if(file.copy(from = "./2_validation.html",
+                to = "../output/2_validation.html") == TRUE) {
+  file.remove("./2_validation.html")
+} else {
+  knitr::knit_exit()
+}
 
 ```
 
@@ -118,45 +156,59 @@ tryCatch({
 
 # 3. Imputation of missing values
 
+start_imputation_time <- Sys.time()
+
+# Remove the file (html report) if it already exists
 if (file.exists("../output/3_imputation.html")) {
   file.remove("../output/3_imputation.html")
 }
 
+# Render the quarto document
 tryCatch({
-  quarto::quarto_render("./3_imputation.QMD",
-                      output_file = "3_imputation.html")
-
-  file.copy(from = "./3_imputation.html",
-               to = "../output/3_imputation.html")
-  file.remove("./3_imputation.html")
+  quarto::quarto_render("./3_imputation.QMD", output_file = "3_imputation.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knitr::knit_exit()
 })
+
+# Copy the file (html report) the 'output' folder 
+# (exit the knit when the file is not successfully created)
+if(file.copy(from = "./3_imputation.html",
+                to = "../output/3_imputation.html") == TRUE) {
+  file.remove("./3_imputation.html")
+} else {
+  knitr::knit_exit()
+}
 
 ```
 
 ## Matching
 
-
 ```{r, matching, message=FALSE, warning=FALSE, error=FALSE}
 
 # 4. Matching cases to controls (1:1) and assessing covariate balance after matching
 
+start_matching_time <- Sys.time()
+
+# Remove the file (html report) if it already exists
 if (file.exists("../output/4_matching.html")) {
   file.remove("../output/4_matching.html")
 }
 
+# Render the quarto document
 tryCatch({
-  quarto::quarto_render("./4_matching.QMD",
-                      output_file = "4_matching.html")
-  file.copy(from = "./4_matching.html",
-                 to = "../output/4_matching.html")
-  file.remove("./4_matching.html")
+  quarto::quarto_render("./4_matching.QMD", output_file = "4_matching.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knitr::knit_exit()
 })
+
+# Copy the file (html report) the 'output' folder
+# (exit the knit when the file is not successfully created)
+if(file.copy(from = "./4_matching.html",
+                to = "../output/4_matching.html") == TRUE) {
+  file.remove("./4_matching.html")
+} else {
+  knitr::knit_exit()
+}
 
 ```
 
@@ -166,19 +218,28 @@ tryCatch({
 
 # 5. Descriptive analysis
 
+start_descriptive_time <- Sys.time()
+
+# Remove the file (html report) if it already exists
 if (file.exists("../output/5_descriptive.html")) {
   file.remove("../output/5_descriptive.html")
 }
+
+# Render the quarto document
 tryCatch({
-  quarto::quarto_render("./5_descriptives.QMD",
-                      output_file = "5_descriptive.html")
-  file.copy(from = "./5_descriptive.html",
-                 to = "../output/5_descriptive.html")
-  file.remove("./5_descriptive.html")
+  quarto::quarto_render("./5_descriptives.QMD", output_file = "5_descriptive.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knitr::knit_exit()
 })
+
+# Copy the file (html report) the 'output' folder
+# (exit the knit when the file is not successfully created)
+if(file.copy(from = "./5_descriptive.html",
+                to = "../output/5_descriptive.html") == TRUE) {
+  file.remove("./5_descriptive.html")
+} else {
+  knitr::knit_exit()
+}
 
 ```
 
@@ -188,26 +249,63 @@ tryCatch({
 
 # 6. Survival analysis
 
+start_survival_time <- Sys.time()
+
+# Remove the file (html report) if it already exists
 if (file.exists("../output/6_survival-analysis.html")) {
   file.remove("../output/6_survival-analysis.html")
 }
+
+# Render the quarto document
 tryCatch({
-  quarto::quarto_render("./6_survival-analysis.QMD",
-                      output_file = "6_survival-analysis.html")
-  file.copy(from = "./6_survival-analysis.html",
-                 to = "../output/6_survival-analysis.html")
-  file.remove("./6_survival-analysis.html")
+  quarto::quarto_render("./6_survival-analysis.QMD", output_file = "6_survival-analysis.html")
 }, error = function(err) {
   print(paste("MY ERROR:  ",err))
-  knitr::knit_exit()
 })
+
+# Copy the file (html report) the 'output' folder
+# (exit the knit when the file is not successfully created)
+if(file.copy(from = "./6_survival-analysis.html",
+                to = "../output/6_survival-analysis.html") == TRUE) {
+  file.remove("./6_survival-analysis.html")
+  # Copy the results for meta-analysis (xlsx file)
+  file_xlsx <- grep(".xlsx", list.files(path="./", full.names = TRUE, recursive = TRUE), value = TRUE)
+  file.copy(from = file_xlsx,
+                to = paste0("../output/",sub('.*./', '', file_xlsx)))
+  file.remove(file_xlsx)
+  # Copy the results for meta-analysis (rds file)
+  file_rds <- grep(".rds", list.files(path="./", full.names = TRUE, recursive = TRUE), value = TRUE)
+  file.copy(from = file_rds,
+                to = paste0("../output/",sub('.*./', '', file_rds)))
+  file.remove(file_rds)
+} else {
+  knitr::knit_exit()
+}
 
 ```
 
-```{r, remove duckdb, message=FALSE, warning=FALSE, error=TRUE}
+```{r, runtime end, message=FALSE, warning=FALSE, error=FALSE}
 
-if (file.exists(auxilary_database_path)) {
-  file.remove(auxilary_database_path)
-}
+# Assess the runtime
+
+info(logger,
+  paste0("
+========================================================================================
+",
+"Runtime","
+",
+"========================================================================================
+  "))
+
+end_time <- Sys.time()
+
+info(logger_simple, paste0("Overall runtime: ", round(difftime(end_time,start_global_time)[[1]],2), " ", units(difftime(end_time,start_global_time))))
+info(logger_simple, paste0("Runtime 0_global.R: ", round(difftime(start_DQA_time,start_global_time)[[1]],2), " ", units(difftime(start_DQA_time,start_global_time))))
+info(logger_simple, paste0("Runtime 1_DQA.QMD: ", round(difftime(start_validation_time,start_DQA_time)[[1]],2), " ", units(difftime(start_validation_time,start_DQA_time))))
+info(logger_simple, paste0("Runtime 2_validation.QMD: ", round(difftime(start_imputation_time,start_validation_time)[[1]],2), " ", units(difftime(start_imputation_time,start_validation_time))))
+info(logger_simple, paste0("Runtime 3_imputation.QMD: ", round(difftime(start_matching_time,start_imputation_time)[[1]],2), " ", units(difftime(start_matching_time,start_imputation_time))))
+info(logger_simple, paste0("Runtime 4_matching.QMD: ", round(difftime(start_descriptive_time,start_matching_time)[[1]],2), " ", units(difftime(start_descriptive_time,start_matching_time))))
+info(logger_simple, paste0("Runtime 5_descriptives.QMD: ", round(difftime(start_survival_time,start_descriptive_time)[[1]],2), " ", units(difftime(start_survival_time,start_descriptive_time))))
+info(logger_simple, paste0("Runtime 6_survival-analysis.QMD: ", round(difftime(end_time,start_survival_time)[[1]],2), " ", units(difftime(end_time,start_survival_time))))
 
 ```

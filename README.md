@@ -57,15 +57,17 @@ The current repository contains the following pieces:
         -   Descriptive analysis of the matched and unmatched study population (QMD)
         -   Survival analysis of the matched study population (QMD)
     -   Input for the analytical pipeline (CSV)
-    -   Ouput of the analytical pipeline [^1]
+    -   Log file created when running the analytical pipeline (TXT)
+    -   Ouput of the analytical pipeline [^readme-1]
         -   Interactive report with dataset statistics, missing data profiles, potential alerts, and detailed per-variable information (HTML)
         -   Interactive report summarizing compliance with the logic validation rules (HTML)
         -   Interactive report summarizing used imputation methods and number of imputed values
         -   Interactive report to assess matching balance in the obtained study population (HTML)
         -   Interactive report including the results of survival analysis in the unmatched study population, a table with baseline characteristics of the matched study population and CONSORT diagram (HTML)
-        -   Interactive report including the analytic results for the meta-analysis (HTML)
+        -   Interactive report including the analytic results (HTML)
+        -   Aggregated non-sensitive analytic results for the meta-analysis (XLSX)
 
-[^1]: For illustrative purposes, the interactive reports contain the output of the scripts of the analytical pipeline applied to the synthetic dataset.
+[^readme-1]: For illustrative purposes, the interactive reports contain the output of the scripts of the analytical pipeline applied to the synthetic dataset.
 
 ## Step-by-step
 
@@ -98,11 +100,11 @@ The next set of digital objects are the consecutive scripts of the analytical pi
 **Script**: `0_global.R`
 
 -   **Input**:
-    -   `vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv`
+    -   `vaccine_effectiveness_synthetic_pop_10k_v.1.1.1.csv`
 -   **Output**:
     -   `cohort_data`
 
-A DuckDB database file is created (`BY-COVID-WP5-BaselineUseCase-VE.duckdb`). Data are imported from a csv file (e.g. `vaccine_effectiveness_synthetic_pop_10k_v.1.1.0.csv`) using the R package `Arrow` and inserted into the `cohort_data` database table within the `BY-COVID-WP5-BaselineUseCase-VE.duckdb`. Data types are manually specified according to the [Common Data Model Specification](https://zenodo.org/record/7572373#.ZC0ad_ZByUk) when reading the data using a schema.
+A DuckDB database file is created (`BY-COVID-WP5-BaselineUseCase-VE.duckdb`). Data are imported from a csv file (e.g. `vaccine_effectiveness_synthetic_pop_10k_v.1.1.1.csv`) using the R package `Arrow` and inserted into the `cohort_data` database table within the `BY-COVID-WP5-BaselineUseCase-VE.duckdb`. Data types are manually specified according to the [Common Data Model Specification](https://zenodo.org/record/7572373#.ZC0ad_ZByUk) when reading the data using a schema.
 
 #### Data quality assessment
 
@@ -113,7 +115,7 @@ A DuckDB database file is created (`BY-COVID-WP5-BaselineUseCase-VE.duckdb`). Da
 -   **Output**:
     -   `DQA.html`
 
-A data quality assessment on the `cohort_data` is performed and an interactive html report (`DQA.html`) is created. This report provides an overview of the data and includes dataset statistics, variable types, missing data profiles and potential alerts. 
+A data quality assessment on the `cohort_data` is performed and an interactive html report (`DQA.html`) is created. This report provides an overview of the data and includes dataset statistics, variable types, missing data profiles and potential alerts.
 
 #### Validation
 
@@ -136,9 +138,10 @@ The `cohort_data` are tested against a set of validation rules (as specified in 
 -   **Output**:
     -   `cohort_data` including `flag_listwise_del`
     -   `cohort_data_imputed`
+    -   `imputation_methods`
     -   `imputation.html`
 
-For each variable in the `cohort_data` different checks are conducted, based on which a decision is made on whether to impute the missing values. A logical variable `flag_listwise_del` is created in the `cohort_data` table in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database and set to `TRUE` for records for which the value of this variable is missing and the `imputation_method=='Listwise deletion (MCAR)'`. Imputation of missing values of variables for which is was decided to impute was conducted using the R package `mice` resulting in an imputed dataset. From this dataset, the records with imputed values are filtered and saved in a separate database table `cohort_data_imputed` in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database. A report (`imputation.html`) is generated summarising the results of the different checks and methods used for dealing with missing values.
+For each variable in the `cohort_data` different checks are conducted, based on which a decision is made on how to handle missing values. A logical variable `flag_listwise_del` is created in the `cohort_data` table in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database and set to `TRUE` for records for which the value of this variable is missing and the `imputation_method=='Listwise deletion where core variable has missing values (MCAR reasonable)'`. Imputation of missing values of variables for which is was decided to impute was conducted using the R package `mice` resulting in an imputed dataset. From this dataset, the records with imputed values are filtered and saved in a separate database table `cohort_data_imputed` in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database. Variables with a high degree of missingness are not included as a matching variable. A report (`imputation.html`) is generated summarising the results of the different checks and methods used for dealing with missing values.
 
 #### Matching
 
@@ -147,13 +150,14 @@ For each variable in the `cohort_data` different checks are conducted, based on 
 -   **Input**:
     -   `cohort_data` including `flag_violation_val` and `flag_listwise_del`
     -   `cohort_data_imputed`
+    -   `imputation_methods`
 -   **Output**:
     -   `group_similarity`
     -   `result_matching_alg`
     -   `matched_data`
     -   `matching.html`
 
-In the script 4_matching.R variables needed for the matching are created based on existing variables in the `cohort_data` and `cohort_data_imputed`. Records from individuals with a previous infection (`previous_infection_bl==TRUE`), records violating one of the 'essential' validation rules (`flag_violation_val==TRUE`) and records set to be listwise deleted (`flag_listwise_del==TRUE`) are excluded. The matching is conducted using the R package `MatchIt`. A new table `group_similarity` is created in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database containing for each `group_id` the 10 nearest matched groups and corresponding distances. The matching algorithm iterates over the set of unique days during the enrollment period at which a newly vaccinated individual (i.e. completing a primary vaccination schedule) is identified. The results obtained for each date are appended to a database table `result_matching_alg` in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database in which one record corresponds to one matched pair. A new table `matched_data` is subsequently created in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database, with two records per match (i.e., one for the case and one for the control). After matching (termination 4_matching.R), the covariate balance is assessed and summarised in an interactive report (`matching.html`).
+In the script 4_matching.R, variables needed for the matching are created based on existing variables in the `cohort_data` and `cohort_data_imputed`. Records from individuals with a previous infection (`previous_infection_bl==TRUE`), records violating one of the 'essential' validation rules (`flag_violation_val==TRUE`) and records set to be listwise deleted (`flag_listwise_del==TRUE`) are excluded. The matching is conducted using the R package `MatchIt`. A new table `group_similarity` is created in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database containing for each `group_id` the 10 nearest matched groups and corresponding distances. The matching algorithm iterates over the set of unique days during the enrollment period at which a newly vaccinated individual (i.e. completing a primary vaccination schedule) is identified. The results obtained for each date are appended to a database table `result_matching_alg` in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database in which one record corresponds to one matched pair. A new table `matched_data` is subsequently created in the `BY-COVID-WP5-BaselineUseCase-VE.duckdb` DuckDB database, with two records per match (i.e., one for the case and one for the control). After matching (termination 4_matching.R), the covariate balance is assessed and summarised in an interactive report (`matching.html`).
 
 #### Descriptive analysis
 
@@ -163,6 +167,7 @@ In the script 4_matching.R variables needed for the matching are created based o
     -   `cohort_data` including `flag_violation_val` and `flag_listwise_del`
     -   `cohort_data_imputed`
     -   `matched_data`
+    -   `imputation_methods`
 -   **Output**:
     -   `descriptive.html`
 
@@ -176,8 +181,9 @@ The descriptive analysis contains four elements which are reported in `descripti
     -   `matched_data`
 -   **Output**:
     -   `survival-analysis.html`
+    -   `results-survival-analysis-<country>.xlsx`
 
-A survival analysis is conducted in the matched study population `matched_data`. A hazard ratio (HR), the Restricted Mean Survival Time (RMST) and Restricted Mean Time Lost (RMTL) are reported in `survival-analysis.html`.
+A survival analysis is conducted in the matched study population `matched_data`. A hazard ratio (HR), the Restricted Mean Survival Time (RMST) and Restricted Mean Time Lost (RMTL) are reported in `survival-analysis.html`. Aggregated non-sensitive results for meta-analysis are written to `results-survival-analysis-<country>.xlsx`.
 
 ## Getting Started
 
@@ -185,23 +191,28 @@ This analytical pipeline has been developed and tested in R (version 4.2.1) usin
 
 ### Dependencies
 
-For testing purposes we assume a similar environment to the development environment. 
+For testing purposes we assume a similar environment to the development environment.
 
 The development environment included several R packages (from base R or CRAN) and the use of the R project file (.Rproj) included with the scripts. The required R packages and the version used for developing and testing the analytical pipeline:
 
 -   parallel (base package)
+-   stats (base package)
+-   graphics (base package)
 -   grDevices (base package)
--   dplyr (dplyr_1.0.10)
+-   utils (base package)
+-   datasets (base package)
+-   dplyr (dplyr_1.1.2)
 -   arrow (arrow_10.0.1)
--   validate (validate_1.1.1)
+-   validate (validate_1.1.3)
 -   DataExplorer (DataExplorer_0.8.2)
 -   DT (DT_0.27)
 -   purrr (purrr_1.0.1)
 -   dlookr (dlookr_0.6.1)
+-   ggpubr (ggpubr_0.5.0)
 -   survminer (survminer_0.4.9)
 -   quarto (quarto_1.2)
 -   ggplot2 (ggplot2_3.4.0)
--   plotly (plotly_4.10.1)
+-   plotly (plotly_4.10.2)
 -   scales (scales_1.2.1)
 -   formattable (formattable_0.2.1)
 -   naniar (naniar_0.6.1)
@@ -210,80 +221,131 @@ The development environment included several R packages (from base R or CRAN) an
 -   here (here_1.0.1)
 -   visdat (visdat_0.6.0)
 -   mice (mice_3.15.0)
--   tidyr (tidyr_1.2.1)
+-   tidyr (tidyr_1.3.0)
 -   shiny (shiny_1.7.4)
--   consort (consort_1.1.0)
+-   consort (consort_1.2.0)
 -   MatchIt (MatchIt_4.5.0)
 -   survival (survival_3.5-0)
 -   table1 (table1_1.4.3)
+-   knitr (knitr_1.41)
 -   tab (tab_5.1.1)
 -   forestmodel (forestmodel_0.6.2)
--   gtsummary (gtsummary_1.7.0)
+-   gtsummary (gtsummary_1.7.2)
 -   survRM2 (survRM2_1.0-4)
+-   log4r (log4r_0.4.3)
+-   xlsx (xlsx_0.6.5)
+-   finalfit (finalfit_1.0.6)
+-   dbplyr (dbplyr_2.3.3)
 
-### Using Docker
+To run the analytical pipeline with the required dependencies, different methods can be adopted: (1) installing R packages manually, (2) using the renv reproducible environment, (3) running the docker image, or (4) using Conda/Mamba.
 
-It is possible to install the required dependencies for the pipeline using 
-[Docker](https://www.docker.com/).  You may skip the `docker build` command 
-to download the [latest container](https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/pkgs/container/vaccine_effectiveness_analytical_pipeline) from GitHub. 
+### 1. Installing R packages manually
 
-```
-cd vaccine_effectiveness_analytical_pipeline 
-# Enable below if you have modified scripts dependencies
-#docker build -t ghcr.io/by-covid/vaccine_effectiveness_analytical_pipeline .
-docker run -v `pwd`/input:/pipeline/input -v `pwd`/output:/pipeline/output -it ghcr.io/by-covid/vaccine_effectiveness_analytical_pipeline
-```
+#### Obtain source code
+
+Download the ZIP file of the repository using the following link: <https://github.com/MarjanMeurisse/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip>
+
+Extract all from the ZIP file and open the R project file contained within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline` in RStudio.
+
+#### Environment
+
+Install the required R packages. To install a specific version of an R package from source, the following R command can be used (example for the R package dplyr, version 1.1.2):
+
+    packageurl <- "https://cran.r-project.org/src/contrib/Archive/dplyr/dplyr_1.1.2.tar.gz"
+    install.packages(packageurl, repos=NULL, type="source")
+
+#### Execute the analytical pipeline
+
+Input data, compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045) should be provided as the only file within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/input`. You can test the analytical pipeline with the synthetic data which are already provided within this folder (`vaccine_effectiveness_synthetic_pop_10k_v.1.1.1.csv`) or replace this file with your own real-world data.
+
+The file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports, xlsx file with aggregated output) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
+
+### 2. Using the renv reproducible environment
+
+#### Obtain source code
+
+Download the ZIP file of the repository using the following link: <https://github.com/MarjanMeurisse/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip>
+
+Extract all from the ZIP file and open the R project file contained within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline` in RStudio.
+
+#### Environment
+
+The R project uses renv. The following R command to check which packages are recorded in the lockfile but which are not installed:
+
+    renv::status()
+
+Reproduce the testing environment by running the following R command:
+
+    renv::restore() 
+
+The metadata from the lockfile are used to install exactly the same version of every package.
+
+#### Execute the analytical pipeline
+
+Input data, compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045) should be provided as the only file within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/input`. You can test the analytical pipeline with the synthetic data which are already provided within this folder (`vaccine_effectiveness_synthetic_pop_10k_v.1.1.1.csv`) or replace this file with your own real-world data.
+
+The file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports, xlsx file with aggregated output) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
+
+### 3. Using Docker
+
+It is possible to run the analytical pipeline as an isolated application using [Docker](https://www.docker.com/).
+
+You may skip the `docker build` command to download the [latest container](https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/pkgs/container/vaccine_effectiveness_analytical_pipeline) from GitHub.
+
+    cd vaccine_effectiveness_analytical_pipeline 
+    # Enable below if you have modified scripts dependencies
+    #docker build -t ghcr.io/by-covid/vaccine_effectiveness_analytical_pipeline .
+    docker run -v `pwd`/input:/pipeline/input -v `pwd`/output:/pipeline/output -it ghcr.io/by-covid/vaccine_effectiveness_analytical_pipeline
 
 Note that when using Docker in this way, file permission on your `output` folder may not match up with the container's permissions when writing outputs. (tip: `chmod -R 777 output`)
 
-### Using Conda/Mamba
+### 4. Using Conda/Mamba
 
 Instead of using containers it can be more convenient during development to use a [Conda](https://conda.io/) environment. The below assumes [Miniconda](https://docs.conda.io/en/latest/miniconda.html) have been installed and activated. To install the R packages listed in `environment.yml`, use:
 
-```
-cd vaccine_effectiveness_analytical_pipeline
-conda env crate
-```
+    cd vaccine_effectiveness_analytical_pipeline
+    conda env crate
 
-The above installs most of the R packages from Conda-Forge, avoiding a compilation phase.  To install the remaining R packages from CRAN:
+The above installs most of the R packages from Conda-Forge, avoiding a compilation phase. To install the remaining R packages from CRAN:
 
-```
-conda activate vaccine_effectiveness
-Rscript install.R
-```
+    conda activate vaccine_effectiveness
+    Rscript install.R
 
 Finally, to execute the main pipeline using [Quarto](https://quarto.org/):
 
-```
-conda activate vaccine_effectiveness
-cd scripts
-quarto render analytical-pipeline.QMD --execute --output-dir ../output/
-```
+    conda activate vaccine_effectiveness
+    cd scripts
+    quarto render analytical-pipeline.QMD --execute --output-dir ../output/
 
 This should populate `output/` content as a series of HTML files.
 
 **Note**: The `environment.yml` is also used by the `Dockerfile` to install its dependencies, and may have R packages in newer version than listed above
 
-
-### Installing R packages manually
-
-To install a specific version of an R package from source, the following R command can be used (example for the R package dplyr, version 1.0.10):
-
-```
-packageurl <- "https://cran.r-project.org/src/contrib/Archive/dplyr/dplyr_1.0.10.tar.gz"
-install.packages(packageurl, repos=NULL, type="source")
-```
-To execute the analytical pipeline using the synthetic data as input data, download the ZIP file of the repository using the following link:
-https://github.com/MarjanMeurisse/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip
-
-Extract all from the ZIP file and open the R project file contained within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline` in RStudio.
-
-Input data, compliant with the [Common Data Model specification](https://doi.org/10.5281/zenodo.6913045) should be provided as the only file within the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/input`. Next, the file `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD` can be opened in RStudio and rendered to run the sequential steps in the analytical pipeline. Output files of the analytical pipeline (interactive html reports) are generated withing the folder `BY-COVID_WP5_T5.2_baseline-use-case-main/vaccine_effectiveness_analytical_pipeline/output`.
-
-
 ## Version history
 
-## Authors 
+-   v.1.0.0: Initial iteration of the analytical pipeline scripts
+
+-   v.1.0.1: Minor adjustments
+
+-   v.1.0.2:
+
+    -   A log file (logfile.txt) is created in the ./logs folder (system settings, timing, errors)
+
+    -   Sex and age group are no longer handled as continuous variables
+
+    -   Implement handling large proportions of missing data in core variables
+
+    -   Add aggregated output for meta-analysis
+
+    -   Matching based on individual-level SES when available
+
+    -   Adjusted hover in plotly graphs
+
+    -   Additional analysis implemented: survival in subgroups determined by vaccination schedule
+
+    -   Adjusted documentation
+
+## Authors
 
 -   [Meurisse, Marjan](https://orcid.org/0000-0002-4409-0664)
 -   [Estupiñán-Romero, Francisco](https://orcid.org/0000-0002-6285-8120)
@@ -304,5 +366,4 @@ Marjan Meurisse - [marjan.meurisse\@sciensano.be](mailto:marjan.meurisse@sciensa
 
 ## Disclaimer
 
-Please, note that we provide these scripts as they are, complying with the specifications of BY-COVID WP5 baseline use case for the purposes and objectives specified within the baseline use case protocol. 
-Software is provided as-is without further support out of the scope of the partners participating in BY-COVID WP5. 
+Please, note that we provide these scripts as they are, complying with the specifications of BY-COVID WP5 baseline use case for the purposes and objectives specified within the baseline use case protocol. Software is provided as-is without further support out of the scope of the partners participating in BY-COVID WP5.

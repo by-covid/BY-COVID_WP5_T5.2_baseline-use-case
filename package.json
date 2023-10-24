@@ -1,0 +1,11 @@
+{
+  "name": "by-covid_wp5_t5.2_baseline-use-case",
+  "version": "1.0.0",
+  "description": "This repository is making an RO-Crate of the [BY-COVID](https://by-covid.org/) **WP5 T5.2** baseline use case on \"*SARS-CoV-2 Vaccine(s) effectiveness in preventing SARS-CoV-2 infection*\".",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -3,18 +3,54 @@
 ################
 
 # DATE LAST MODIFIED:
-# 20/04/2023
+# 19/09/2023
 
 # METADATA: 
 if(FALSE) {
   title      <- 'BY-COVID WP5.2 Baseline Use Case: SARS-CoV-2 vaccine effectiveness - analytical pipeline - matching'
   author     <- list('Javier González-Galindo','Francisco Estupiñán-Romero','Marjan Meurisse','Santiago Royo-Sierra','Nina Van Goethem','Enrique Bernal-Delgado')
-  version    <- '1.0.0'
+  version    <- '1.0.2'
   maintainer <- 'Marjan Meurisse'
   email      <- 'Marjan.Meurisse@sciensano.be'
   input      <- list('cohort_data and cohort_data_imputed (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
   output     <- list('group_similarity, result_matching_alg, matched_data (database tables in BY-COVID-WP5-BaselineUseCase-VE.duckdb)')
 }
+
+##########################
+### Matching variables ###
+##########################
+
+tryCatch(
+  {
+    ## Description: get database connection
+    con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
+    
+    ## Description: load data
+    df_imputation_methods <- dbGetQuery(con,"SELECT * FROM imputation_methods")
+    
+    ## Description: obtain variables to exclude as matching variable
+    v_matching_excl <- as.character(df_imputation_methods[which(df_imputation_methods$imputation_method=="Exclude core variable as matching variable (more than 15% missing values)"),"Variable_name"])
+    if("Exclude comorbidities_bl as matching variable (comorbidity)" %in% df_imputation_methods$imputation_method) {
+      v_matching_excl <- append(v_matching_excl,"comorbidities_bl")
+    }
+    if("Exclude immunestatus_bl as matching variable (immune status)" %in% df_imputation_methods$imputation_method) {
+      v_matching_excl <- append(v_matching_excl,"immunestatus_bl")
+    }
+    
+    ## Description: obtain variables to include as matching variable
+    v_matching_incl <- setdiff(c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl"),v_matching_excl)
+    
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  },
+  finally={
+    ## Description: disconnect from database
+    dbDisconnect(con, shutdown=TRUE)
+  })
 
 ##################################
 ### Adjust 'cohort_data' table ###
@@ -25,17 +61,18 @@ f_computation_new_variables <- function() {
   tryCatch(
     {
       ## Description: get database connection
-      con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+      con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       
       ## Description: add columns in 'cohort_data' table
       dbExecute(con, "ALTER TABLE cohort_data ADD COLUMN comorbidities_bl BOOLEAN;
                   ALTER TABLE cohort_data ADD COLUMN immunestatus_bl BOOLEAN;
-                  ALTER TABLE cohort_data ADD COLUMN age_cd INTEGER;
-                  ALTER TABLE cohort_data_imputed ADD COLUMN age_cd INTEGER;
+                  ALTER TABLE cohort_data ADD COLUMN age_cd VARCHAR;
+                  ALTER TABLE cohort_data_imputed ADD COLUMN age_cd VARCHAR;
                   ALTER TABLE cohort_data ADD COLUMN boost_bl BOOLEAN;
                   ALTER TABLE cohort_data ADD COLUMN group_id INTEGER;
                   ALTER TABLE cohort_data ADD COLUMN flag_inclusion_record BOOLEAN;")
-      ## Description: compute the variables 'comorbidities_bl', 'immunestatus_bl', 'age_cd' and 'group_id' in cohort_data
+      
+      ## Description: compute the variables 'comorbidities_bl', 'immunestatus_bl', 'age_cd' and 'boost_bl' in cohort_data
       dbExecute(con, 
                 "UPDATE cohort_data set
                       	comorbidities_bl = CASE  
@@ -73,7 +110,7 @@ f_computation_new_variables <- function() {
                         WHEN age_nm >= 80 and age_nm <=84 THEN 17
                         WHEN age_nm >= 85 THEN 18
                         ELSE NULL 
-                        END;
+                        END;        
                 UPDATE cohort_data set
                         residence_area_cd = (select residence_area_cd from cohort_data
                                              group by residence_area_cd
@@ -84,28 +121,34 @@ f_computation_new_variables <- function() {
                         WHEN vaccination_schedule_cd == \'JJ\'  AND dose_2_dt IS NOT NULL THEN TRUE
                                               WHEN vaccination_schedule_cd != \'JJ\' and vaccination_schedule_cd is not NULL  and dose_3_dt is not null THEN TRUE
                                               ELSE FALSE
-                                              END;
-                UPDATE cohort_data set 
-                        group_id=b.group_id from(
-                        select person_id ,
-                        dense_rank() over (order by sex_cd,	age_cd, residence_area_cd, pregnancy_bl, essential_worker_bl, institutionalized_bl, foreign_bl,
-                                             comorbidities_bl, immunestatus_bl) as group_id from (  
-                         select COALESCE(cohort_data.person_id,cohort_data_imputed.person_id) as person_id,
-                  							COALESCE(cohort_data.sex_cd,cohort_data_imputed.sex_cd) as sex_cd,
-                  							COALESCE(cohort_data.age_cd,cohort_data_imputed.age_cd) as age_cd,
-                  							COALESCE(cohort_data.residence_area_cd,cohort_data_imputed.residence_area_cd) as residence_area_cd,
-                  							COALESCE(cohort_data.pregnancy_bl,cohort_data_imputed.pregnancy_bl) as pregnancy_bl,
-                  							COALESCE(cohort_data.essential_worker_bl,cohort_data_imputed.essential_worker_bl) as essential_worker_bl,
-                  							COALESCE(cohort_data.institutionalized_bl,cohort_data_imputed.institutionalized_bl) as institutionalized_bl,
-                  							COALESCE(cohort_data.foreign_bl,cohort_data_imputed.foreign_bl) as foreign_bl,
-                  							cohort_data.comorbidities_bl,
-                  							cohort_data.immunestatus_bl
-                                              from main.cohort_data
-                                              left join main.cohort_data_imputed
-                  						    on cohort_data.person_id = cohort_data_imputed.person_id) table_with_imputed  ) b
-                        where cohort_data.person_id =b.person_id")
+                                              END;")
       
-      ## Description: compute the variable 'age_cd' in cohort_data imputed
+      ## Description: compute the variable 'group_id' in cohort_data
+      dbExecute(con,
+        paste0("UPDATE cohort_data set 
+          group_id=b.group_id from(
+            select person_id,
+            dense_rank() over (order by ", 
+                paste(v_matching_incl, sep="' '", collapse=", "),
+            ") as group_id from (select ", 
+                "COALESCE(cohort_data.person_id,cohort_data_imputed.person_id) as person_id, ",
+                ifelse("sex_cd" %in% v_matching_incl,"COALESCE(cohort_data.sex_cd,cohort_data_imputed.sex_cd) as sex_cd, ",""),
+                ifelse("age_cd" %in% v_matching_incl,"COALESCE(cohort_data.age_cd,cohort_data_imputed.age_cd) as age_cd, ",""),
+                ifelse("residence_area_cd" %in% v_matching_incl,"COALESCE(cohort_data.residence_area_cd,cohort_data_imputed.residence_area_cd) as residence_area_cd, ",""),
+                ifelse("pregnancy_bl" %in% v_matching_incl,"COALESCE(cohort_data.pregnancy_bl,cohort_data_imputed.pregnancy_bl) as pregnancy_bl, ",""),
+                ifelse("essential_worker_bl" %in% v_matching_incl,"COALESCE(cohort_data.essential_worker_bl,cohort_data_imputed.essential_worker_bl) as essential_worker_bl, ",""),
+                ifelse("institutionalized_bl" %in% v_matching_incl,"COALESCE(cohort_data.institutionalized_bl,cohort_data_imputed.institutionalized_bl) as institutionalized_bl, ",""),
+                ifelse("foreign_bl" %in% v_matching_incl,"COALESCE(cohort_data.foreign_bl,cohort_data_imputed.foreign_bl) as foreign_bl, ",""),
+                ifelse("socecon_lvl_cd" %in% v_matching_incl,"COALESCE(cohort_data.socecon_lvl_cd,cohort_data_imputed.socecon_lvl_cd) as socecon_lvl_cd, ",""),
+                ifelse("comorbidities_bl" %in% v_matching_incl,"cohort_data.comorbidities_bl, ",""),
+                ifelse("immunestatus_bl" %in% v_matching_incl,"cohort_data.immunestatus_bl, ",""),
+            "from main.cohort_data
+            left join main.cohort_data_imputed
+            on cohort_data.person_id = cohort_data_imputed.person_id) table_with_imputed  ) b
+            where cohort_data.person_id=b.person_id"
+      ))
+      
+      ## Description: compute the variable 'age_cd' in cohort_data_imputed
       dbExecute(con,"
               UPDATE cohort_data_imputed set
                         age_cd = CASE
@@ -130,12 +173,18 @@ f_computation_new_variables <- function() {
                         ELSE NULL 
                         END")
       
-      ## Description: compute the variable flag_inclusion_record
+      ## Description: compute the variable flag_inclusion_record in cohort_data
       dbExecute(con,"UPDATE cohort_data SET 
                 flag_inclusion_record = CASE
                 WHEN previous_infection_bl==TRUE OR flag_violating_val==TRUE OR flag_listwise_del==TRUE THEN FALSE
                 ELSE TRUE
                 END")
+    },
+    error=function(cond) {
+      ## Log info
+      warn(logger, paste0("MY ERROR: 
+                        ", cond))
+      return(stop(cond))
     },
     finally={
       ## Description: disconnect from database
@@ -148,14 +197,21 @@ f_computation_new_variables()
 tryCatch(
   {
     ## Description: get database connection
-    con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+    con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
     ## Description: create view where only records with flag_inclusion_record==TRUE are selected
     dbExecute(con, "CREATE OR REPLACE VIEW cohort_view AS SELECT * FROM cohort_data WHERE flag_inclusion_record==TRUE")
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
   },
   finally={
     ## Description: disconnect from database
     dbDisconnect(con, shutdown=TRUE)
   })
+
 
 ################
 ### Analysis ###
@@ -168,11 +224,17 @@ getDates <- function() {
   tryCatch(
     {
       ## get database connection
-      con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=TRUE)
+      con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=TRUE)
       
       ## query 'cohort_data' table to obtain distinct dates
       result <- dbGetQuery(con, "select DISTINCT fully_vaccinated_dt from cohort_view 
                      where fully_vaccinated_dt < '2021-09-01' and fully_vaccinated_dt >= '2021-01-01'  ORDER BY random()")
+    },
+    error=function(cond) {
+      ## Log info
+      warn(logger, paste0("MY ERROR: 
+                        ", cond))
+      return(stop(cond))
     },
     finally={
       ## disconnect from database
@@ -192,26 +254,30 @@ calculate_similarity <- function() {
   tryCatch(
     {
       ## get database connection
-      con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+      con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       
-      dbGetQuery(con,"SELECT * FROM cohort_data_imputed")
+      df_original <- dbGetQuery(con,paste0("SELECT DISTINCT ON (a.group_id)
+                    a.person_id, ",
+                    ifelse("sex_cd" %in% v_matching_incl, "COALESCE(a.sex_cd, b.sex_cd) AS sex_cd, ",""),
+                    ifelse("age_cd" %in% v_matching_incl, "COALESCE(a.age_cd, b.age_cd) AS age_cd, ",""),
+                    ifelse("residence_area_cd" %in% v_matching_incl, "COALESCE(a.residence_area_cd, b.residence_area_cd) AS residence_area_cd, ",""),
+                    ifelse("pregnancy_bl" %in% v_matching_incl, "COALESCE(a.pregnancy_bl, b.pregnancy_bl) AS pregnancy_bl, ",""),
+                    ifelse("essential_worker_bl" %in% v_matching_incl, "COALESCE(a.essential_worker_bl, b.essential_worker_bl) AS essential_worker_bl, ",""),
+                    ifelse("institutionalized_bl" %in% v_matching_incl, "COALESCE(a.institutionalized_bl, b.institutionalized_bl) AS institutionalized_bl, ",""),
+                    ifelse("foreign_bl" %in% v_matching_incl, "COALESCE(a.foreign_bl, b.foreign_bl) AS foreign_bl, ",""),
+                    ifelse("socecon_lvl_cd" %in% v_matching_incl,"COALESCE(a.socecon_lvl_cd, b.socecon_lvl_cd) as socecon_lvl_cd, ",""),
+                    ifelse("comorbidities_bl" %in% v_matching_incl, "a.comorbidities_bl, ",""),
+                    ifelse("immunestatus_bl" %in% v_matching_incl, "a.immunestatus_bl, ",""),
+                    "a.group_id
+              FROM cohort_view a    
+              LEFT JOIN cohort_data_imputed b on a.person_id = b.person_id
+              ORDER BY a.group_id"))
       
-      df_original <- dbGetQuery(con,"SELECT DISTINCT ON (a.group_id)
-                            a.person_id,
-                            COALESCE(a.sex_cd, b.sex_cd) AS sex_cd,
-                            COALESCE(a.age_cd,b.age_cd) AS age_cd,
-                            COALESCE(a.residence_area_cd,b.residence_area_cd) AS residence_area_cd,
-                            COALESCE(a.pregnancy_bl,b.pregnancy_bl,FALSE) AS pregnancy_bl,
-                            COALESCE(a.essential_worker_bl,b.essential_worker_bl) AS essential_worker_bl,
-                            COALESCE(a.institutionalized_bl,b.institutionalized_bl) AS institutionalized_bl,
-                            COALESCE(a.foreign_bl,b.foreign_bl) AS foreign_bl, 
-                            a.comorbidities_bl,
-                            a.immunestatus_bl,
-                            a.group_id
-                    FROM cohort_view a    
-                    LEFT JOIN cohort_data_imputed b on a.person_id = b.person_id
-                    ORDER BY a.group_id")
-      df_original$residence_area_cd <- as.numeric(df_original$residence_area_cd)
+      
+      if("residence_area_cd" %in% v_matching_incl) {df_original$residence_area_cd <- as.factor(df_original$residence_area_cd)}
+      if("sex_cd" %in% v_matching_incl) {df_original$sex_cd <- as.factor(df_original$sex_cd)}
+      if("age_cd" %in% v_matching_incl) {df_original$age_cd <- as.factor(df_original$age_cd)}
+      if("socecon_lvl_cd" %in% v_matching_incl) {df_original$socecon_lvl_cd <- as.factor(df_original$socecon_lvl_cd)}
       
       ## group numbers
       n_groups <- unique(df_original$group_id)
@@ -230,15 +296,14 @@ calculate_similarity <- function() {
         df_original <- rbind(df_original,df_original_2)
         
         ## matching
-        mod_match <- matchit(fully_vaccinated_bl ~ age_cd + sex_cd + residence_area_cd + pregnancy_bl + essential_worker_bl + 
-                               institutionalized_bl + foreign_bl + comorbidities_bl + immunestatus_bl,
+        mod_match <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl, sep="' '", collapse=" + "))),
                              method = "nearest", distance = "glm", ratio = 10, data = df_original) 
         mod_data <- match.data(mod_match) 
         mod_data <- mod_data %>% mutate(matched_group=group_id, group_id=mod_data[which(mod_data$fully_vaccinated_bl==1),"group_id"]) %>% select(c(group_id,matched_group,distance)) 
         return(mod_data)
       }
       ## apply function
-      clusterExport(cl, c("n_groups","df_original"), envir = environment())
+      clusterExport(cl, c("n_groups","df_original","v_matching_incl"), envir = environment())
       output <- parLapply(cl, 1:length(n_groups),loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance))
       
       ## create table 'group_similarity
@@ -247,8 +312,14 @@ calculate_similarity <- function() {
                   	matched_group VARCHAR,
                   	distance TINYINT)")
       
-      # insert 'output' into 'group_similarity' table
+      ## insert 'output' into 'group_similarity' table
       dbWriteTable(con, "group_similarity",as.data.frame(output),overwrite = TRUE)
+    },
+    error=function(cond) {
+      ## Log info
+      warn(logger, paste0("MY ERROR: 
+                        ", cond))
+      return(stop(cond))
     },
     finally={
       ## disconnect from database
@@ -286,21 +357,22 @@ getGroupsByDate <- function(date_, cursor) {
   return(data_)
 }
 
-getSampleNBigger <- function(date_, group, n_sample, cursor) { 
+getSampleNBigger <- function(date_, group, n_sample, cursor, v_matching) { 
   query <- paste0("select * from (
             select
               a.person_id,
-              FALSE as fully_vaccinated_bl,
-              COALESCE(a.sex_cd,b.sex_cd) AS sex_cd,
-              COALESCE(a.age_cd,b.age_cd) AS age_cd,
-              COALESCE(a.residence_area_cd,b.residence_area_cd) AS residence_area_cd,
-              COALESCE(a.pregnancy_bl,b.pregnancy_bl) AS pregnancy_bl,
-              COALESCE(a.essential_worker_bl,b.essential_worker_bl) AS essential_worker_bl,
-              COALESCE(a.institutionalized_bl,b.institutionalized_bl) AS institutionalized_bl,
-              COALESCE(a.foreign_bl,b.foreign_bl) AS foreign_bl,
-              a.comorbidities_bl,
-              a.immunestatus_bl 
-            from
+              FALSE as fully_vaccinated_bl, ",
+              ifelse("sex_cd" %in% v_matching, "COALESCE(a.sex_cd,b.sex_cd) AS sex_cd, ",""),
+              ifelse("age_cd" %in% v_matching, "COALESCE(a.age_cd,b.age_cd) AS age_cd, ",""),
+              ifelse("residence_area_cd" %in% v_matching, "COALESCE(a.residence_area_cd,b.residence_area_cd) AS residence_area_cd, ",""),
+              ifelse("pregnancy_bl" %in% v_matching, "COALESCE(a.pregnancy_bl,b.pregnancy_bl) AS pregnancy_bl, ",""),
+              ifelse("essential_worker_bl" %in% v_matching, "COALESCE(a.essential_worker_bl,b.essential_worker_bl) AS essential_worker_bl, ",""),
+              ifelse("institutionalized_bl" %in% v_matching, "COALESCE(a.institutionalized_bl,b.institutionalized_bl) AS institutionalized_bl, ",""),
+              ifelse("foreign_bl" %in% v_matching, "COALESCE(a.foreign_bl,b.foreign_bl) AS foreign_bl, ",""),
+              ifelse("socecon_lvl_cd" %in% v_matching, "COALESCE(a.socecon_lvl_cd,b.socecon_lvl_cd) AS socecon_lvl_cd, ",""),
+              ifelse("comorbidities_bl" %in% v_matching, "a.comorbidities_bl, ",""),
+              ifelse("immunestatus_bl" %in% v_matching, "a.immunestatus_bl ",""),
+            "from
               cohort_view a 
               LEFT JOIN cohort_data_imputed b on a.person_id = b.person_id
             where
@@ -316,17 +388,18 @@ getSampleNBigger <- function(date_, group, n_sample, cursor) {
             union all         
               select 
                 c.person_id,
-                c.fully_vaccinated_bl,
-                COALESCE(c.sex_cd,d.sex_cd) AS sex_cd,
-                COALESCE(c.age_cd,d.age_cd) AS age_cd,
-                COALESCE(c.residence_area_cd,d.residence_area_cd) AS residence_area_cd,
-                COALESCE(c.pregnancy_bl,d.pregnancy_bl) AS pregnancy_bl,
-                COALESCE(c.essential_worker_bl,d.essential_worker_bl) AS essential_worker_bl,
-                COALESCE(c.institutionalized_bl,d.institutionalized_bl) AS institutionalized_bl,
-                COALESCE(c.foreign_bl,d.foreign_bl) AS foreign_bl,
-                c.comorbidities_bl,
-                c.immunestatus_bl  
-              from 
+                c.fully_vaccinated_bl, ",
+                ifelse("sex_cd" %in% v_matching, "COALESCE(c.sex_cd,d.sex_cd) AS sex_cd, ",""),
+                ifelse("age_cd" %in% v_matching, "COALESCE(c.age_cd,d.age_cd) AS age_cd, ",""),
+                ifelse("residence_area_cd" %in% v_matching, "COALESCE(c.residence_area_cd,d.residence_area_cd) AS residence_area_cd, ",""),
+                ifelse("pregnancy_bl" %in% v_matching, "COALESCE(c.pregnancy_bl,d.pregnancy_bl) AS pregnancy_bl, ",""),
+                ifelse("essential_worker_bl" %in% v_matching, "COALESCE(c.essential_worker_bl,d.essential_worker_bl) AS essential_worker_bl, ",""),
+                ifelse("institutionalized_bl" %in% v_matching, "COALESCE(c.institutionalized_bl,d.institutionalized_bl) AS institutionalized_bl, ",""),
+                ifelse("foreign_bl" %in% v_matching, "COALESCE(c.foreign_bl,d.foreign_bl) AS foreign_bl, ",""),
+                ifelse("socecon_lvl_cd" %in% v_matching, "COALESCE(c.socecon_lvl_cd,d.socecon_lvl_cd) AS socecon_lvl_cd, ",""),
+                ifelse("comorbidities_bl" %in% v_matching, "c.comorbidities_bl, ",""),
+                ifelse("immunestatus_bl" %in% v_matching, "c.immunestatus_bl ",""),
+              " from 
                 cohort_view c 
                 LEFT JOIN cohort_data_imputed d on c.person_id = d.person_id
               where 
@@ -336,71 +409,40 @@ getSampleNBigger <- function(date_, group, n_sample, cursor) {
   return(data_)
 }
 
-getSampleForMatch <- function(date_, group, n_sample, cursor){
+getSampleForMatch <- function(date_, group, n_sample, cursor, v_matching){
   query <- paste0("select 
               a.person_id,
-              a.fully_vaccinated_bl,
-              COALESCE(a.sex_cd, c.sex_cd) AS sex_cd,
-              COALESCE(a.age_cd,c.age_cd) AS age_cd,
-              COALESCE(a.residence_area_cd,c.residence_area_cd) AS residence_area_cd,
-              COALESCE(a.pregnancy_bl,c.pregnancy_bl) AS pregnancy_bl,
-              COALESCE(a.essential_worker_bl,c.essential_worker_bl) AS essential_worker_bl,
-              COALESCE(a.institutionalized_bl,c.institutionalized_bl) AS institutionalized_bl,
-              COALESCE(a.foreign_bl,c.foreign_bl) AS foreign_bl, 
-              a.comorbidities_bl,
-              a.immunestatus_bl from
+              a.fully_vaccinated_bl, ",
+              ifelse("sex_cd" %in% v_matching, "COALESCE(a.sex_cd,c.sex_cd) AS sex_cd, ",""),
+              ifelse("age_cd" %in% v_matching, "COALESCE(a.age_cd,c.age_cd) AS age_cd, ",""),
+              ifelse("residence_area_cd" %in% v_matching, "COALESCE(a.residence_area_cd,c.residence_area_cd) AS residence_area_cd, ",""),
+              ifelse("pregnancy_bl" %in% v_matching, "COALESCE(a.pregnancy_bl,c.pregnancy_bl) AS pregnancy_bl, ",""),
+              ifelse("essential_worker_bl" %in% v_matching, "COALESCE(a.essential_worker_bl,c.essential_worker_bl) AS essential_worker_bl, ",""),
+              ifelse("institutionalized_bl" %in% v_matching, "COALESCE(a.institutionalized_bl,c.institutionalized_bl) AS institutionalized_bl, ",""),
+              ifelse("foreign_bl" %in% v_matching, "COALESCE(a.foreign_bl,c.foreign_bl) AS foreign_bl, ",""),
+              ifelse("socecon_lvl_cd" %in% v_matching, "COALESCE(a.socecon_lvl_cd,c.socecon_lvl_cd) AS socecon_lvl_cd, ",""),
+              ifelse("comorbidities_bl" %in% v_matching, "a.comorbidities_bl, ",""),
+              ifelse("immunestatus_bl" %in% v_matching, "a.immunestatus_bl",""), " from
               (select
                 person_id,
-                fully_vaccinated_bl,
-                sex_cd,
-                age_cd,
-                residence_area_cd,
-                pregnancy_bl,
-                essential_worker_bl,
-                institutionalized_bl,
-                foreign_bl,
-                comorbidities_bl,
-                immunestatus_bl 
-              from
+                fully_vaccinated_bl, ",
+                paste(v_matching, sep="' '", collapse=", "),
+              " from
                 cohort_view
               where
                 (fully_vaccinated_dt == '", date_, "') and group_id = ", as.character(group), "
               union all
                 select 
                   person_id,
-                  FALSE as fully_vaccinated_bl,
-                  sex_cd,
-                  age_cd,
-                  residence_area_cd,
-                  pregnancy_bl,
-                  essential_worker_bl,
-                  institutionalized_bl,
-                  foreign_bl,
-                  comorbidities_bl,
-                  immunestatus_bl from (
+                  FALSE as fully_vaccinated_bl, ",
+                  paste(v_matching, sep="' '", collapse=", "), " from (
                 select
                   person_id,
-                  fully_vaccinated_bl,
-                  sex_cd,
-                  age_cd,
-                  residence_area_cd,
-                  pregnancy_bl,
-                  essential_worker_bl,
-                  institutionalized_bl,
-                  foreign_bl,
-                  comorbidities_bl,
-                  immunestatus_bl,
-                  row_number() OVER (PARTITION BY 
-                    sex_cd,
-                    age_cd,
-                    residence_area_cd,
-                    pregnancy_bl,
-                    essential_worker_bl,
-                    institutionalized_bl,
-                    foreign_bl,
-                    comorbidities_bl,
-                    immunestatus_bl
-                ORDER BY random()) AS person_num
+                  fully_vaccinated_bl, ",
+                  paste(v_matching, sep="' '", collapse=", "), ",
+                  row_number() OVER (PARTITION BY ",
+                    paste(v_matching, sep="' '", collapse=", "),
+                " ORDER BY random()) AS person_num
                     from (select * from (select * from cohort_view v
                       where
                           (fully_vaccinated_dt > '", date_, "'
@@ -426,59 +468,37 @@ getSampleForMatch <- function(date_, group, n_sample, cursor){
   return(data_)
 }
 
-getSamplesRandom <-function(date_, group, n_sample, cursor){
+getSamplesRandom <-function(date_, group, n_sample, cursor, v_matching){
      query <- paste0("select a.person_id,
-        a.fully_vaccinated_bl,
-        COALESCE(a.sex_cd, c.sex_cd) AS sex_cd,
-        COALESCE(a.age_cd,c.age_cd) AS age_cd,
-        COALESCE(a.residence_area_cd,c.residence_area_cd) AS residence_area_cd,
-        COALESCE(a.pregnancy_bl,c.pregnancy_bl) AS pregnancy_bl,
-        COALESCE(a.essential_worker_bl,c.essential_worker_bl) AS essential_worker_bl,
-        COALESCE(a.institutionalized_bl,c.institutionalized_bl) AS institutionalized_bl,
-        COALESCE(a.foreign_bl,c.foreign_bl) AS foreign_bl, 
-        a.comorbidities_bl,
-        a.immunestatus_bl from
+        a.fully_vaccinated_bl, ",
+        ifelse("sex_cd" %in% v_matching, "COALESCE(a.sex_cd,c.sex_cd) AS sex_cd, ",""),
+        ifelse("age_cd" %in% v_matching, "COALESCE(a.age_cd,c.age_cd) AS age_cd, ",""),
+        ifelse("residence_area_cd" %in% v_matching, "COALESCE(a.residence_area_cd,c.residence_area_cd) AS residence_area_cd, ",""),
+        ifelse("pregnancy_bl" %in% v_matching, "COALESCE(a.pregnancy_bl,c.pregnancy_bl) AS pregnancy_bl, ",""),
+        ifelse("essential_worker_bl" %in% v_matching, "COALESCE(a.essential_worker_bl,c.essential_worker_bl) AS essential_worker_bl, ",""),
+        ifelse("institutionalized_bl" %in% v_matching, "COALESCE(a.institutionalized_bl,c.institutionalized_bl) AS institutionalized_bl, ",""),
+        ifelse("foreign_bl" %in% v_matching, "COALESCE(a.foreign_bl,c.foreign_bl) AS foreign_bl, ",""),
+        ifelse("socecon_lvl_cd" %in% v_matching, "COALESCE(a.socecon_lvl_cd,c.socecon_lvl_cd) AS socecon_lvl_cd, ",""),
+        ifelse("comorbidities_bl" %in% v_matching, "a.comorbidities_bl, ",""),
+        ifelse("immunestatus_bl" %in% v_matching, "a.immunestatus_bl",""), " from
         (select
           person_id,
-          fully_vaccinated_bl,
-          sex_cd,
-          age_cd,
-          residence_area_cd,
-          pregnancy_bl,
-          essential_worker_bl,
-          institutionalized_bl,
-          foreign_bl,
-          comorbidities_bl,
-          immunestatus_bl 
-        from
+          fully_vaccinated_bl, ",
+          paste(v_matching, sep="' '", collapse=", "),
+        " from
           cohort_view
         where
           (fully_vaccinated_dt ==  '", date_, "') and group_id = ", as.character(group), "
         union all
           select 
             person_id,
-            FALSE as fully_vaccinated_bl,
-            sex_cd,
-            age_cd,
-            residence_area_cd,
-            pregnancy_bl,
-            essential_worker_bl,
-            institutionalized_bl,
-            foreign_bl,
-            comorbidities_bl,
-            immunestatus_bl from (
+            FALSE as fully_vaccinated_bl, ",
+            paste(v_matching, sep="' '", collapse=", "), 
+            " from (
           select
             person_id,
-            fully_vaccinated_bl,
-            sex_cd,
-            age_cd,
-            residence_area_cd,
-            pregnancy_bl,
-            essential_worker_bl,
-            institutionalized_bl,
-            foreign_bl,
-            comorbidities_bl,
-            immunestatus_bl,
+            fully_vaccinated_bl, ",
+            paste(v_matching, sep="' '", collapse=", "), ",
             row_number() OVER (
           ORDER BY random()) AS person_num
               from (select * from (select * from cohort_view v
@@ -499,7 +519,6 @@ getSamplesRandom <-function(date_, group, n_sample, cursor){
                     ) b where person_num <= ", as.character(n_sample), ") a
             LEFT join cohort_data_imputed c
                     ON a.person_id = c.person_id")
-
     data_ <- dbGetQuery(cursor, query)
     return(data_)
 }
@@ -510,7 +529,7 @@ getSamplesRandom <-function(date_, group, n_sample, cursor){
 doMatch <- function(dates) {
   tryCatch(
     {
-      con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+      con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       n_sample <- 150
       
       ### Loop by date ###
@@ -531,30 +550,15 @@ doMatch <- function(dates) {
           ifelse(tmp$condition_null_c,
                  ### If control group id null (no exact match found) ###
                  {
-                   df_matching <- getSampleForMatch(k,tmp$full_vaccine_group, n_sample, con);
+                   df_matching <- getSampleForMatch(k,tmp$full_vaccine_group, n_sample, con, v_matching_incl);
                    sim_groups <- nrow(df_matching) > tmp[,"full_vaccine_n_group"]
                    ifelse(sim_groups,
                     {
                      ## If similar group found ##
                      cols <- colnames(df_matching)[colnames(df_matching) != 'person_id'];
                      df_matching <- df_matching %>% mutate_at(cols, as.numeric);
-                     # check if pregnancy_bl all na -> if yes remove
-                     cond <- sum(is.na(df_matching$pregnancy_bl))==nrow(df_matching);
-                     ifelse(
-                       !cond,
-                       {
-                       ## Pregnancy not all na
-                       psm <- matchit(fully_vaccinated_bl ~ age_cd + sex_cd + residence_area_cd + pregnancy_bl + essential_worker_bl + 
-                                          institutionalized_bl + foreign_bl + comorbidities_bl + immunestatus_bl,
-                                        method = "nearest", distance = "glm", data = df_matching);
-                       },
-                       {
-                       ## Pregnancy all na
-                       df_matching <- df_matching %>% select(-pregnancy_bl)
-                       psm <- matchit(fully_vaccinated_bl ~ age_cd + sex_cd + residence_area_cd + essential_worker_bl + 
-                                          institutionalized_bl + foreign_bl + comorbidities_bl + immunestatus_bl,
-                                        method = "nearest", distance = "glm", data = df_matching)
-                       });
+                     psm <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl, sep="' '", collapse=" + "))),
+                             method = "nearest", distance = "glm", data = df_matching); 
                      psm <- match.data(psm);
                      psm$subclass <- as.numeric(as.character(psm[,"subclass"]))+last_subclass;
                      df <- data.frame(matrix(ncol = 3, nrow = length(unique(psm$subclass))));
@@ -568,25 +572,11 @@ doMatch <- function(dates) {
                    },
                    {
                      ## If no similar group found ##
-                     df_matching <- getSamplesRandom(k,tmp$full_vaccine_group, n_sample, con);
+                     df_matching <- getSamplesRandom(k,tmp$full_vaccine_group, n_sample, con, v_matching_incl);
                      cols <- colnames(df_matching)[colnames(df_matching) != 'person_id'];
                      df_matching <- df_matching %>% mutate_at(cols, as.numeric);
-                     cond <- sum(is.na(df_matching$pregnancy_bl))==nrow(df_matching)
-                     ifelse(
-                       !cond,
-                       {
-                         ## Pregnancy not all na
-                         psm <- matchit(fully_vaccinated_bl ~ age_cd + sex_cd + residence_area_cd + pregnancy_bl + essential_worker_bl + 
-                                          institutionalized_bl + foreign_bl + comorbidities_bl + immunestatus_bl,
-                                        method = "nearest", distance = "glm", data = df_matching);
-                       },
-                       {
-                         ## Pregnancy all na
-                         df_matching <- df_matching %>% select(-pregnancy_bl)
-                         psm <- matchit(fully_vaccinated_bl ~ age_cd + sex_cd + residence_area_cd + essential_worker_bl + 
-                                          institutionalized_bl + foreign_bl + comorbidities_bl + immunestatus_bl,
-                                        method = "nearest", distance = "glm", data = df_matching)
-                       })
+                     psm <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl, sep="' '", collapse=" + "))),
+                                    method = "nearest", distance = "glm", data = df_matching); 
                      psm <- match.data(psm);
                      psm$subclass <- as.numeric(as.character(psm[,"subclass"]))+last_subclass
                      df <- data.frame(matrix(ncol = 3, nrow = length(unique(psm$subclass))));
@@ -602,7 +592,7 @@ doMatch <- function(dates) {
                  ,
                  ### If control group id not null (exact match(es) found) ###
                  {
-                   df_sample <- getSampleNBigger(k,tmp$full_vaccine_group,tmp$full_vaccine_n_group,con);
+                   df_sample <- getSampleNBigger(k,tmp$full_vaccine_group,tmp$full_vaccine_n_group,con,v_matching_incl);
                    person_id_df <- df_sample %>% filter(fully_vaccinated_bl==TRUE) %>% select(person_id);
                    matched_id_df <- df_sample %>% filter(fully_vaccinated_bl==FALSE) %>% select(person_id) %>% rename(matched_ID=person_id);
                    ifelse(tmp$condition_less_or_eq,
@@ -632,6 +622,12 @@ doMatch <- function(dates) {
         dbWriteTable(con, "result_matching_alg",df,overwrite = FALSE, append=TRUE)
       }
     },
+    error=function(cond) {
+      ## Log info
+      warn(logger, paste0("MY ERROR: 
+                        ", cond))
+      return(stop(cond))
+    },
     finally={
       ## disconnect from database
       dbDisconnect(con, shutdown=TRUE)
@@ -646,7 +642,7 @@ system.time(doMatch(dates_v))
 getStatusMatch <- function() {
   tryCatch(
     {
-      con = dbConnect(duckdb::duckdb(), dbdir=auxilary_database_path, read_only=FALSE)
+      con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       end_follow_up <- "'2022-09-01'"
       # Calculate censorship date for pairs.      
       dbExecute(con, paste0("
@@ -847,6 +843,12 @@ getStatusMatch <- function() {
     	      ELSE status
     	      END;")
       
+    },
+    error=function(cond) {
+      ## Log info
+      warn(logger, paste0("MY ERROR: 
+                        ", cond))
+      return(stop(cond))
     },
     finally={
       ## disconnect from database
