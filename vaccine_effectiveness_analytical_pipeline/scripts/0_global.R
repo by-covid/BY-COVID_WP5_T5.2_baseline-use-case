@@ -253,6 +253,10 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
           ## register arrow dataset
           duckdb_register_arrow(conn = con, name = "cohort_view", ddf)
 
+          ## Log info
+          info(logger_simple,paste0("Number of rows in table cohort_view after: ", dbGetQuery(con,"SELECT COUNT() FROM cohort_view ;")[[1]],,"
+                                    "))
+
           ## insert data into 'cohort_data' table
           dbExecute(con, "INSERT INTO cohort_data SELECT * FROM cohort_view")
 
