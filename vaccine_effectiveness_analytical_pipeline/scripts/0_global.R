@@ -239,7 +239,7 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
           )
           
           data_file <- list.files(paste0(input_data_path,"/"),pattern=".csv")
-          file <- file.path(paste0(input_data_path,"/"),data_file)
+          file <- file.path(input_data_path,data_file)
           parse_options <- CsvParseOptions$create(delimiter = "|")
           convert_options <- CsvConvertOptions$create(true_values = c("True","true","TRUE"),
                                                       false_values = c("False","false","FALSE"),
