@@ -32,4 +32,4 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER app/www/analytical-pipeline.png /home/mamba
 #RUN chown -R $MAMBA_USER /pipeline
 USER $MAMBA_USER
 ## Command
-CMD ["R", "-e", "shiny::runApp('/home/mambauser/app', host = '0.0.0.0', port = 3838)"]
+CMD ["R", "-e", "shiny::runApp('/home/mambauser/app/app.R', host = '0.0.0.0', port = 3838)"]
