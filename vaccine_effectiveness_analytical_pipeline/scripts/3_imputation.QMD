@@ -82,60 +82,6 @@ tryCatch(
 
 ```
 
-## Missing values {.tabset}
-
-::: panel-tabset
-##### Missing values map
-
-```{r, missing values map, message=FALSE, warning=FALSE, error=FALSE}
-
-info(logger_simple, "CREATING MISSING VALUES MAP...")
-
-tryCatch(
-  {
-    explanatory <- c("age_nm","sex_cd","residence_area_cd","essential_worker_bl",
-        "institutionalized_bl","foreign_bl", "diabetes_bl","obesity_bl","heart_failure_bl","copd_bl",
-        "solid_tumor_without_metastasis_bl","chronic_liver_disease_bl","chronic_kidney_disease_bl",
-        "sickle_cell_disease_bl","hypertension_bl","blood_cancer_bl","transplanted_bl", 
-        "hiv_infection_bl","primary_immunodeficiency_bl","immunosuppression_bl","pregnancy_bl")
-    pl_missing_map <- df_not_viol %>% missing_plot(explanatory = explanatory)
-    ply <- ggplotly(pl_missing_map)
-    for (i in 1:length(explanatory)) {
-      ply$x$data[[1]]$text[i,] <- paste0("Id: ", ply$x$data[[1]][["x"]],"<br />","Variable: ", explanatory[length(explanatory)+1-i])
-    }
-    ply
-  },
-  error=function(cond) {
-    ## Log info
-    warn(logger, paste0("MY ERROR: 
-                        ", cond))
-    return(stop(cond))
-  })
-
-```
-
-##### Missing data matrix
-
-```{r, missing data matrix, message=FALSE, warning=FALSE, error=FALSE}
-
-info(logger_simple, "CREATING MISSING DATA MATRIX...")
-
-tryCatch(
-  {
-    explanatory <- c("age_nm","sex_cd","residence_area_cd","pregnancy_bl","essential_worker_bl",
-        "institutionalized_bl","foreign_bl","socecon_lvl_cd") 
-    df_not_viol %>% missing_pairs(explanatory = explanatory,position = "fill")
-  },
-  error=function(cond) {
-    ## Log info
-    warn(logger, paste0("MY ERROR: 
-                        ", cond))
-    return(stop(cond))
-  })
-
-```
-:::
-
 ## Handling missing data {.tabset}
 
 ::: panel-tabset
