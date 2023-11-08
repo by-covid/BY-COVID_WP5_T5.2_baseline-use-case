@@ -401,7 +401,7 @@
         "causal model"
       ],
       "license": {
-        "@id": "CC BY 4.0"
+        "@id": "https://spdx.org/licenses/CC-BY-4.0"
       },
       "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
       "spatialCoverage": {
