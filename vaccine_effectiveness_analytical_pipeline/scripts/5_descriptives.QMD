@@ -73,6 +73,9 @@ tryCatch(
     if("Exclude immunestatus_bl as matching variable (immune status)" %in% df_imputation_methods$imputation_method) {
       v_matching_excl <- append(v_matching_excl,"immunestatus_bl")
     }
+    for(i in c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl")) {
+        if(length(unique(dbGetQuery(con, paste0("SELECT ", i, " FROM cohort_data"))[[1]]))==1) {
+        v_matching_excl <- c(v_matching_excl,i)}}
     v_matching_incl <- setdiff(c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl"),v_matching_excl)
 
     ## Matched data
@@ -724,8 +727,7 @@ tryCatch(
 
 ##### Matched population
 
-At each eligible time during the enrollment period, the vaccination status of eligible individuals is assessed and every individual who has completed a primary vaccination schedule at that time (treated/exposed) is matched to an individual who has not (yet) completed the primary vaccination schedule (control). `r format(n_eligible_vacc, digits = 2, big.mark = " ", decimal.mark = ",")` eligible individuals completed a primary vaccination schedule during the enrollment period. Newly vaccinated individuals (completing a primary vaccination schedule) are eligible for inclusion in the study, even if they had previously been selected in the "no (or partial) vaccine group". As such, individuals can occur more than once in the matched population (`r format(n_con_vacc_matched, digits = 2, big.mark = " ", decimal.mark = ",")` individuals completing a primary vaccination schedule during the enrollment period were previously matched once or more than once as control).
-The matched individuals are counted by intervention group and whether they experienced a known/confirmed infection (confirmed_case_bl, see CDM for definition).
+At each eligible time during the enrollment period, the vaccination status of eligible individuals is assessed and every individual who has completed a primary vaccination schedule at that time (treated/exposed) is matched to an individual who has not (yet) completed the primary vaccination schedule (control). `r format(n_eligible_vacc, digits = 2, big.mark = " ", decimal.mark = ",")` eligible individuals completed a primary vaccination schedule during the enrollment period. Newly vaccinated individuals (completing a primary vaccination schedule) are eligible for inclusion in the study, even if they had previously been selected in the "no (or partial) vaccine group". As such, individuals can occur more than once in the matched population (`r format(n_con_vacc_matched, digits = 2, big.mark = " ", decimal.mark = ",")` individuals completing a primary vaccination schedule during the enrollment period were previously matched once or more than once as control). The matched individuals are counted by intervention group and whether they experienced a known/confirmed infection (confirmed_case_bl, see CDM for definition).
 
 ```{r, print table matched population, message=FALSE, warning=FALSE, error=FALSE}
 

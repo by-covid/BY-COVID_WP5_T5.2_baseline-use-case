@@ -424,9 +424,15 @@ tryCatch(
   {
     imp <- tmp[[2]]
     
-    if(!is.null(imp)) {
+    v_imp_excl <- c()
+    for(i in v_imp) {
+      if(sum(is.na(data_imp[,i]))>0) {v_imp_excl <- c(v_imp_excl,i)}
+    }
+    v_imp <- setdiff(v_imp, v_imp_excl)
+    
+    if(!is.null(imp) | length(v_imp)>0) {
       ## Create plots
-      plot(imp)
+      # plot(imp)
       formula <- as.formula(paste("~", paste(v_imp, 
             collapse = "+", sep = ""), sep = ""))
       densityplot(imp,formula)

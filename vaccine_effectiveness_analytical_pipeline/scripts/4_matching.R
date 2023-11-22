@@ -36,10 +36,7 @@ tryCatch(
     if("Exclude immunestatus_bl as matching variable (immune status)" %in% df_imputation_methods$imputation_method) {
       v_matching_excl <- append(v_matching_excl,"immunestatus_bl")
     }
-    
-    ## Description: obtain variables to include as matching variable
-    v_matching_incl <- setdiff(c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl"),v_matching_excl)
-    
+
   },
   error=function(cond) {
     ## Log info
@@ -122,6 +119,14 @@ f_computation_new_variables <- function() {
                                               WHEN vaccination_schedule_cd != \'JJ\' and vaccination_schedule_cd is not NULL  and dose_3_dt is not null THEN TRUE
                                               ELSE FALSE
                                               END;")
+      
+      ## Description: obtain variables to exclude as matching variable
+      for(i in c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl")) {
+        if(length(unique(dbGetQuery(con, paste0("SELECT ", i, " FROM cohort_data"))[[1]]))==1) {
+          v_matching_excl <- c(v_matching_excl,i)}}
+      v_matching_excl <<- v_matching_excl
+      ## Description: obtain variables to include as matching variable
+      v_matching_incl <<- setdiff(c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl"),v_matching_excl)
       
       ## Description: compute the variable 'group_id' in cohort_data
       dbExecute(con,
