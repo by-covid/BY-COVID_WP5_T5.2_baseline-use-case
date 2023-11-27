@@ -8,7 +8,6 @@ dependencies:
 #  - r-consort
 #  - r-parallel
  - r-devtools=2.4
-# - r-quarto=1.1.145
  - r-quarto=1.2
  - r-arrow=10.0.1
  - r-dplyr=1.1.2
@@ -46,3 +45,4 @@ dependencies:
  - r-xlsx=0.6.5
  - r-finalfit=1.0.6
  - r-dbplyr=2.3
+ - r-htmlwidgets=1.6.2
