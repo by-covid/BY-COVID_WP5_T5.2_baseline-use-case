@@ -290,8 +290,10 @@ tryCatch(
         data_imp_compl <- cbind(person_id = df_imp$person_id, data_imp_compl)
         # -> Select patient_ids of patients with imputed values
         out <- lapply(v, FUN =  function(variable) {
-          out <- data.frame(person_id=df_imp[which(is.na(df_imp[,variable])),"person_id"])
-          print(out)
+          # out <- data.frame(person_id=df_imp[which(is.na(df_imp[,variable])),"person_id"])
+          out <- data.frame(setdiff(df_imp[which(is.na(df_imp[,v])),"person_id"], data_imp_compl[which(is.na(data_imp_compl[,v])),"person_id"]))
+          colnames(out) <- "person_id"
+          # print(out)
           return(out)
         }) %>% bind_rows()
         p_id <- out %>% distinct()
@@ -307,7 +309,22 @@ tryCatch(
     }
     # Use the function to obtain an imputed dataset
     tmp <- method_imputation(df_not_viol %>% select(all_of(setdiff(c("person_id",core_v,comorb_v, imm_v),v_excl))),v_imp)
-    data_imp <- tmp[[1]] %>% mutate(sex_cd=as.character(sex_cd), residence_area_cd=as.character(residence_area_cd))
+    
+    if(length(v_imp)!=0) {
+    data_imp <- tmp[[1]] %>% select(-c(.imp, .id)) %>% 
+      mutate_at(vars(one_of('sex_cd','residence_area_cd','socecon_lvl_cd')), as.character) %>%
+      mutate_at(vars(one_of('pregnancy_bl','essential_worker_bl','institutionalized_bl','foreign_bl',"diabetes_bl","obesity_bl","heart_failure_bl","copd_bl",
+        "solid_tumor_without_metastasis_bl","chronic_liver_disease_bl","chronic_kidney_disease_bl",
+        "sickle_cell_disease_bl","hypertension_bl","blood_cancer_bl","transplanted_bl",
+        "hiv_infection_bl","primary_immunodeficiency_bl","immunosuppression_bl")), as.logical)
+    } else {
+      data_imp <- tmp[[1]] %>% 
+        mutate_at(vars(one_of('sex_cd','residence_area_cd','socecon_lvl_cd')), as.character) %>%
+        mutate_at(vars(one_of('pregnancy_bl','essential_worker_bl','institutionalized_bl','foreign_bl',"diabetes_bl","obesity_bl","heart_failure_bl","copd_bl",
+          "solid_tumor_without_metastasis_bl","chronic_liver_disease_bl","chronic_kidney_disease_bl",
+          "sickle_cell_disease_bl","hypertension_bl","blood_cancer_bl","transplanted_bl",
+          "hiv_infection_bl","primary_immunodeficiency_bl","immunosuppression_bl")), as.logical)
+    }
   },
   error=function(cond) {
     ## Log info
@@ -338,14 +355,12 @@ tryCatch(
 tryCatch(
   {
     con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
-    
     n_ld_before <- dbGetQuery(con, "SELECT COUNT() FROM cohort_data where flag_listwise_del=TRUE")[[1]]
-
     df_imp_missing <- as.data.frame(matrix(ncol = 2, nrow = 0))
     colnames(df_imp_missing) <- c("variable", "nr_not_imp")
     for(i in v_imp) {
-      ## Description: variables that require listwise deletion
-      tmp_ld_rn <- data.frame(person_id=data_imp[which(is.na(data_imp[,i])),"person_id"]) 
+      # tmp_ld_rn <- data.frame(person_id=data_imp[which(is.na(data_imp[,i])),"person_id"]) 
+      tmp_ld_rn <- data.frame(person_id=setdiff(df_not_viol[which(is.na(df_not_viol[,i])),"person_id"],data_imp$person_id)) %>% distinct()
       duckdb_register(con, name='table_listwise_deletion', df=tmp_ld_rn, overwrite = TRUE, experimental = FALSE)
       qry <- 
         "update cohort_data set
@@ -357,9 +372,7 @@ tryCatch(
        colnames(df_imp_missing) <- c("variable", "nr_not_imp")
        rm(tmp_ld_rn)
     }
-    
     n_ld_after <- dbGetQuery(con, "SELECT COUNT() FROM cohort_data where flag_listwise_del=TRUE")[[1]]
-    
   },
   error=function(cond) {
     ## Log info
@@ -370,7 +383,6 @@ tryCatch(
   finally={
     dbDisconnect(con, shutdown=TRUE)
   })
-
 
 ```
 
@@ -393,7 +405,7 @@ tryCatch(
     
     df_var_imputation_method <- df_var_imputation_method[, c("Variable_name","imputation_method","Nr_missing","Pct_missing","Nr_imputed","Missing_values","Comorbidity","comorb_incl","Immunestatus","imm_incl","Core","MCAR","Perc_miss_lt","Perc_miss_lt5","Perc_miss_lt15")]
     
-    df_var_imputation_method <- df_var_imputation_method %>% arrange(factor(Variable_name,levels = colnames(df_not_viol)))
+    df_var_imputation_method <- df_var_imputation_method %>% arrange(factor(Variable_name,levels = colnames(df_not_viol))) %>% mutate(across(where(is.numeric), round, 3))
     
     ## Description: print table with information on methods used to deal with missing data
     formattable(df_var_imputation_method,
