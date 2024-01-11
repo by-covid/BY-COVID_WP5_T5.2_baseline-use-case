@@ -20,6 +20,8 @@ if(FALSE) {
 ### Matching variables ###
 ##########################
 
+info(logger_simple, "Determine matching variables...")
+
 tryCatch(
   {
     ## Description: get database connection
@@ -53,6 +55,8 @@ tryCatch(
 ### Adjust 'cohort_data' table ###
 ##################################
 
+info(logger_simple, "Adjust 'cohort_data' table...")
+
 f_computation_new_variables <- function() {
   
   tryCatch(
@@ -61,6 +65,7 @@ f_computation_new_variables <- function() {
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       
       ## Description: add columns in 'cohort_data' table
+      info(logger_simple, "       Add columns in cohort_data...")
       dbExecute(con, "ALTER TABLE cohort_data ADD COLUMN comorbidities_bl BOOLEAN;
                   ALTER TABLE cohort_data ADD COLUMN immunestatus_bl BOOLEAN;
                   ALTER TABLE cohort_data ADD COLUMN age_cd VARCHAR;
@@ -70,6 +75,7 @@ f_computation_new_variables <- function() {
                   ALTER TABLE cohort_data ADD COLUMN flag_inclusion_record BOOLEAN;")
       
       ## Description: compute the variables 'comorbidities_bl', 'immunestatus_bl', 'age_cd' and 'boost_bl' in cohort_data
+      info(logger_simple, "       Compute the variables 'comorbidities_bl', 'immunestatus_bl', 'age_cd' and 'boost_bl' in cohort_data...")
       dbExecute(con, 
                 "UPDATE cohort_data set
                       	comorbidities_bl = CASE  
@@ -121,6 +127,7 @@ f_computation_new_variables <- function() {
                                               END;")
       
       ## Description: obtain variables to exclude as matching variable
+      info(logger_simple, "       Obtain variables to exclude as matching variable...")
       for(i in c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl")) {
         if(length(unique(dbGetQuery(con, paste0("SELECT ", i, " FROM cohort_data"))[[1]]))==1) {
           v_matching_excl <- c(v_matching_excl,i)}}
@@ -130,6 +137,7 @@ f_computation_new_variables <- function() {
       v_matching_incl <<- v_matching_incl
       
       ## Description: compute the variable 'group_id' in cohort_data
+      info(logger_simple, "       Compute the variable 'group_id' in cohort data...")
       dbExecute(con,
         paste0("UPDATE cohort_data set 
           group_id=b.group_id from(
@@ -155,6 +163,7 @@ f_computation_new_variables <- function() {
       ))
       
       ## Description: compute the variable 'age_cd' in cohort_data_imputed
+      info(logger_simple, "       Compute the variable 'age_cd' in cohort_data_imputed...")
       if("age_nm" %in% (dbGetQuery(con, "describe select * from cohort_data_imputed") %>% select(column_name))[[1]]) 
         {dbExecute(con,"
               UPDATE cohort_data_imputed set
@@ -181,7 +190,8 @@ f_computation_new_variables <- function() {
                         END")}
       
       ## Description: compute the variable flag_inclusion_record in cohort_data
-      dbExecute(con,"UPDATE cohort_data SET 
+      info(logger_simple, "       Compute the variable 'flag_inclusion_record' in cohort data...")
+      dbExecute(con,"UPDATE cohort_data SET
                 flag_inclusion_record = CASE
                 WHEN previous_infection_bl==TRUE OR flag_violating_val==TRUE OR flag_listwise_del==TRUE THEN FALSE
                 ELSE TRUE
@@ -200,6 +210,8 @@ f_computation_new_variables <- function() {
 }
 
 f_computation_new_variables()
+
+info(logger_simple, "Create 'cohort_view' in which only records with flag_inclusion_record==TRUE are selected...")
 
 tryCatch(
   {
@@ -226,6 +238,8 @@ tryCatch(
 
 ### Create vector with dates ###
 ################################
+
+info(logger_simple, "Obtain vector with dates to loop over...")
 
 getDates <- function() {
   tryCatch(
@@ -257,12 +271,15 @@ dates_v <- as.Date(as.vector(getDates()$fully_vaccinated_dt),
 ### Calculate similarity ###
 ############################
 
+info(logger_simple, "Calculate simularity...")
+
 calculate_similarity <- function() {
   tryCatch(
     {
       ## get database connection
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       
+      info(logger_simple, "       Create df_original...")
       df_original <- dbGetQuery(con,paste0("SELECT DISTINCT ON (a.group_id)
                     a.person_id, ",
                     ifelse("sex_cd" %in% v_matching_incl, "COALESCE(a.sex_cd, b.sex_cd) AS sex_cd, ",""),
@@ -288,10 +305,12 @@ calculate_similarity <- function() {
       ## group numbers
       n_groups <- unique(df_original$group_id)
       
+      info(logger_simple, "       Make cluster...")
       cl <- makeCluster(4)
       clusterEvalQ(cl, c(library(duckdb),library(DBI),library(MatchIt),library(dplyr)))
       
       ## function
+      info(logger_simple, "       Loop over groups and matching...")
       loop_group <- function(i) {
         
         group_nr <- n_groups[i]
@@ -313,6 +332,7 @@ calculate_similarity <- function() {
       output <- parLapply(cl, 1:length(n_groups),loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance))
       
       ## create table 'group_similarity
+      info(logger_simple, "       Create duckdb database table group_similarity...")
       dbExecute(con, "CREATE OR REPLACE TABLE group_similarity (
                   	group_id VARCHAR,
                   	matched_group VARCHAR,
@@ -532,12 +552,15 @@ getSamplesRandom <-function(date_, group, n_sample, cursor, v_matching){
 ### Execute matching  ###
 #########################
 
+info(logger_simple, "Execute matching...")
+
 doMatch <- function(dates) {
   tryCatch(
     {
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       n_sample <- 150
       
+      info(logger_simple, "       Loop by date and group...")
       ### Loop by date ###
       for(i in 1:length(dates)) {
         k <- as.character(dates[i])
@@ -660,12 +683,16 @@ system.time(doMatch(dates_v))
 ### Calculate status and follow-up time for survival analysis  ###
 ##################################################################
 
+info(logger_simple, "Calculating status and follow-up time for survival analysis...")
+
 getStatusMatch <- function() {
   tryCatch(
     {
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       end_follow_up <- "'2022-09-01'"
-      # Calculate censorship date for pairs.      
+      
+      # Calculate censorship date for pairs
+      info(logger_simple, "       Calculate censorship data for pairs...")
       dbExecute(con, paste0("
       CREATE OR REPLACE TABLE result_matching_alg AS		
       select
@@ -749,6 +776,8 @@ getStatusMatch <- function() {
       			on
       			result_matching_alg.matched_ID = control_dates.person_id )c) censoring_table"))
       
+      # Calculate status and follow-up time 
+      info(logger_simple, "       Calculate status and follow-up time...")
       dbExecute(con, "
                 CREATE OR REPLACE TABLE matched_data as
                   	select
@@ -856,6 +885,7 @@ getStatusMatch <- function() {
     	      END;
                 
       "))
+      
       # Change the status if the confirmed date is after the censorship date.
       dbExecute(con, "
       update matched_data set 	
