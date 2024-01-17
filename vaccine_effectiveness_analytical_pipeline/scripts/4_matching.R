@@ -305,9 +305,9 @@ calculate_similarity <- function() {
       ## group numbers
       n_groups <- unique(df_original$group_id)
       
-      info(logger_simple, "       Make cluster...")
-      cl <- makeCluster(4)
-      clusterEvalQ(cl, c(library(duckdb),library(DBI),library(MatchIt),library(dplyr)))
+      # info(logger_simple, "       Make cluster...")
+      # cl <- makeCluster(4)
+      # clusterEvalQ(cl, c(library(duckdb),library(DBI),library(MatchIt),library(dplyr)))
       
       ## function
       info(logger_simple, "       Loop over groups and matching...")
@@ -328,8 +328,9 @@ calculate_similarity <- function() {
         return(mod_data)
       }
       ## apply function
-      clusterExport(cl, c("n_groups","df_original","v_matching_incl"), envir = environment())
-      output <- parLapply(cl, 1:length(n_groups),loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance))
+      # clusterExport(cl, c("n_groups","df_original","v_matching_incl"), envir = environment())
+      # output <- parLapply(cl, 1:length(n_groups),loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance))
+      output <- lapply(1:length(n_groups), loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance)) 
       
       ## create table 'group_similarity
       info(logger_simple, "       Create duckdb database table group_similarity...")
