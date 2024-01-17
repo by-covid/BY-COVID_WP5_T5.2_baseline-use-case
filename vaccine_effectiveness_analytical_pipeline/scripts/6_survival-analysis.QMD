@@ -549,7 +549,9 @@ tryCatch(
     
     ## Adjust hover text
     for (i in 1:(2*n_facet)) {
-      ggsurv.facet.vacschedule.ply$x$data[[i]]$text = paste0("Time: ",ggsurv.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Survival probability: ", round(ggsurv.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[i]]$name))
+      if(is.numeric(ggcumev.facet.vacschedule.ply$x$data[[i]]$y)){
+        ggsurv.facet.vacschedule.ply$x$data[[i]]$text = paste0("Time: ",ggsurv.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Survival probability: ", round(ggsurv.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[i]]$name))
+      }
     }  
   },
   error=function(cond) {
@@ -629,7 +631,9 @@ tryCatch(
     
     ## Adjust hover text
     for (i in 1:(2*n_facet)) {
-      ggcumev.facet.vacschedule.ply$x$data[[i]]$text = paste0(paste("Time: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Cumulative incidence: ", round(ggcumev.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$name))
+      if(is.numeric(ggcumev.facet.vacschedule.ply$x$data[[i]]$y)){
+          ggcumev.facet.vacschedule.ply$x$data[[i]]$text = paste0(paste("Time: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Cumulative incidence: ", round(ggcumev.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$name))
+      }
     }  
   },
   error=function(cond) {
