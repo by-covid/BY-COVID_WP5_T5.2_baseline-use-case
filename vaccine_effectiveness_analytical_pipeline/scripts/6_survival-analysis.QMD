@@ -163,8 +163,12 @@ tryCatch(
     }
     
     ## Adjust hover text
-    plot_surv.pl$x$data[[1]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[1]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[1]]$y,3),"<br>",plot_surv.pl$x$data[[1]]$name))
-    plot_surv.pl$x$data[[2]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[2]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[2]]$y,3),"<br>",plot_surv.pl$x$data[[2]]$name))
+    if(is.numeric(plot_surv.pl$x$data[[1]]$y)) {
+      plot_surv.pl$x$data[[1]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[1]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[1]]$y,3),"<br>",plot_surv.pl$x$data[[1]]$name))
+    }
+    if(is.numeric(plot_surv.pl$x$data[[2]]$y)) {
+      plot_surv.pl$x$data[[2]]$text = paste0(paste("Time: ",plot_surv.pl$x$data[[2]]$x,"<br>","Survival probability: ", round(plot_surv.pl$x$data[[2]]$y,3),"<br>",plot_surv.pl$x$data[[2]]$name))
+    }
   },
   error=function(cond) {
     ## Log info
@@ -227,8 +231,12 @@ tryCatch(
     }
     
     ## Adjust hover text
-    plot_cumev.pl$x$data[[1]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[1]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[1]]$y,3),"<br>",plot_surv.pl$x$data[[1]]$name))
-    plot_cumev.pl$x$data[[2]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[2]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[2]]$y,3),"<br>",plot_cumev.pl$x$data[[2]]$name))
+    if(is.numeric(plot_cumev.pl$x$data[[1]]$y) & is.numeric(plot_cumev.pl$x$data[[1]]$x) & !is.null(plot_cumev.pl$x$data[[1]]$name)) {
+      plot_cumev.pl$x$data[[1]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[1]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[1]]$y,3),"<br>",plot_surv.pl$x$data[[1]]$name))
+    }
+    if(is.numeric(plot_cumev.pl$x$data[[2]]$y) & is.numeric(plot_cumev.pl$x$data[[2]]$x) & !is.null(plot_cumev.pl$x$data[[2]]$name)) {
+      plot_cumev.pl$x$data[[2]]$text = paste0(paste("Time: ",plot_cumev.pl$x$data[[2]]$x,"<br>","Survival probability: ", round(plot_cumev.pl$x$data[[2]]$y,3),"<br>",plot_cumev.pl$x$data[[2]]$name))
+    }
   },
   error=function(cond) {
     ## Log info
@@ -272,8 +280,16 @@ tryCatch(
     
     cols <- lapply(c(2:7, 8:12) , function(x) res[x])
     tbl <- do.call(data.frame, cols)[,1:9] %>% mutate(strata = ifelse(strata=="fully_vaccinated_bl=FALSE", "Not fully vaccinated", "Fully vaccinated")) %>% relocate(strata)
-    tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)))
-    tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)))
+    if(is.numeric(tbl$n.event)) {
+      tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.event.cumsum=cumsum(n.event)))
+    } else {
+      tbl$n.event.cumsum <- NA
+    }
+    if(is.numeric(tbl$n.censor)) {
+      tbl <- rbind(tbl %>% filter(strata=="Not fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)),tbl %>% filter(strata=="Fully vaccinated") %>% mutate(n.censor.cumsum=cumsum(n.censor)))
+    } else {
+      tbl$n.censor.cumsum <- NA
+    }
     tbl <- tbl %>% relocate(n.event.cumsum, .after = n.risk)%>% relocate(n.censor.cumsum, .before = n.censor) %>% select(-n.event) %>% select(-n.censor)
     
     formattable(tbl %>% mutate(surv=round(surv,4),std.err=round(std.err,5),cumhaz=round(cumhaz,4),std.chaz=round(std.chaz,5)),
@@ -362,10 +378,20 @@ tryCatch(
     df_sum_cph <- data.frame(coefficients=NA, exp_coefficients=NA, se_coefficients=NA, robust_se=NA, z=NA, p_value=NA)
     df_sum_cph[1,] <- summary(cph_fit)[["coefficients"]]
     rownames(df_sum_cph) <- rownames(summary(cph_fit)[["coefficients"]])
-    se_exp_coef <- df_sum_cph$robust_se*df_sum_cph$exp_coefficients # se(sex)*exp(sex) or us svycontrast() in the survey package
-    upper_limit <- df_sum_cph$exp_coefficients+1.96*se_exp_coef # Adjust critical value? 95% CI?
-    lower_limit <- df_sum_cph$exp_coefficients-1.96*se_exp_coef # Adjust critical value? 95% CI?
-    df_sum_cph_rounded <- round(df_sum_cph,3)
+    if(is.numeric(df_sum_cph$robust_se) & is.numeric(df_sum_cph$exp_coefficients)) {
+      se_exp_coef <- df_sum_cph$robust_se*df_sum_cph$exp_coefficients
+    } else {
+      se_exp_coef <- NA
+    }
+    # se_exp_coef <- df_sum_cph$robust_se*df_sum_cph$exp_coefficients # se(sex)*exp(sex) or us svycontrast() in the survey package
+    if(is.numeric(df_sum_cph$exp_coefficients) & is.numeric(se_exp_coef)) {
+      upper_limit <- df_sum_cph$exp_coefficients+1.96*se_exp_coef # Adjust critical value? 95% CI?
+      lower_limit <- df_sum_cph$exp_coefficients-1.96*se_exp_coef # Adjust critical value? 95% CI?
+    } else {
+      upper_limit <- NA
+      lower_limit <- NA
+    }
+    df_sum_cph_rounded <- df_sum_cph %>% mutate_if(is.numeric, round, digits=3)
     
     # Table for export
     df_sum_cph$se_exp_coefficients <- se_exp_coef
@@ -374,7 +400,11 @@ tryCatch(
     df_sum_cph <- df_sum_cph %>% rename(robust_se_coefficients=robust_se)
     
     # Print table
-    df_sum_cph_rounded$hr_ci <- paste0(df_sum_cph_rounded$exp_coefficients," (",round(lower_limit,3),", ",round(upper_limit,3),")")
+    if(is.numeric(lower_limit) & is.numeric(upper_limit)) {
+      df_sum_cph_rounded$hr_ci <- paste0(df_sum_cph_rounded$exp_coefficients," (",round(lower_limit,3),", ",round(upper_limit,3),")")
+    } else {
+      df_sum_cph_rounded$hr_ci <- NA
+    }
     formattable(df_sum_cph_rounded) %>% select(c(coefficients,se_coefficients,robust_se,p_value,hr_ci)) %>% rename("Parameter estimate" = coefficients, "SE coefficient" = se_coefficients, "Robust SE coefficient" = robust_se, "P-value" = p_value, "Hazard Ratio (HR)\n(95% CI for HR)" = hr_ci) # 95% CI?
   },
   error=function(cond) {
@@ -537,19 +567,27 @@ tryCatch(
     n_facet <- length(vaccination_schedules)
     # Show the legend only for the first layer of the group
     ggsurv.facet.vacschedule.ply$x$data[[1]]$showlegend <- TRUE 
-    ggsurv.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[1]]$name))
-    for (i in 2:n_facet) {
-      ggsurv.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
+    if(!is.null(ggsurv.facet.vacschedule.ply$x$data[[1]]$name)) {
+      ggsurv.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[1]]$name))
     }
-    ggsurv.facet.vacschedule.ply$x$data[[n_facet+1]]$showlegend <- TRUE 
-    ggsurv.facet.vacschedule.ply$x$data[[n_facet+1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[n_facet+1]]$name))
-    for (i in (n_facet+2):(2*n_facet)) {
-      ggsurv.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
+    if(n_facet>1) {
+      for (i in 2:n_facet) {
+        ggsurv.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
+      }
+    }
+    ggsurv.facet.vacschedule.ply$x$data[[n_facet+1]]$showlegend <- TRUE
+    if(!is.null(ggsurv.facet.vacschedule.ply$x$data[[n_facet+1]]$name)) {
+      ggsurv.facet.vacschedule.ply$x$data[[n_facet+1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[n_facet+1]]$name))
+    }
+    if(n_facet>1) {
+      for (i in (n_facet+2):(2*n_facet)) {
+        ggsurv.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
+      }
     }
     
     ## Adjust hover text
     for (i in 1:(2*n_facet)) {
-      if(is.numeric(ggcumev.facet.vacschedule.ply$x$data[[i]]$y)){
+      if(is.numeric(ggsurv.facet.vacschedule.ply$x$data[[i]]$y) & is.numeric(ggsurv.facet.vacschedule.ply$x$data[[i]]$x) & !is.null(ggsurv.facet.vacschedule.ply$x$data[[i]]$name)) {
         ggsurv.facet.vacschedule.ply$x$data[[i]]$text = paste0("Time: ",ggsurv.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Survival probability: ", round(ggsurv.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[i]]$name))
       }
     }  
@@ -619,19 +657,27 @@ tryCatch(
     n_facet <- length(vaccination_schedules)
     # Show the legend only for the first layer of the group
     ggcumev.facet.vacschedule.ply$x$data[[1]]$showlegend <- TRUE 
-    ggcumev.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[1]]$name))
-    for (i in 2:n_facet) {
-      ggcumev.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
+    if(!is.null(ggcumev.facet.vacschedule.ply$x$data[[1]]$name)) {
+      ggcumev.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[1]]$name))
+    }
+    if(n_facet>1) {
+      for (i in 2:n_facet) {
+        ggcumev.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
+      }
     }
     ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$showlegend <- TRUE 
-    ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name))
-    for (i in (n_facet+2):(2*n_facet)) {
-      ggcumev.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
+    if(!is.null(ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name)) {
+      ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name))
+    }
+    if(n_facet>1) {
+      for (i in (n_facet+2):(2*n_facet)) {
+        ggcumev.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
+      }
     }
     
     ## Adjust hover text
     for (i in 1:(2*n_facet)) {
-      if(is.numeric(ggcumev.facet.vacschedule.ply$x$data[[i]]$y)){
+      if(is.numeric(ggcumev.facet.vacschedule.ply$x$data[[i]]$y) & is.numeric(ggcumev.facet.vacschedule.ply$x$data[[i]]$x) & !is.null(ggcumev.facet.vacschedule.ply$x$data[[i]]$name)){
           ggcumev.facet.vacschedule.ply$x$data[[i]]$text = paste0(paste("Time: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Cumulative incidence: ", round(ggcumev.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$name))
       }
     }  
