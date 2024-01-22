@@ -4,6 +4,9 @@ subtitle: "Survival analysis"
 format: 
   html:
     self-contained: true
+knitr:
+  opts_chunk:
+    out.width: "90%"
 code-fold: false
 echo: false
 editor: visual
@@ -18,7 +21,7 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 19/09/2023
+# 22/01/2024
 
 # METADATA: 
 if(FALSE) {
@@ -75,12 +78,17 @@ tryCatch(
                 LEFT JOIN cohort_data_sub B
                 on A.person_id=B.person_id")
     dbExecute(con,"UPDATE matched_data_ext SET vaccination_schedule_cd=NULL WHERE fully_vaccinated_bl=FALSE")   
-    df_matched <- as.data.frame(tbl(con, "matched_data_ext") %>% 
+    df_matched_all <- as.data.frame(tbl(con, "matched_data_ext") %>% 
                 select(-`person_id:1`) %>%
                 group_by(subclass) %>%
                 arrange(subclass, fully_vaccinated_bl) %>%
                 tidyr::fill(vaccination_schedule_cd, .direction = 'up'))
-    vaccination_schedules <- na.exclude(unique(dbGetQuery(con, "select vaccination_schedule_cd from cohort_data"))$vaccination_schedule_cd)
+    
+    df_matched_excluded <- as.data.frame(df_matched_all %>% 
+                  group_by(vaccination_schedule_cd) %>%
+                  filter(n() < 500)%>% summarise(count = n()) %>%
+                  arrange(-count)) 
+
     residence_areas <- na.exclude(unique(dbGetQuery(con, "select residence_area_cd from cohort_data"))$residence_area_cd)
     
   },
@@ -97,6 +105,28 @@ tryCatch(
 
 ```
 
+#### Vaccination schedules dropped from the subgroup analyses
+
+Vaccination schedules with less than 500 were dropped from the subgroup analyses.
+
+```{r, dropped_vaccination_schedules, message=FALSE, warning=FALSE, error=FALSE}
+
+df_matched <- as.data.frame(df_matched_all %>% 
+                  group_by(vaccination_schedule_cd) %>%
+                  filter(n() >= 500) )
+vaccination_schedules <-  na.exclude(as.character(unique(df_matched$vaccination_schedule_cd)))
+    
+formattable(df_matched_excluded,
+                list(Strata = formatter("Strata",
+                    style = ~style(display = "block", 
+                                    padding = "0 4px", 
+                                    `border-radius` = "4px", 
+                                    )))) %>%
+      rename("Vaccination schedule" = vaccination_schedule_cd, "N" = count) 
+  
+
+```
+
 #  {.tabset}
 
 ::: panel-tabset
@@ -110,9 +140,9 @@ info(logger_simple, "PROCUDING KAPLAN-MEIER ESTIMATES OF THE PROBABILITY OF SURV
 
 tryCatch(
   {
-    survobj <- Surv(time=df_matched$futime,
-                    event=df_matched$status)
-    surv_fit <- survfit(survobj ~ fully_vaccinated_bl,  data=df_matched)
+    survobj <- Surv(time=df_matched_all$futime,
+                    event=df_matched_all$status)
+    surv_fit <- survfit(survobj ~ fully_vaccinated_bl,  data=df_matched_all)
   },
   error=function(cond) {
     ## Log info
@@ -136,7 +166,7 @@ info(logger_simple, "PLOTTING THE PROBABILITY OF SURVIVAL OVER TIME...")
 tryCatch(
   {
     ## Create plot
-    plot_surv <- ggsurvplot(surv_fit, data = df_matched,
+    plot_surv <- ggsurvplot(surv_fit, data = df_matched_all,
                xlab="Days of follow-up",
                ylab="Survival probability",
                surv.median.line = "hv",
@@ -207,7 +237,7 @@ info(logger_simple, "PLOTTING CUMULATIVE INCIDENCE OVER TIME...")
 tryCatch(
   {
     ## Create plot
-    plot_cumev <- ggsurvplot(surv_fit,data = df_matched, conf.int = TRUE,
+    plot_cumev <- ggsurvplot(surv_fit,data = df_matched_all, conf.int = TRUE,
                 ylim=c(0,1), xlim=c(0,700),break.x.by=100,
                 pval.coord = c(100,0.80),
                 pval = TRUE,
@@ -290,8 +320,9 @@ tryCatch(
     } else {
       tbl$n.censor.cumsum <- NA
     }
-    tbl <- tbl %>% relocate(n.event.cumsum, .after = n.risk)%>% relocate(n.censor.cumsum, .before = n.censor) %>% select(-n.event) %>% select(-n.censor)
     
+    tbl <- tbl %>% relocate(n.event.cumsum, .after = n.risk)%>% relocate(n.censor.cumsum, .before = n.censor) %>% select(-n.event) %>% select(-n.censor)
+
     formattable(tbl %>% mutate(surv=round(surv,4),std.err=round(std.err,5),cumhaz=round(cumhaz,4),std.chaz=round(std.chaz,5)),
                 list(Strata = formatter("Strata",
                     style = ~style(display = "block", 
@@ -354,9 +385,8 @@ info(logger_simple, "BUILDING A COX PROPORTIONAL HAZARDS MODEL...")
 
 tryCatch(
   {
-    df_matched$fully_vaccinated_bl <- factor(df_matched$fully_vaccinated_bl,levels = c(FALSE,TRUE))
-    cph_fit <- coxph(Surv(futime, status) ~ fully_vaccinated_bl + cluster(person_id), data = df_matched)
-    # cph_fit %>% tbl_regression(exp=TRUE, intercept=TRUE) # conf.level=0.001
+    df_matched_all$fully_vaccinated_bl <- factor(df_matched_all$fully_vaccinated_bl,levels = c(FALSE,TRUE))
+    cph_fit <- coxph(Surv(futime, status) ~ fully_vaccinated_bl + cluster(person_id), data = df_matched_all)
   },
   error=function(cond) {
     ## Log info
@@ -383,7 +413,6 @@ tryCatch(
     } else {
       se_exp_coef <- NA
     }
-    # se_exp_coef <- df_sum_cph$robust_se*df_sum_cph$exp_coefficients # se(sex)*exp(sex) or us svycontrast() in the survey package
     if(is.numeric(df_sum_cph$exp_coefficients) & is.numeric(se_exp_coef)) {
       upper_limit <- df_sum_cph$exp_coefficients+1.96*se_exp_coef # Adjust critical value? 95% CI?
       lower_limit <- df_sum_cph$exp_coefficients-1.96*se_exp_coef # Adjust critical value? 95% CI?
@@ -392,7 +421,7 @@ tryCatch(
       lower_limit <- NA
     }
     df_sum_cph_rounded <- df_sum_cph %>% mutate_if(is.numeric, round, digits=3)
-    
+
     # Table for export
     df_sum_cph$se_exp_coefficients <- se_exp_coef
     df_sum_cph$exp_coefficients_lower <- lower_limit
@@ -447,7 +476,7 @@ info(logger_simple, "CALCULATING THE RMST AND RMTL...")
 
 tryCatch(
   {
-    df_rmst <- df_matched
+    df_rmst <- df_matched_all
     df_rmst$fully_vaccinated_bl <- as.numeric(ifelse(df_rmst$fully_vaccinated_bl==TRUE,1,0))
     df_rmst <- rmst2(df_rmst$futime, df_rmst$status, df_rmst$fully_vaccinated_bl, tau = 365, alpha = 0.05)
  },
@@ -567,6 +596,7 @@ tryCatch(
     n_facet <- length(vaccination_schedules)
     # Show the legend only for the first layer of the group
     ggsurv.facet.vacschedule.ply$x$data[[1]]$showlegend <- TRUE 
+    ggsurv.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[1]]$name))
     if(!is.null(ggsurv.facet.vacschedule.ply$x$data[[1]]$name)) {
       ggsurv.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[1]]$name))
     }
@@ -584,10 +614,9 @@ tryCatch(
         ggsurv.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
       }
     }
-    
     ## Adjust hover text
     for (i in 1:(2*n_facet)) {
-      if(is.numeric(ggsurv.facet.vacschedule.ply$x$data[[i]]$y) & is.numeric(ggsurv.facet.vacschedule.ply$x$data[[i]]$x) & !is.null(ggsurv.facet.vacschedule.ply$x$data[[i]]$name)) {
+      if(is.numeric(ggsurv.facet.vacschedule.ply$x$data[[i]]$y) & is.numeric(ggsurv.facet.vacschedule.ply$x$data[[i]]$x) & !is.null(ggsurv.facet.vacschedule.ply$x$data[[i]]$name)){
         ggsurv.facet.vacschedule.ply$x$data[[i]]$text = paste0("Time: ",ggsurv.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Survival probability: ", round(ggsurv.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",gsub('^\\(|,\\d+\\)$', '', ggsurv.facet.vacschedule.ply$x$data[[i]]$name))
       }
     }  
@@ -657,13 +686,9 @@ tryCatch(
     n_facet <- length(vaccination_schedules)
     # Show the legend only for the first layer of the group
     ggcumev.facet.vacschedule.ply$x$data[[1]]$showlegend <- TRUE 
-    if(!is.null(ggcumev.facet.vacschedule.ply$x$data[[1]]$name)) {
-      ggcumev.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[1]]$name))
-    }
-    if(n_facet>1) {
-      for (i in 2:n_facet) {
-        ggcumev.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
-      }
+    ggcumev.facet.vacschedule.ply$x$data[[1]]$name = paste0(gsub('^\\(|,\\d+\\)$', '', ggcumev.facet.vacschedule.ply$x$data[[1]]$name))
+    for (i in 2:n_facet) {
+      ggcumev.facet.vacschedule.ply$x$data[[i]]$showlegend <- FALSE
     }
     ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$showlegend <- TRUE 
     if(!is.null(ggcumev.facet.vacschedule.ply$x$data[[n_facet+1]]$name)) {
@@ -680,7 +705,7 @@ tryCatch(
       if(is.numeric(ggcumev.facet.vacschedule.ply$x$data[[i]]$y) & is.numeric(ggcumev.facet.vacschedule.ply$x$data[[i]]$x) & !is.null(ggcumev.facet.vacschedule.ply$x$data[[i]]$name)){
           ggcumev.facet.vacschedule.ply$x$data[[i]]$text = paste0(paste("Time: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$x,"<br>","Cumulative incidence: ", round(ggcumev.facet.vacschedule.ply$x$data[[i]]$y,3),"<br>","Intervention: ",ggcumev.facet.vacschedule.ply$x$data[[i]]$name))
       }
-    }  
+    } 
   },
   error=function(cond) {
     ## Log info
@@ -722,7 +747,6 @@ tryCatch(
   {
     df_matched$fully_vaccinated_bl <- factor(df_matched$fully_vaccinated_bl,levels = c(FALSE,TRUE))
     cph_fit_subg_vacschedule <- coxph(Surv(futime, status) ~ fully_vaccinated_bl*strata(vaccination_schedule_cd) + cluster(person_id), data = df_matched)
-    # cph_fit %>% tbl_regression(exp=TRUE, intercept=TRUE) # conf.level=0.001
   },
   error=function(cond) {
     ## Log info
@@ -1085,7 +1109,6 @@ tryCatch(
   {
     df_matched$fully_vaccinated_bl <- factor(df_matched$fully_vaccinated_bl,levels = c(FALSE,TRUE))
     cph_fit_subg_area <- coxph(Surv(futime, status) ~ fully_vaccinated_bl*strata(residence_area_cd) + cluster(person_id), data = df_matched)
-    # cph_fit %>% tbl_regression(exp=TRUE, intercept=TRUE) # conf.level=0.001
   },
   error=function(cond) {
     ## Log info
@@ -1272,35 +1295,19 @@ info(logger_simple, "SAVING RESULTS FOR META-ANALYSIS...
 tryCatch(
   {
     # Main analysis
-    write.xlsx2(
-      surv_summary(surv_fit), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary"), row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10))
-    write.xlsx2(
-      df_sum_cph, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9))
-    write.xlsx2(
-      df_rmst_result, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
-    write.xlsx2(
-      df_rmst_contrast, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,5))
-
-    # Subgroup analysis - vaccination schedule
-    write.xlsx2(
-      surv_summary(surv_fit_vacschedule), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary_vacschedule"),  append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10))
-    write.xlsx2(
-      df_sum_cph_subg_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR_vacschedule"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9))
-    write.xlsx2(
-      df_rmst_result_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL_vacschedule"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,7))
-    write.xlsx2(
-      df_rmst_contrast_vacschedule, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE_vacschedule"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
-    
-    # Subgroup analysis - residence area
-    write.xlsx2(
-      surv_summary(surv_fit_area), file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("Surv_summary_area"),  append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,10))
-    write.xlsx2(
-      df_sum_cph_subg_area, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("HR_area"), append=TRUE, row.names = TRUE, encoding = "UTF-8", dec = ".", colIndex = c(1,9)) 
-    write.xlsx2(
-      df_rmst_result_area, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("RMST_RMTL_area"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,7))
-    write.xlsx2(
-      df_rmst_contrast_area, file = paste0('results-survival-analysis-',country,'.xlsx'), sheetName = c("ATE_area"), append=TRUE, row.names = FALSE, encoding = "UTF-8", dec = ".", colIndex = c(1,6))
-    
+    names <- list('Surv_summary' = surv_summary(surv_fit),
+     'HR' = df_sum_cph,
+     'RMST_RMTL' = df_rmst_result,
+     'ATE' = df_rmst_contrast,
+     'Surv_summary_vacschedule' = surv_summary(surv_fit_vacschedule),
+     'HR_vacschedule' = df_sum_cph_subg_vacschedule,
+     'RMST_RMTL_vacschedule' = df_rmst_result_vacschedule,
+     'ATE_vacschedule' = df_rmst_contrast_vacschedule,
+     'Surv_summary_area' = surv_summary(surv_fit_area),
+     'HR_area' = df_sum_cph_subg_area,
+     'RMST_RMTL_area' = df_rmst_result_area,
+     'ATE_area' = df_rmst_contrast_area)
+    openxlsx::write.xlsx(names, file = paste0('results-survival-analysis-',country,'.xlsx'))
   },
   error=function(cond) {
     ## Log info
