@@ -105,27 +105,6 @@ tryCatch(
 
 ```
 
-#### Vaccination schedules dropped from the subgroup analyses
-
-Vaccination schedules with less than 500 were dropped from the subgroup analyses.
-
-```{r, dropped_vaccination_schedules, message=FALSE, warning=FALSE, error=FALSE}
-
-df_matched <- as.data.frame(df_matched_all %>% 
-                  group_by(vaccination_schedule_cd) %>%
-                  filter(n() >= 500) )
-vaccination_schedules <-  na.exclude(as.character(unique(df_matched$vaccination_schedule_cd)))
-    
-formattable(df_matched_excluded,
-                list(Strata = formatter("Strata",
-                    style = ~style(display = "block", 
-                                    padding = "0 4px", 
-                                    `border-radius` = "4px", 
-                                    )))) %>%
-      rename("Vaccination schedule" = vaccination_schedule_cd, "N" = count) 
-  
-
-```
 
 #  {.tabset}
 
@@ -551,6 +530,28 @@ tryCatch(
 
 ## Additional analysis - subgroups by vaccination schedule
 
+#### Vaccination schedules dropped from the subgroup analyses
+
+Vaccination schedules with less than 500 records were dropped from the subgroup analyses.
+
+```{r, dropped_vaccination_schedules, message=FALSE, warning=FALSE, error=FALSE}
+
+df_matched <- as.data.frame(df_matched_all %>% 
+                  group_by(vaccination_schedule_cd) %>%
+                  filter(n() >= 500) )
+vaccination_schedules <-  na.exclude(as.character(unique(df_matched$vaccination_schedule_cd)))
+    
+formattable(df_matched_excluded,
+                list(Strata = formatter("Strata",
+                    style = ~style(display = "block", 
+                                    padding = "0 4px", 
+                                    `border-radius` = "4px", 
+                                    )))) %>%
+      rename("Vaccination schedule" = vaccination_schedule_cd, "N" = count) 
+  
+
+```
+
 ##### Survival plot
 
 We estimate the survival function using the Kaplan-Meier estimator and represent this function visually using a Kaplan-Meier curve, showing the probability of not getting infected by SARS-CoV-2 at a certain time after onset of follow-up. The survival function is estimated for the control and intervention group, within subsets defined by the vaccination schedule.
@@ -833,7 +834,7 @@ tryCatch(
              rmst2(time = get(paste0("df_rmst_vacschedule_",i))[["futime"]], 
                                  status = get(paste0("df_rmst_vacschedule_",i))[["status"]], 
                                  arm = get(paste0("df_rmst_vacschedule_",i))[["fully_vaccinated_bl"]], 
-                                 tau = 365, alpha = 0.05))
+                                 tau = 300, alpha = 0.05))
     }
  },
   error=function(cond) {
@@ -925,6 +926,28 @@ tryCatch(
 ```
 
 ## Additional analysis - subgroups by NUTS3 residence area
+
+#### Vaccination schedules dropped from the subgroup analyses
+
+Vaccination schedules with less than 500 records were dropped from the subgroup analyses.
+
+```{r, dropped_vaccination_schedules_nuts, message=FALSE, warning=FALSE, error=FALSE}
+
+df_matched <- as.data.frame(df_matched_all %>% 
+                  group_by(vaccination_schedule_cd) %>%
+                  filter(n() >= 500) )
+vaccination_schedules <-  na.exclude(as.character(unique(df_matched$vaccination_schedule_cd)))
+    
+formattable(df_matched_excluded,
+                list(Strata = formatter("Strata",
+                    style = ~style(display = "block", 
+                                    padding = "0 4px", 
+                                    `border-radius` = "4px", 
+                                    )))) %>%
+      rename("Vaccination schedule" = vaccination_schedule_cd, "N" = count) 
+  
+
+```
 
 ##### Survival plot
 
