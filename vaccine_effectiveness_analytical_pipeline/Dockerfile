@@ -1,8 +1,7 @@
 FROM mambaorg/micromamba:1.4.2-bullseye-slim
 
 USER root
-RUN apt update && apt install -y --no-install-recommends \
-  && apt install -y xdg-mime libgtk-3-0 libcurl4 libnss3 libv8-dev libwebkit2gtk-4.0-dev \
+RUN apt update && apt install -y --no-install-recommends xdg-mime libgtk-3-0 libcurl4 libnss3 libv8-dev libwebkit2gtk-4.0-dev \
   && rm -rf /var/lib/apt/lists/*
 
 USER $MAMBA_USER
