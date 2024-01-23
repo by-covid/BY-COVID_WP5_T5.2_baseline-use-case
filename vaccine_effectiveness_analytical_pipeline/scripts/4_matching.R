@@ -325,7 +325,8 @@ calculate_similarity <- function() {
                              method = "nearest", distance = "glm", ratio = 10, data = df_original) 
         mod_data <- match.data(mod_match) 
         mod_data <- mod_data %>% mutate(matched_group=group_id, group_id=mod_data[which(mod_data$fully_vaccinated_bl==1),"group_id"]) %>% select(c(group_id,matched_group,distance)) 
-        return(mod_data)
+        Sys.sleep(0.20)
+	return(mod_data)
       }
       ## apply function
       # clusterExport(cl, c("n_groups","df_original","v_matching_incl"), envir = environment())
