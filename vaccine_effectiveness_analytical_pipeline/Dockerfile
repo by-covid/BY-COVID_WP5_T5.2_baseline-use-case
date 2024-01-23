@@ -11,9 +11,9 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER install.R /tmp
 
 ## Install conda requirements using micromamba
 RUN micromamba create -y -f /tmp/environment.yml \
-    && micromamba -n vaccine_effectiveness run Rscript /tmp/install.R
+    && micromamba -n vaccine_effectiveness run Rscript /tmp/install.R \
     && micromamba clean --all --yes \
-    && rm -rf /opt/conda/conda-meta /tmp/environment.yml \
+    && rm -rf /opt/conda/conda-meta /tmp/environment.yml
     
 RUN echo "micromamba activate vaccine_effectiveness" >> ~/.bashrc
 RUN echo "export PATH=/opt/conda/envs/vaccine_effectiveness/bin:${PATH}"  >> ~/.bashrc
