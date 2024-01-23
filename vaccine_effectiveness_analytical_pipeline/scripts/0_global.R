@@ -3,7 +3,7 @@
 ################
 
 # DATE LAST MODIFIED:
-# 19/09/2023
+# 23/01/2024
 
 # METADATA: 
 if(FALSE) {
@@ -23,8 +23,8 @@ if(FALSE) {
 ### Description: load required packages
 x <- c("dplyr","arrow","validate","DataExplorer","DT","purrr","dlookr","survminer",
        "quarto","ggplot2","plotly","scales","formattable","naniar","duckdb","DBI","here",
-       "grDevices","visdat","mice","tidyr","shiny","consort","parallel","MatchIt","logger",
-       "survival","table1","tab","forestmodel","gtsummary","survRM2","knitr","log4r","xlsx","finalfit","dbplyr") 
+       "grDevices","visdat","mice","tidyr","shiny","consort","MatchIt","logger",
+       "survival","table1","tab","forestmodel","gtsummary","survRM2","knitr","log4r","openxlsx","finalfit","dbplyr") 
 lapply(x, require, character.only = TRUE)
 
 ### Description: directories
