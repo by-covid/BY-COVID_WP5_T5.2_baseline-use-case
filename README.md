@@ -19,8 +19,8 @@ The methodological framework comprises the following steps:
 -   Translating the causal model into data requirements using a Common Data Model (CDM)
 -   Generating synthetic data and developing an interoperable analytical pipeline
 -   Mobilising individual-level data within each of the nodes and transforming the data to comply with the CDM
--   Deploying the interoperable analytical pipeline within the secure processing environment (SPE) of each of the nodes (*Data Hubs*)
--   Meta-analysis of the aggregated results
+-   Deploying the interoperable analytical pipeline within the secure processing environment (SPE) of each of the sites (*Participant Nodes*)
+-   Comparative analysis of the aggregated results
 
 ### Use case
 
@@ -65,7 +65,7 @@ The current repository contains the following pieces:
         -   Interactive report to assess matching balance in the obtained study population (HTML)
         -   Interactive report including the results of survival analysis in the unmatched study population, a table with baseline characteristics of the matched study population and CONSORT diagram (HTML)
         -   Interactive report including the analytic results (HTML)
-        -   Aggregated non-sensitive analytic results for the meta-analysis (XLSX)
+        -   Aggregated non-sensitive analytic results for the comparative analysis (XLSX)
 
 [^readme-1]: For illustrative purposes, the interactive reports contain the output of the scripts of the analytical pipeline applied to the synthetic dataset.
 
