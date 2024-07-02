@@ -4,9 +4,12 @@
     {
       "@id": "ro-crate-metadata.json",
       "@type": "CreativeWork",
-      "conformsTo": {
+      "conformsTo": [
+        {
         "@id": "https://w3id.org/ro/crate/1.1"
-      },
+        },
+        { "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"}
+      ],
       "about": {
         "@id": "./"
       },
@@ -25,9 +28,11 @@
     {
       "@id": "./",
       "@type": "Dataset",
-      "conformsTo": {
-        "@id": "https://w3id.org/ro/wfrun/process/0.1"
-      },
+      "conformsTo": [
+          {"@id": "https://w3id.org/ro/wfrun/process/0.1"},
+          {"@id": "https://w3id.org/ro/wfrun/workflow/0.1"},
+          {"@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"}
+      ],
       "author": [
         {
           "@id": "https://orcid.org/0000-0002-6285-8120"
@@ -64,6 +69,12 @@
         },
         {
           "@id": "vaccine_effectiveness_synthetic_dataset/"
+        },
+        {
+          "@id": "analytical-pipeline.png"
+        },
+        {
+          "@id": "conceptual-phase.png"
         },
         {
           "@id": "README.md"
@@ -126,6 +137,21 @@
       "temporalCoverage": "Study Period: From the date of the first documented SARS-CoV-2 infection in each country to the most recent date in which data is available at the time of analysis. Roughly from 01-03-2020 to 30-06-2022, depending on the country.",
       "usageInfo": "The scripts (software) included in the publication are offered \"as-is\", without warranty, and disclaiming liability for damages resulting from using it. The software is released under the CC-BY-4.0 licence, which gives you permission to use the content for almost any purpose (but does not grant you any trademark permissions), so long as you note the license and give credit.",
       "releaseNotes": "- Updated Causal model to eliminate the consideration of 'vaccination_schedule_cd' as a mediator\n- Adjusted the study period to be consistent with the Study Protocol\n- Updated 'sex_cd' as a required variable\n- Added 'chronic_liver_disease_bl' as a comorbidity at the individual level\n- Updated 'socecon_lvl_cd' at the area level as a recommended variable\n -Added crosswalks for the definition of 'chronic_liver_disease_bl' in a separate sheet\n -Updated the 'vaccination_schedule_cd' reference to the 'Vaccine' node in the updated DAG\n -Updated the description of the 'confirmed_case_dt' and 'previous_infection_dt' variables to clarify the definition and the need for a single registry per person"
+    },
+    {   "@id": "https://w3id.org/ro/wfrun/process/0.1",
+        "@type": "CreativeWork",
+        "name": "Process Run Crate",
+        "version": "0.1"
+    },
+    {   "@id": "https://w3id.org/ro/wfrun/workflow/0.1",
+        "@type": "CreativeWork",
+        "name": "Workflow Run Crate",
+        "version": "0.1"
+    },
+    {   "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0",
+        "@type": "CreativeWork",
+        "name": "Workflow RO-Crate",
+        "version": "1.0"
     },
     {
       "@id": "https://github.com/by-covid/BY-COVID_WP5_T5.2_baseline-use-case/archive/refs/heads/main.zip",
@@ -402,6 +428,9 @@
       ],
       "license": {
         "@id": "https://spdx.org/licenses/CC-BY-4.0"
+      },
+      "mainEntity": {
+        "@id": "vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD"
       },
       "name": "COVID-19 vaccine(s) effectiveness assessment (synthetic dataset)",
       "spatialCoverage": {
@@ -841,6 +870,8 @@
         },
         {
           "@id": "vaccine_effectiveness_analytical_pipeline/output/6_survival-analysis.html"
+        },        {
+          "@id": "vaccine_effectiveness_analytical_pipeline/output/results-survival-analysis-ESP.xlsx"
         }
       ]
     },
@@ -879,6 +910,12 @@
       "@type": "File",
       "encodingFormat": "text/html",
       "name": "Interactive report including the analytic results for the meta-analysis (HTML)"
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/output/results-survival-analysis-ESP.xlsx",
+      "@type": "File",
+      "encodingFormat": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "name": "Aggregated non-sensitive results for meta-analysis (Excel sheet)"
     },
     {
       "@id": "vaccine_effectiveness_analytical_pipeline/scripts/",
@@ -967,13 +1004,37 @@
       "name": "Survival analysis of the matched study population (QMD)"
     },
     {
-      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/analytical-pipeline.QMD",
-      "@type": "File",
+      "@id": "vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD",
+      "@type": ["File", "SoftwareSourceCode", "ComputationalWorkflow"],
       "encodingFormat": "text/qmd",
+      "programmingLanguage": { "@id": "https://quarto.org/" },
+      "image": { 
+        "@id": "analytical-pipeline.png"
+      },   
       "name": "Quarto script sourcing consecutive scripts of the analytical pipeline (QMD)"
     },
     {
-      "@id": "vaccine_effectiveness_analytical_pipeline/output/scripts/analytical-pipeline.html",
+      "@id": "analytical-pipeline.png",
+      "@type": ["File", "ImageObject"],
+      "name": "Diagram of analytical pipeline",
+      "about": {
+        "@id": "vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.QMD"
+      }
+    },
+    {
+      "@id": "conceptual-phase.png",
+      "@type": ["File", "ImageObject"],
+      "name": "Conceptual phases",
+      "description": "From Causal model, via a data model spec to generation of synthetic data",
+      "about": [
+        { "@id": "vaccine_effectiveness_causal_model/vaccine_effectiveness_causal_model_v.1.1.0.qmd"},
+        { "@id": "vaccine_effectiveness_common_data_model_specification/vaccine_effectiveness_data_model_specification_v.1.1.0.xlsx" },
+        { "@id": "vaccine_effectiveness_synthetic_dataset/by-covid_wp5_baseline_generate_synthetic_data_v.1.1.0.ipynb" },
+        { "@id": "vaccine_effectiveness_synthetic_dataset/vaccines_effectiveness_synthetic_dataset_pop_650k_v.1.1.0.csv" }
+      ]
+    },
+    {
+      "@id": "vaccine_effectiveness_analytical_pipeline/scripts/analytical-pipeline.html",
       "@type": "File",
       "encodingFormat": "text/html",
       "name": "Quarto document providing a log of the individual code block executions (HTML)"
@@ -1024,6 +1085,12 @@
       "url": {
         "@id": "https://jupyter.org/"
       }
+    },
+    {
+      "@id": "https://quarto.org/",
+      "@type": "ComputerLanguage",
+      "name": "Quarto Markdown",
+      "url": "https://quarto.org/docs/authoring/markdown-basics.html"
     },
     {
       "@id": "https://orcid.org/0000-0001-7316-6990",
