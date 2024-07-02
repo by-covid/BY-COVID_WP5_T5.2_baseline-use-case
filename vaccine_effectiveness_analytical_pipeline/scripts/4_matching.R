@@ -20,6 +20,8 @@ if(FALSE) {
 ### Matching variables ###
 ##########################
 
+info(logger_simple, "Determine matching variables...")
+
 tryCatch(
   {
     ## Description: get database connection
@@ -36,10 +38,7 @@ tryCatch(
     if("Exclude immunestatus_bl as matching variable (immune status)" %in% df_imputation_methods$imputation_method) {
       v_matching_excl <- append(v_matching_excl,"immunestatus_bl")
     }
-    
-    ## Description: obtain variables to include as matching variable
-    v_matching_incl <- setdiff(c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl"),v_matching_excl)
-    
+
   },
   error=function(cond) {
     ## Log info
@@ -56,6 +55,8 @@ tryCatch(
 ### Adjust 'cohort_data' table ###
 ##################################
 
+info(logger_simple, "Adjust 'cohort_data' table...")
+
 f_computation_new_variables <- function() {
   
   tryCatch(
@@ -64,6 +65,7 @@ f_computation_new_variables <- function() {
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       
       ## Description: add columns in 'cohort_data' table
+      info(logger_simple, "       Add columns in cohort_data...")
       dbExecute(con, "ALTER TABLE cohort_data ADD COLUMN comorbidities_bl BOOLEAN;
                   ALTER TABLE cohort_data ADD COLUMN immunestatus_bl BOOLEAN;
                   ALTER TABLE cohort_data ADD COLUMN age_cd VARCHAR;
@@ -73,6 +75,7 @@ f_computation_new_variables <- function() {
                   ALTER TABLE cohort_data ADD COLUMN flag_inclusion_record BOOLEAN;")
       
       ## Description: compute the variables 'comorbidities_bl', 'immunestatus_bl', 'age_cd' and 'boost_bl' in cohort_data
+      info(logger_simple, "       Compute the variables 'comorbidities_bl', 'immunestatus_bl', 'age_cd' and 'boost_bl' in cohort_data...")
       dbExecute(con, 
                 "UPDATE cohort_data set
                       	comorbidities_bl = CASE  
@@ -123,7 +126,18 @@ f_computation_new_variables <- function() {
                                               ELSE FALSE
                                               END;")
       
+      ## Description: obtain variables to exclude as matching variable
+      info(logger_simple, "       Obtain variables to exclude as matching variable...")
+      for(i in c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl")) {
+        if(length(unique(dbGetQuery(con, paste0("SELECT ", i, " FROM cohort_data"))[[1]]))==1) {
+          v_matching_excl <- c(v_matching_excl,i)}}
+      v_matching_excl <<- v_matching_excl
+      ## Description: obtain variables to include as matching variable
+      v_matching_incl <- setdiff(c("sex_cd","age_cd","residence_area_cd","pregnancy_bl","essential_worker_bl","institutionalized_bl","foreign_bl","socecon_lvl_cd","comorbidities_bl","immunestatus_bl"),v_matching_excl)
+      v_matching_incl <<- v_matching_incl
+      
       ## Description: compute the variable 'group_id' in cohort_data
+      info(logger_simple, "       Compute the variable 'group_id' in cohort data...")
       dbExecute(con,
         paste0("UPDATE cohort_data set 
           group_id=b.group_id from(
@@ -141,7 +155,7 @@ f_computation_new_variables <- function() {
                 ifelse("foreign_bl" %in% v_matching_incl,"COALESCE(cohort_data.foreign_bl,cohort_data_imputed.foreign_bl) as foreign_bl, ",""),
                 ifelse("socecon_lvl_cd" %in% v_matching_incl,"COALESCE(cohort_data.socecon_lvl_cd,cohort_data_imputed.socecon_lvl_cd) as socecon_lvl_cd, ",""),
                 ifelse("comorbidities_bl" %in% v_matching_incl,"cohort_data.comorbidities_bl, ",""),
-                ifelse("immunestatus_bl" %in% v_matching_incl,"cohort_data.immunestatus_bl, ",""),
+                ifelse("immunestatus_bl" %in% v_matching_incl,"cohort_data.immunestatus_bl ",""),
             "from main.cohort_data
             left join main.cohort_data_imputed
             on cohort_data.person_id = cohort_data_imputed.person_id) table_with_imputed  ) b
@@ -149,7 +163,9 @@ f_computation_new_variables <- function() {
       ))
       
       ## Description: compute the variable 'age_cd' in cohort_data_imputed
-      dbExecute(con,"
+      info(logger_simple, "       Compute the variable 'age_cd' in cohort_data_imputed...")
+      if("age_nm" %in% (dbGetQuery(con, "describe select * from cohort_data_imputed") %>% select(column_name))[[1]]) 
+        {dbExecute(con,"
               UPDATE cohort_data_imputed set
                         age_cd = CASE
                         WHEN age_nm >= 0 and age_nm <=4 THEN 1
@@ -171,10 +187,11 @@ f_computation_new_variables <- function() {
                         WHEN age_nm >= 80 and age_nm <=84 THEN 17
                         WHEN age_nm >= 85 THEN 18
                         ELSE NULL 
-                        END")
+                        END")}
       
       ## Description: compute the variable flag_inclusion_record in cohort_data
-      dbExecute(con,"UPDATE cohort_data SET 
+      info(logger_simple, "       Compute the variable 'flag_inclusion_record' in cohort data...")
+      dbExecute(con,"UPDATE cohort_data SET
                 flag_inclusion_record = CASE
                 WHEN previous_infection_bl==TRUE OR flag_violating_val==TRUE OR flag_listwise_del==TRUE THEN FALSE
                 ELSE TRUE
@@ -193,6 +210,8 @@ f_computation_new_variables <- function() {
 }
 
 f_computation_new_variables()
+
+info(logger_simple, "Create 'cohort_view' in which only records with flag_inclusion_record==TRUE are selected...")
 
 tryCatch(
   {
@@ -220,13 +239,15 @@ tryCatch(
 ### Create vector with dates ###
 ################################
 
+info(logger_simple, "Obtain vector with dates to loop over...")
+
 getDates <- function() {
   tryCatch(
     {
       ## get database connection
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=TRUE)
       
-      ## query 'cohort_data' table to obtain distinct dates
+      ## query 'cohort_view' to obtain distinct dates
       result <- dbGetQuery(con, "select DISTINCT fully_vaccinated_dt from cohort_view 
                      where fully_vaccinated_dt < '2021-09-01' and fully_vaccinated_dt >= '2021-01-01'  ORDER BY random()")
     },
@@ -250,12 +271,15 @@ dates_v <- as.Date(as.vector(getDates()$fully_vaccinated_dt),
 ### Calculate similarity ###
 ############################
 
+info(logger_simple, "Calculate simularity...")
+
 calculate_similarity <- function() {
   tryCatch(
     {
       ## get database connection
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       
+      info(logger_simple, "       Create df_original...")
       df_original <- dbGetQuery(con,paste0("SELECT DISTINCT ON (a.group_id)
                     a.person_id, ",
                     ifelse("sex_cd" %in% v_matching_incl, "COALESCE(a.sex_cd, b.sex_cd) AS sex_cd, ",""),
@@ -273,7 +297,6 @@ calculate_similarity <- function() {
               LEFT JOIN cohort_data_imputed b on a.person_id = b.person_id
               ORDER BY a.group_id"))
       
-      
       if("residence_area_cd" %in% v_matching_incl) {df_original$residence_area_cd <- as.factor(df_original$residence_area_cd)}
       if("sex_cd" %in% v_matching_incl) {df_original$sex_cd <- as.factor(df_original$sex_cd)}
       if("age_cd" %in% v_matching_incl) {df_original$age_cd <- as.factor(df_original$age_cd)}
@@ -282,10 +305,12 @@ calculate_similarity <- function() {
       ## group numbers
       n_groups <- unique(df_original$group_id)
       
-      cl <- makeCluster(4)
-      clusterEvalQ(cl, c(library(duckdb),library(DBI),library(MatchIt),library(dplyr)))
+      # info(logger_simple, "       Make cluster...")
+      # cl <- makeCluster(4)
+      # clusterEvalQ(cl, c(library(duckdb),library(DBI),library(MatchIt),library(dplyr)))
       
       ## function
+      info(logger_simple, "       Loop over groups and matching...")
       loop_group <- function(i) {
         
         group_nr <- n_groups[i]
@@ -300,13 +325,16 @@ calculate_similarity <- function() {
                              method = "nearest", distance = "glm", ratio = 10, data = df_original) 
         mod_data <- match.data(mod_match) 
         mod_data <- mod_data %>% mutate(matched_group=group_id, group_id=mod_data[which(mod_data$fully_vaccinated_bl==1),"group_id"]) %>% select(c(group_id,matched_group,distance)) 
-        return(mod_data)
+        Sys.sleep(0.20)
+	return(mod_data)
       }
       ## apply function
-      clusterExport(cl, c("n_groups","df_original","v_matching_incl"), envir = environment())
-      output <- parLapply(cl, 1:length(n_groups),loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance))
+      # clusterExport(cl, c("n_groups","df_original","v_matching_incl"), envir = environment())
+      # output <- parLapply(cl, 1:length(n_groups),loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance))
+      output <- lapply(1:length(n_groups), loop_group) %>% bind_rows() %>% arrange(group_id,desc(distance)) 
       
       ## create table 'group_similarity
+      info(logger_simple, "       Create duckdb database table group_similarity...")
       dbExecute(con, "CREATE OR REPLACE TABLE group_similarity (
                   	group_id VARCHAR,
                   	matched_group VARCHAR,
@@ -526,12 +554,15 @@ getSamplesRandom <-function(date_, group, n_sample, cursor, v_matching){
 ### Execute matching  ###
 #########################
 
+info(logger_simple, "Execute matching...")
+
 doMatch <- function(dates) {
   tryCatch(
     {
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       n_sample <- 150
       
+      info(logger_simple, "       Loop by date and group...")
       ### Loop by date ###
       for(i in 1:length(dates)) {
         k <- as.character(dates[i])
@@ -556,15 +587,23 @@ doMatch <- function(dates) {
                     {
                      ## If similar group found ##
                      cols <- colnames(df_matching)[colnames(df_matching) != 'person_id'];
-                     df_matching <- df_matching %>% mutate_at(cols, as.numeric);
-                     psm <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl, sep="' '", collapse=" + "))),
+                     df_matching <- df_matching %>% mutate_at(cols, as.factor);
+                     # Obtain variables to exclude as matching variable
+                     v_matching_excl_tmp <- c()
+                     for(i in colnames(df_matching)) {
+                       if(length(unique(df_matching[[i]]))==1) {
+                         v_matching_excl_tmp <- c(v_matching_excl_tmp,i)}}
+                     # Obtain variables to include as matching variable
+                     v_matching_incl_tmp <- setdiff(v_matching_incl,v_matching_excl_tmp)
+                     # Execute matching
+                     psm <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl_tmp, sep="' '", collapse=" + "))),
                              method = "nearest", distance = "glm", data = df_matching); 
                      psm <- match.data(psm);
                      psm$subclass <- as.numeric(as.character(psm[,"subclass"]))+last_subclass;
                      df <- data.frame(matrix(ncol = 3, nrow = length(unique(psm$subclass))));
                      # separate full vaccine and non-vaccine
-                     tmp_vacc <- psm %>% filter(fully_vaccinated_bl==1) %>% arrange(subclass)
-                     tmp_nonvacc <- psm %>% filter(fully_vaccinated_bl==0) %>% arrange(subclass)
+                     tmp_vacc <- psm %>% filter(fully_vaccinated_bl==TRUE) %>% arrange(subclass)
+                     tmp_nonvacc <- psm %>% filter(fully_vaccinated_bl==FALSE) %>% arrange(subclass)
                      df <- data.frame(person_id = list(tmp_vacc$person_id),  matched_ID = list(tmp_nonvacc$person_id), subclass = list(tmp_vacc$subclass))
                      colnames(df) <- c("person_id", "matched_ID", "subclass");
                      last_subclass <<- max(df$subclass)
@@ -574,15 +613,22 @@ doMatch <- function(dates) {
                      ## If no similar group found ##
                      df_matching <- getSamplesRandom(k,tmp$full_vaccine_group, n_sample, con, v_matching_incl);
                      cols <- colnames(df_matching)[colnames(df_matching) != 'person_id'];
-                     df_matching <- df_matching %>% mutate_at(cols, as.numeric);
-                     psm <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl, sep="' '", collapse=" + "))),
+                     df_matching <- df_matching %>% mutate_at(cols, as.factor);
+                     # Obtain variables to exclude as matching variable
+                     v_matching_excl_tmp <- c()
+                     for(i in colnames(df_matching)) {
+                       if(length(unique(df_matching[[i]]))==1) {
+                         v_matching_excl_tmp <- c(v_matching_excl_tmp,i)}}
+                     # Obtain variables to include as matching variable
+                     v_matching_incl_tmp <- setdiff(v_matching_incl,v_matching_excl_tmp)
+                     psm <- matchit(as.formula(paste0("fully_vaccinated_bl ~ ", paste(v_matching_incl_tmp, sep="' '", collapse=" + "))),
                                     method = "nearest", distance = "glm", data = df_matching); 
                      psm <- match.data(psm);
                      psm$subclass <- as.numeric(as.character(psm[,"subclass"]))+last_subclass
                      df <- data.frame(matrix(ncol = 3, nrow = length(unique(psm$subclass))));
                      # separate full vaccine and non-vaccine
-                     tmp_vacc <- psm %>% filter(fully_vaccinated_bl==1) %>% arrange(subclass)
-                     tmp_nonvacc <- psm %>% filter(fully_vaccinated_bl==0) %>% arrange(subclass)
+                     tmp_vacc <- psm %>% filter(fully_vaccinated_bl==TRUE) %>% arrange(subclass)
+                     tmp_nonvacc <- psm %>% filter(fully_vaccinated_bl==FALSE) %>% arrange(subclass)
                      df <- data.frame(person_id = list(tmp_vacc$person_id),  matched_ID = list(tmp_nonvacc$person_id), subclass = list(tmp_vacc$subclass))
                      colnames(df) <- c("person_id", "matched_ID", "subclass");
                      last_subclass <<- max(df$subclass)
@@ -639,12 +685,16 @@ system.time(doMatch(dates_v))
 ### Calculate status and follow-up time for survival analysis  ###
 ##################################################################
 
+info(logger_simple, "Calculating status and follow-up time for survival analysis...")
+
 getStatusMatch <- function() {
   tryCatch(
     {
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
       end_follow_up <- "'2022-09-01'"
-      # Calculate censorship date for pairs.      
+      
+      # Calculate censorship date for pairs
+      info(logger_simple, "       Calculate censorship data for pairs...")
       dbExecute(con, paste0("
       CREATE OR REPLACE TABLE result_matching_alg AS		
       select
@@ -728,6 +778,8 @@ getStatusMatch <- function() {
       			on
       			result_matching_alg.matched_ID = control_dates.person_id )c) censoring_table"))
       
+      # Calculate status and follow-up time 
+      info(logger_simple, "       Calculate status and follow-up time...")
       dbExecute(con, "
                 CREATE OR REPLACE TABLE matched_data as
                   	select
@@ -835,6 +887,7 @@ getStatusMatch <- function() {
     	      END;
                 
       "))
+      
       # Change the status if the confirmed date is after the censorship date.
       dbExecute(con, "
       update matched_data set 	

@@ -5,6 +5,8 @@ library(quarto)
 library(tools)
 # library(zip)
 
+options(shiny.maxRequestSize=3*1024^3)
+
 ui <- dashboardPage(
 
   ### Dashboard header ###

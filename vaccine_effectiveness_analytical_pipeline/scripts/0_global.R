@@ -3,7 +3,7 @@
 ################
 
 # DATE LAST MODIFIED:
-# 19/09/2023
+# 23/01/2024
 
 # METADATA: 
 if(FALSE) {
@@ -23,8 +23,8 @@ if(FALSE) {
 ### Description: load required packages
 x <- c("dplyr","arrow","validate","DataExplorer","DT","purrr","dlookr","survminer",
        "quarto","ggplot2","plotly","scales","formattable","naniar","duckdb","DBI","here",
-       "grDevices","visdat","mice","tidyr","shiny","consort","parallel","MatchIt","logger",
-       "survival","table1","tab","forestmodel","gtsummary","survRM2","knitr","log4r","xlsx","finalfit","dbplyr") 
+       "grDevices","visdat","mice","tidyr","shiny","consort","MatchIt","logger",
+       "survival","table1","tab","forestmodel","gtsummary","survRM2","knitr","log4r","openxlsx","finalfit","dbplyr") 
 lapply(x, require, character.only = TRUE)
 
 ### Description: directories
@@ -239,7 +239,7 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
           )
           
           data_file <- list.files(paste0(input_data_path,"/"),pattern=".csv")
-          file <- file.path(paste0(input_data_path,"/"),data_file)
+          file <- file.path(input_data_path,data_file)
           parse_options <- CsvParseOptions$create(delimiter = "|")
           convert_options <- CsvConvertOptions$create(true_values = c("True","true","TRUE"),
                                                       false_values = c("False","false","FALSE"),
@@ -252,6 +252,10 @@ f_load_data <- function(create_db_tables=FALSE, load_data=FALSE) {
           
           ## register arrow dataset
           duckdb_register_arrow(conn = con, name = "cohort_view", ddf)
+
+          ## Log info
+          info(logger_simple,paste0("Number of rows in table cohort_view after: ", dbGetQuery(con,"SELECT COUNT() FROM cohort_view ;")[[1]],"
+                                    "))
 
           ## insert data into 'cohort_data' table
           dbExecute(con, "INSERT INTO cohort_data SELECT * FROM cohort_view")

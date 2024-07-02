@@ -82,60 +82,6 @@ tryCatch(
 
 ```
 
-## Missing values {.tabset}
-
-::: panel-tabset
-##### Missing values map
-
-```{r, missing values map, message=FALSE, warning=FALSE, error=FALSE}
-
-info(logger_simple, "CREATING MISSING VALUES MAP...")
-
-tryCatch(
-  {
-    explanatory <- c("age_nm","sex_cd","residence_area_cd","essential_worker_bl",
-        "institutionalized_bl","foreign_bl", "diabetes_bl","obesity_bl","heart_failure_bl","copd_bl",
-        "solid_tumor_without_metastasis_bl","chronic_liver_disease_bl","chronic_kidney_disease_bl",
-        "sickle_cell_disease_bl","hypertension_bl","blood_cancer_bl","transplanted_bl", 
-        "hiv_infection_bl","primary_immunodeficiency_bl","immunosuppression_bl","pregnancy_bl")
-    pl_missing_map <- df_not_viol %>% missing_plot(explanatory = explanatory)
-    ply <- ggplotly(pl_missing_map)
-    for (i in 1:length(explanatory)) {
-      ply$x$data[[1]]$text[i,] <- paste0("Id: ", ply$x$data[[1]][["x"]],"<br />","Variable: ", explanatory[length(explanatory)+1-i])
-    }
-    ply
-  },
-  error=function(cond) {
-    ## Log info
-    warn(logger, paste0("MY ERROR: 
-                        ", cond))
-    return(stop(cond))
-  })
-
-```
-
-##### Missing data matrix
-
-```{r, missing data matrix, message=FALSE, warning=FALSE, error=FALSE}
-
-info(logger_simple, "CREATING MISSING DATA MATRIX...")
-
-tryCatch(
-  {
-    explanatory <- c("age_nm","sex_cd","residence_area_cd","pregnancy_bl","essential_worker_bl",
-        "institutionalized_bl","foreign_bl","socecon_lvl_cd") 
-    df_not_viol %>% missing_pairs(explanatory = explanatory,position = "fill")
-  },
-  error=function(cond) {
-    ## Log info
-    warn(logger, paste0("MY ERROR: 
-                        ", cond))
-    return(stop(cond))
-  })
-
-```
-:::
-
 ## Handling missing data {.tabset}
 
 ::: panel-tabset
@@ -208,7 +154,7 @@ info(logger_simple, "CREATING A TABLE WITH VARIABLE CHARACTERISTICS (ADD IMPUTAT
 
 tryCatch(
   {
-    ## Description: test MCAR assumption (exclude variables which have more than 50% of values missing)
+    ## Description: test MCAR assumption (exclude variables which have more than 15% of values missing)
     v_excl <- c()
     for(i in c(core_v, comorb_v, imm_v)) {
       if(length(unique(df_not_viol[[i]]))==1 |
@@ -247,30 +193,6 @@ tryCatch(
 
 ```
 
-```{r, save variable status, results='hide', message=FALSE, warning=FALSE, error=FALSE}
-
-## Description: save table with variable characteristics
-
-info(logger_simple, "SAVE TABLE WITH VARIABLE CHARACTERISTICS...")
-
-tryCatch(
-    {
-      ## Description: Save table with variable characteristics as duckdb table
-      con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
-      dbWriteTable(con, "imputation_methods",df_var_imputation_method,overwrite = TRUE, append=FALSE)
-    },
-    error=function(cond) {
-      ## Log info
-      warn(logger, paste0("MY ERROR: 
-                          ", cond))
-      return(stop(cond))
-    },
-    finally={
-      dbDisconnect(con, shutdown=TRUE)
-    })
-
-```
-
 ```{r, listwise deletion, results='hide', message=FALSE, warning=FALSE, error=FALSE}
 
 ## Description: listwise deletion
@@ -292,16 +214,18 @@ tryCatch(
 if(length(v_ld)>0) {
   tryCatch(
     {
-      ## Description: variables that require listwise deletion
-      tmp_ld_rn <- data.frame(person_id=df_not_viol[which(is.na(df_not_viol[,v_ld])),"person_id"])
       con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
-      duckdb_register(con, name='table_listwise_deletion', df=tmp_ld_rn, overwrite = TRUE, experimental = FALSE)
-      qry <- 
-        "update cohort_data set
-          flag_listwise_del = TRUE WHERE cohort_data.person_id IN (select person_id from table_listwise_deletion);"
-      dbExecute(con, qry)
-      duckdb_unregister(con, name='table_listwise_deletion')
-      rm(tmp_ld_rn)
+      for(i in v_ld) {
+         ## Description: variables that require listwise deletion
+         tmp_ld_rn <- data.frame(person_id=df_not_viol[which(is.na(df_not_viol[,i])),"person_id"])
+         duckdb_register(con, name='table_listwise_deletion', df=tmp_ld_rn, overwrite = TRUE, experimental = FALSE)
+         qry <- 
+           "update cohort_data set
+             flag_listwise_del = TRUE WHERE cohort_data.person_id IN (select person_id from table_listwise_deletion);"
+         dbExecute(con, qry)
+         duckdb_unregister(con, name='table_listwise_deletion')
+         rm(tmp_ld_rn)
+      }
     },
     error=function(cond) {
       ## Log info
@@ -332,8 +256,10 @@ tryCatch(
       tmp <- df_imp %>% 
         select(-person_id) %>% 
         mutate_at(if("residence_area_cd" %in% names(.)) "residence_area_cd" else integer(0), factor) %>%
-        mutate_at(if("sex_cd" %in% names(.)) "sex_cd" else integer(0), factor)
+        mutate_at(if("sex_cd" %in% names(.)) "sex_cd" else integer(0), factor) %>%
+        mutate_at(if("socecon_lvl_cd" %in% names(.)) "socecon_lvl_cd" else integer(0), factor)
 
+      tmp[sapply(tmp, is.logical)] <- lapply(tmp[sapply(tmp, is.logical)], as.factor)
       # Imputation age: if sex_cd!="2" or age_nm<12 or age_nm>50 -> impute pregnancy_bl to false
       if("pregnancy_bl" %in% v) {
         tmp <- tmp %>% mutate(pregnancy_bl=ifelse(is.na(pregnancy_bl) & (sex_cd!="2" | age_nm<12 | age_nm>50),FALSE,pregnancy_bl))
@@ -350,36 +276,55 @@ tryCatch(
         # -> Imputation methods
         meth <- make.method(tmp)
         meth[] <- ""
-        meth[v_imp] <- "pmm"
+        meth[which((names(meth) %in% v))] <- "pmm"
+        # meth[which(!(names(meth) %in% v))] <- ""
         # -> Run imputation
         imp <- mice(
           tmp,
-          method = meth, 
           predictorMatrix = pred,
+          method = meth, 
           m = 1, 
-          maxit = 20
+          maxit = 50
           )
-        data_imp <- complete(imp) 
-        data_imp <- cbind(person_id = df_imp$person_id, data_imp)
+        data_imp_compl <- as.data.frame(mice::complete(imp,"long")) 
+        data_imp_compl <- cbind(person_id = df_imp$person_id, data_imp_compl)
         # -> Select patient_ids of patients with imputed values
         out <- lapply(v, FUN =  function(variable) {
-          out <- data.frame(person_id=df_imp[which(is.na(df_imp[,variable])),"person_id"])
-          print(out)
+          # out <- data.frame(person_id=df_imp[which(is.na(df_imp[,variable])),"person_id"])
+          out <- data.frame(setdiff(df_imp[which(is.na(df_imp[,v])),"person_id"], data_imp_compl[which(is.na(data_imp_compl[,v])),"person_id"]))
+          colnames(out) <- "person_id"
+          # print(out)
           return(out)
         }) %>% bind_rows()
         p_id <- out %>% distinct()
         # -> Select records with imputed data and insert into duckdb
-        data_imp <- data_imp[which(data_imp$person_id %in% p_id$person_id),]
+        data_imp <- data_imp_compl[which(data_imp_compl$person_id %in% p_id$person_id),]
       } else {
         ## If no variables selected for imputation
+        data_imp_compl <- df_imp
         data_imp <- df_imp[0,]
         imp <- NULL
       }
-      return(list(data_imp,imp))
+      return(list(data_imp,imp)) # data_imp_compl
     }
     # Use the function to obtain an imputed dataset
     tmp <- method_imputation(df_not_viol %>% select(all_of(setdiff(c("person_id",core_v,comorb_v, imm_v),v_excl))),v_imp)
-    data_imp <- tmp[[1]] %>% mutate(sex_cd=as.character(sex_cd), residence_area_cd=as.character(residence_area_cd))
+    
+    if(length(v_imp)!=0) {
+    data_imp <- tmp[[1]] %>% select(-c(.imp, .id)) %>% 
+      mutate_at(vars(one_of('sex_cd','residence_area_cd','socecon_lvl_cd')), as.character) %>%
+      mutate_at(vars(one_of('pregnancy_bl','essential_worker_bl','institutionalized_bl','foreign_bl',"diabetes_bl","obesity_bl","heart_failure_bl","copd_bl",
+        "solid_tumor_without_metastasis_bl","chronic_liver_disease_bl","chronic_kidney_disease_bl",
+        "sickle_cell_disease_bl","hypertension_bl","blood_cancer_bl","transplanted_bl",
+        "hiv_infection_bl","primary_immunodeficiency_bl","immunosuppression_bl")), as.logical)
+    } else {
+      data_imp <- tmp[[1]] %>% 
+        mutate_at(vars(one_of('sex_cd','residence_area_cd','socecon_lvl_cd')), as.character) %>%
+        mutate_at(vars(one_of('pregnancy_bl','essential_worker_bl','institutionalized_bl','foreign_bl',"diabetes_bl","obesity_bl","heart_failure_bl","copd_bl",
+          "solid_tumor_without_metastasis_bl","chronic_liver_disease_bl","chronic_kidney_disease_bl",
+          "sickle_cell_disease_bl","hypertension_bl","blood_cancer_bl","transplanted_bl",
+          "hiv_infection_bl","primary_immunodeficiency_bl","immunosuppression_bl")), as.logical)
+    }
   },
   error=function(cond) {
     ## Log info
@@ -407,6 +352,38 @@ tryCatch(
       dbDisconnect(con, shutdown=TRUE)
     })
 
+tryCatch(
+  {
+    con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
+    n_ld_before <- dbGetQuery(con, "SELECT COUNT() FROM cohort_data where flag_listwise_del=TRUE")[[1]]
+    df_imp_missing <- as.data.frame(matrix(ncol = 2, nrow = 0))
+    colnames(df_imp_missing) <- c("variable", "nr_not_imp")
+    for(i in v_imp) {
+      # tmp_ld_rn <- data.frame(person_id=data_imp[which(is.na(data_imp[,i])),"person_id"]) 
+      tmp_ld_rn <- data.frame(person_id=setdiff(df_not_viol[which(is.na(df_not_viol[,i])),"person_id"],data_imp$person_id)) %>% distinct()
+      duckdb_register(con, name='table_listwise_deletion', df=tmp_ld_rn, overwrite = TRUE, experimental = FALSE)
+      qry <- 
+        "update cohort_data set
+          flag_listwise_del = TRUE WHERE cohort_data.person_id IN (select person_id from table_listwise_deletion);"
+       dbExecute(con, qry)
+       duckdb_unregister(con, name='table_listwise_deletion')
+       # df_imp_missing <- df_imp_missing %>% add_row(variable = i, nr_not_imp = nrow(tmp_ld_rn))
+       df_imp_missing <- rbind(df_imp_missing,c(i,nrow(tmp_ld_rn)))
+       colnames(df_imp_missing) <- c("variable", "nr_not_imp")
+       rm(tmp_ld_rn)
+    }
+    n_ld_after <- dbGetQuery(con, "SELECT COUNT() FROM cohort_data where flag_listwise_del=TRUE")[[1]]
+  },
+  error=function(cond) {
+    ## Log info
+    warn(logger, paste0("MY ERROR: 
+                        ", cond))
+    return(stop(cond))
+  },
+  finally={
+    dbDisconnect(con, shutdown=TRUE)
+  })
+
 ```
 
 ```{r, imputation process print, message=FALSE, warning=FALSE, error=FALSE}
@@ -421,17 +398,18 @@ tryCatch(
     df_var_imputation_method$Nr_imputed <- 0
     for(c in 1:length(v_imp)) {
       coln <- v_imp[c]
-      df_var_imputation_method[which(df_var_imputation_method$Variable_name==coln),"Nr_imputed"] <- df_var_imputation_method[which(df_var_imputation_method$Variable_name==coln),"num_missing"]
+      df_var_imputation_method[which(df_var_imputation_method$Variable_name==coln),"Nr_imputed"] <- df_var_imputation_method[which(df_var_imputation_method$Variable_name==coln),"num_missing"] - as.numeric(df_imp_missing[which(df_imp_missing$variable==coln),"nr_not_imp"])
     }
-    df_var_imputation_method <- df_var_imputation_method %>% select(-c(num_missing,pct_missing))
+    df_var_imputation_method <- df_var_imputation_method %>% rename(Nr_missing=num_missing, Pct_missing=pct_missing)
+      # select(-c(num_missing,pct_missing))
     
-    df_var_imputation_method <- df_var_imputation_method[, c("Variable_name","imputation_method","Nr_imputed","Missing_values","Comorbidity","comorb_incl","Immunestatus","imm_incl","Core","MCAR","Perc_miss_lt","Perc_miss_lt5","Perc_miss_lt15")]
+    df_var_imputation_method <- df_var_imputation_method[, c("Variable_name","imputation_method","Nr_missing","Pct_missing","Nr_imputed","Missing_values","Comorbidity","comorb_incl","Immunestatus","imm_incl","Core","MCAR","Perc_miss_lt","Perc_miss_lt5","Perc_miss_lt15")]
     
-    df_var_imputation_method <- df_var_imputation_method %>% arrange(factor(Variable_name,levels = colnames(df_not_viol)))
+    df_var_imputation_method <- df_var_imputation_method %>% arrange(factor(Variable_name,levels = colnames(df_not_viol))) %>% mutate(across(where(is.numeric), round, 3))
     
     ## Description: print table with information on methods used to deal with missing data
     formattable(df_var_imputation_method,
-                align = c("l","c","c","c","c","c","c","c","c","c","c","c"),
+                align = c("l","c","c","c","c","c","c","c","c","c","c","c","c","c"),
                 list(
                   `Method` = formatter("imputation_method",
                     style = ~style(display = "block", 
@@ -466,6 +444,30 @@ tryCatch(
 
 ```
 
+```{r, save variable status, results='hide', message=FALSE, warning=FALSE, error=FALSE}
+
+## Description: save table with variable characteristics
+
+info(logger_simple, "SAVE TABLE WITH VARIABLE CHARACTERISTICS...")
+
+tryCatch(
+    {
+      ## Description: Save table with variable characteristics as duckdb table
+      con = dbConnect(duckdb::duckdb(), dbdir=auxiliary_database_path, read_only=FALSE)
+      dbWriteTable(con, "imputation_methods",df_var_imputation_method,overwrite = TRUE, append=FALSE)
+    },
+    error=function(cond) {
+      ## Log info
+      warn(logger, paste0("MY ERROR: 
+                          ", cond))
+      return(stop(cond))
+    },
+    finally={
+      dbDisconnect(con, shutdown=TRUE)
+    })
+
+```
+
 ##### Distribution imputed data
 
 ```{r, plot imputation, message=FALSE, warning=FALSE, error=FALSE}
@@ -478,9 +480,15 @@ tryCatch(
   {
     imp <- tmp[[2]]
     
-    if(!is.null(imp)) {
+    v_imp_excl <- c()
+    for(i in v_imp) {
+      if(sum(is.na(data_imp[,i]))>0) {v_imp_excl <- c(v_imp_excl,i)}
+    }
+    v_imp_tmp <- setdiff(v_imp, v_imp_excl)
+    
+    if(!is.null(imp) & length(v_imp_tmp)>0) {
       ## Create plots
-      plot(imp)
+      # plot(imp)
       formula <- as.formula(paste("~", paste(v_imp, 
             collapse = "+", sep = ""), sep = ""))
       densityplot(imp,formula)

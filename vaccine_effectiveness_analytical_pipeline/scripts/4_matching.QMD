@@ -19,7 +19,7 @@ title-block-banner: "#27445C"
 ################
 
 # DATE LAST MODIFIED:
-# 19/09/2023
+# 23/01/2024
 
 # METADATA: 
 if(FALSE) {
@@ -93,8 +93,8 @@ tryCatch(
                             ifelse("age_cd" %in% v_matching_incl,"COALESCE(a.age_cd,b.age_cd) as age_cd, ",""),
                             ifelse("residence_area_cd" %in% v_matching_incl,"COALESCE(a.residence_area_cd,b.residence_area_cd) as residence_area_cd, ",""),
                             ifelse("pregnancy_bl" %in% v_matching_incl,"COALESCE(a.pregnancy_bl,b.pregnancy_bl) as pregnancy_bl, ",""),
-                            ifelse("essential_worker_bl" %in% v_matching_incl,"COALESCE(a.essential_worker_bl,b.essential_worker_bl) AS essential_worker_bl ",""),
-                            ifelse("institutionalized_bl" %in% v_matching_incl,"COALESCE(a.institutionalized_bl,b.institutionalized_bl) as institutionalized_bl, ",""),
+                            ifelse("essential_worker_bl" %in% v_matching_incl,"COALESCE(a.essential_worker_bl,b.essential_worker_bl) as essential_worker_bl, ",""),
+                            ifelse("institutionalized_bl" %in% v_matching_incl,"COALESCE(a.institutionalized_bl,b.institutionalized_bl) as institutionalized_bl, ",""), 
                             ifelse("foreign_bl" %in% v_matching_incl,"COALESCE(a.foreign_bl,b.foreign_bl) as foreign_bl, ",""),
                             ifelse("socecon_lvl_cd" %in% v_matching_incl,"COALESCE(a.socecon_lvl_cd,b.socecon_lvl_cd) as socecon_lvl_cd, ",""),
                             ifelse("comorbidities_bl" %in% v_matching_incl,"a.comorbidities_bl, ",""),
